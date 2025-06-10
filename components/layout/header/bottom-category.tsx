@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 
 const BottomCategory = () => {
   return (
-    <div className="bg-primary p-2 text-white">
+    <div className="bg-primarymain p-2 text-white">
       <div className="max-w-7xl mx-auto flex justify-between gap-6">
         <div className="flex gap-6">
           <h2>Womens </h2>

@@ -11,7 +11,7 @@ export type producttype = {
   size: ProductSize[];
   color: ProductColor[];
   productAttributes: ProductAttribute[];
-  stock: StockType[];
+  stock: StockType;
 };
 
 export type ProductAttribute = {
@@ -53,3 +53,9 @@ export type ProductColor = {
   name: string;
   hex: string;
 };
+
+
+export type categoryType = {
+  id: string;
+  name: string;
+}

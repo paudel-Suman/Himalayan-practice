@@ -3,7 +3,7 @@ import React from "react";
 
 const TopInfo = () => {
   return (
-    <div className="bg-primary p-2 text-white">
+    <div className="bg-primarymain p-2 text-white">
       <div className="max-w-7xl mx-auto flex justify-between">
         <div className="flex items-center gap-1">
           <Icon icon="ion:mail" width="16" height="16" />

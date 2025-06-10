@@ -1,25 +1,37 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import TopInfo from "./top-info";
 import Image from "next/image";
 import BottomCategory from "./bottom-category";
 import Link from "next/link";
-import Headroom from "react-headroom";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("query", searchTerm);
+    router.push(`/search?${params.toString()}`);
+  };
   return (
-    <Headroom>
-      <div className="bg-white relative">
-        <TopInfo />
-        <nav className="max-w-7xl mx-auto p-2 flex justify-between items-center">
-          <div>
-            <input
-              className="border border-zinc-400 rounded-full p-2 text-sm w-[350px] focus:border-blue-500 outline-none"
-              type="text"
-              placeholder="Search"
-            />
-          </div>
-          <figure className="absolute left-1/2 -translate-x-1/2">
+    <div className="bg-white relative">
+      <TopInfo />
+      <nav className="max-w-7xl mx-auto p-2 flex justify-between items-center">
+        <form onSubmit={handleSubmit}>
+          <input
+            className="border border-zinc-400 rounded-full p-2 text-sm w-[350px] focus:border-blue-500 outline-none"
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </form>
+        <figure className="absolute left-1/2 -translate-x-1/2">
+          <Link href="/">
             <Image
               src="/logo/mainlogo.png"
               alt="logo"
@@ -27,19 +39,19 @@ const Header = () => {
               height={1000}
               className="object-contain w-40"
             />
-          </figure>
+          </Link>
+        </figure>
 
-          <div className="flex items-center gap-8">
-            {navlinks.map((item, index) => (
-              <Link href={item.path} key={index} className="font-medium">
-                {item.title}
-              </Link>
-            ))}
-          </div>
-        </nav>
-        <BottomCategory />
-      </div>
-    </Headroom>
+        <div className="flex items-center gap-8">
+          {navlinks.map((item, index) => (
+            <Link href={item.path} key={index} className="font-medium">
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      </nav>
+      <BottomCategory />
+    </div>
   );
 };
 
@@ -48,14 +60,14 @@ export default Header;
 const navlinks = [
   {
     title: "About",
-    path: "/",
+    path: "/about",
   },
   {
     title: "Blogs",
-    path: "/",
+    path: "/blogs",
   },
   {
     title: "Contact",
-    path: "/",
+    path: "/contact",
   },
 ];
