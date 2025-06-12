@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 const BottomCategory = () => {
   return (
@@ -13,11 +14,9 @@ const BottomCategory = () => {
         <div className="flex gap-6">
           <Icon icon="mdi:cart" width="24" height="24" />
           <Icon icon="ri:heart-fill" width="24" height="24" />
-          <Icon
-            icon="iconamoon:profile-circle-fill"
-            width="24"
-            height="24"
-          />
+          <Link href="/login">
+            <Icon icon="iconamoon:profile-circle-fill" width="24" height="24" />
+          </Link>
         </div>
       </div>
     </div>
