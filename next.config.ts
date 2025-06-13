@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
         hostname: "blog.daraz.com.np",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        port: "",
+      },
     ],
   },
 };
