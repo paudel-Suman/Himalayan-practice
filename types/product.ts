@@ -49,13 +49,13 @@ export type ProductSize = {
 };
 
 export type ProductColor = {
+  productColorId: string;
   id: number;
   name: string;
   hex: string;
 };
 
-
 export type categoryType = {
   id: string;
   name: string;
-}
+};
