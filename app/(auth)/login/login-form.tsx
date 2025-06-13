@@ -9,10 +9,16 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Icon } from "@iconify/react";
 import { toast } from "react-hot-toast";
+import { useMyContext } from "@/app/(root)/context/store";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
+  const { login } = useMyContext();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || `/profile`;
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,7 +31,6 @@ export default function LoginForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
     // Clear error when user types
     if (errors) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -61,16 +66,19 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`https://api.katunje.com/v1/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -83,7 +91,18 @@ export default function LoginForm() {
       }
 
       if (res.ok) {
+        login(
+          {
+            id: data.data.id,
+            name: data.data.name,
+            email: data.data.email,
+            role: data.data.role,
+            avatar: data.data.avatar,
+          },
+          data.data.token
+        );
         toast.success("Login successful");
+        router.push(callbackUrl);
       }
     } catch (error) {
       console.error("Login failed", error);

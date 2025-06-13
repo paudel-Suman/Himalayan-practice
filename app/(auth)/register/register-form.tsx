@@ -1,7 +1,7 @@
 "use client";
 import type React from "react";
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,9 +34,6 @@ export default function RegisterForm() {
     password: "",
     confirmPassword: "",
   });
-
-  const params = useParams();
-  const country = params.country;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -93,17 +90,20 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`https://api.katunje.com/v1/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -113,11 +113,7 @@ export default function RegisterForm() {
         return;
       }
       toast.success("Registration Successfull");
-      router.push(
-        `/${country}/auth/verifyEmail?email=${encodeURIComponent(
-          data.data.email
-        )}`
-      );
+      router.push(`verifyEmail?email=${encodeURIComponent(data.data.email)}`);
     } catch (error) {
       console.error("Registration failed", error);
     } finally {
