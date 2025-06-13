@@ -1,3 +1,4 @@
+import { categoryType } from "@/types/category";
 import { producttype } from "@/types/product";
 import { reviewtype } from "@/types/review";
 
@@ -15,6 +16,23 @@ export async function getTrendingProducts(): Promise<producttype[]> {
     return data.products || [];
   } catch (error) {
     console.error("Error fetching trending products:", error);
+    return [];
+  }
+}
+export async function getCategory(): Promise<categoryType[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-categories`
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch Category");
+    }
+
+    const data = await res.json();
+    return data.categories || [];
+  } catch (error) {
+    console.error("Error fetching Category:", error);
     return [];
   }
 }
