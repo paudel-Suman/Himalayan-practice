@@ -86,13 +86,13 @@ const Testimonials = () => {
     ],
   };
   return (
-    <main className="bg-zinc-50 py-2">
+    <main className="bg-zinc-100 py-2">
       <div className="my-20 md:space-y-8 space-y-4 max-w-7xl lg:mx-auto mx-4">
         <PageHeader title="What our clients have to Say" />
         <Slider {...settings} className="my-10">
           {testimonialsdata.map((item, index) => (
             <div key={index} className="px-4">
-              <div className="p-4 rounded-md shadow-md border">
+              <div className="p-4 rounded-md shadow-md border bg-white">
                 <div className="">
                   <div className="flex justify-between">
                     <div className="flex items-center gap-2">
@@ -131,7 +131,7 @@ const Testimonials = () => {
         <Slider {...settings2}>
           {testimonialsdata.map((item, index) => (
             <div key={index} className="px-4">
-              <div className="p-4 rounded-md shadow-md border">
+              <div className="p-4 rounded-md shadow-md border bg-white">
                 <div className="">
                   <div className="flex justify-between">
                     <div className="flex items-center gap-2">

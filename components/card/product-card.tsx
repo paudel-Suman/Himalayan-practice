@@ -51,7 +51,7 @@ const ProductCard = ({ products }: { products: producttype }) => {
   
   return (
     <Link href={`/product/${slug}`}>
-      <div className="relative border border-black/10 shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
+      <div className="bg-white relative border border-black/10 shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
         <figure className="overflow-hidden rounded-md">
           <Image
             src={featureImage}
