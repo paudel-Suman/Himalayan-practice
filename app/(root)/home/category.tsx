@@ -19,7 +19,7 @@ const Category = ({ category }: { category: categoryType[] }) => {
                 alt={item.name}
                 width={1000}
                 height={1000}
-                className="h-[10em] object-cover rounded-md group-hover:border-4 group-hover:border-red-600 group-hover:sclae-125 ease-in-out duration-200"
+                className="h-[10em] object-cover rounded-md group-hover:border-2 group-hover:border-red-600 group-hover:sclae-125 ease-in-out duration-200"
               />
             </figure>
             <div className="absolute left-4 bottom-4 text-white">
