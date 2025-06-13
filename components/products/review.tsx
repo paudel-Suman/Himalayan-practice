@@ -24,17 +24,20 @@ const Review = ({ productId }: { productId: number }) => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`https://api.katunje.com/v1/review/add-review`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          comment: formData.comment,
-          rating: formData.rating,
-          productId: formData.productId,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/review/add-review`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            comment: formData.comment,
+            rating: formData.rating,
+            productId: formData.productId,
+          }),
+        }
+      );
 
       const data = await res.json();
 
