@@ -33,6 +33,11 @@ const nextConfig: NextConfig = {
         hostname: "upload.wikimedia.org",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "example.com",
+        port: "",
+      },
     ],
   },
 };
