@@ -61,7 +61,7 @@ const Trending = ({
     sliderRef.current?.slickPrev();
   };
   return (
-    <div className="bg-primarymain py-10">
+    <div className="bg-gradient-to-tl from-primarymain via-primarymain/90 to-primarymain/80 py-10">
       <div className="max-w-7xl mx-auto">
         <PageHeader title="Trending Products" className="text-white" />
 
