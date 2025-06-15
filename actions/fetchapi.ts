@@ -5,7 +5,7 @@ import { reviewtype } from "@/types/review";
 export async function getTrendingProducts(): Promise<producttype[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-product-by-region/np`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-all-products`
     );
 
     if (!res.ok) {
@@ -13,7 +13,7 @@ export async function getTrendingProducts(): Promise<producttype[]> {
     }
 
     const data = await res.json();
-    return data.products || [];
+    return data.data.product || [];
   } catch (error) {
     console.error("Error fetching trending products:", error);
     return [];
