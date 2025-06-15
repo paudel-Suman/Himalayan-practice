@@ -26,7 +26,9 @@ const BottomCategory = () => {
           <h2>Bags</h2>
         </div>
         <div className="flex gap-6">
-          <Icon icon="mdi:cart" width="24" height="24" />
+          <Link href="/cart">
+            <Icon icon="mdi:cart" width="24" height="24" />
+          </Link>
           <Link href="/profile/wishlist">
             <Icon icon="ri:heart-fill" width="24" height="24" />
           </Link>
