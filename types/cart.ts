@@ -1,13 +1,14 @@
 export type Cart = {
   id: string;
+  name: string;
   cartId: string;
   quantity: number;
   colorId: string;
   sizeId: string;
   total: number;
   regionId: string;
-  selectedColorId:string;
-  selectedSizeId:string;
+  selectedColorId: string;
+  selectedSizeId: string;
   productId: string;
   product: {
     id: string;
