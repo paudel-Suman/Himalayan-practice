@@ -37,7 +37,13 @@ export default async function BlogsPage() {
   return (
     <>
       <div className="my-20 ">
-        <StripeCard data={blogPosts} />
+        {blogPosts.length > 0 ? (
+          <StripeCard data={blogPosts} />
+        ) : (
+          <div className="h-[60vh] flex justify-center items-center">
+            <h2 className="text-4xl font-bold text-red-500">No Blogs Found !</h2>
+          </div>
+        )}
       </div>
     </>
   );
