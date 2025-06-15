@@ -1,9 +1,11 @@
+import { getCategory } from "@/actions/fetchapi";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Mail, Phone, MapPin, CreditCard } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Footer() {
+export default async function Footer() {
+  const category = await getCategory();
   return (
     <footer className="bg-gradient-to-tl from-primarymain via-primarymain/90 to-primarymain/80 text-gray-200">
       {/* Main Footer Content */}
@@ -73,38 +75,16 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Shop</h4>
             <ul className="space-y-3">
-              <li>
-                <Link
-                  href="#"
-                  className="text-sm hover:text-white transition-colors"
-                >
-                  New Arrivals
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-sm hover:text-white transition-colors"
-                >
-                  Women
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-sm hover:text-white transition-colors"
-                >
-                  Men
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-sm hover:text-white transition-colors"
-                >
-                  Accessories
-                </Link>
-              </li>
+              {category.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={`/search?categoryId=${item.id}`}
+                    className="text-sm hover:text-white transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -114,7 +94,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  href="/contact"
                   className="text-sm hover:text-white transition-colors"
                 >
                   Contact Us
@@ -123,7 +103,7 @@ export default function Footer() {
 
               <li>
                 <Link
-                  href="#"
+                  href="/shipping-info"
                   className="text-sm hover:text-white transition-colors"
                 >
                   Shipping Info
@@ -132,10 +112,10 @@ export default function Footer() {
 
               <li>
                 <Link
-                  href="#"
+                  href="/faq"
                   className="text-sm hover:text-white transition-colors"
                 >
-                  FAQ
+                  FAQs
                 </Link>
               </li>
             </ul>
@@ -147,7 +127,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  href="/about"
                   className="text-sm hover:text-white transition-colors"
                 >
                   About Us
@@ -178,28 +158,22 @@ export default function Footer() {
             {/* Legal Links */}
             <div className="flex flex-wrap justify-center lg:justify-end gap-6 text-sm">
               <Link
-                href="#"
+                href="/privacy"
                 className="text-zinc-300 hover:text-white transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
-                href="#"
+                href="/terms"
                 className="text-zinc-300 hover:text-white transition-colors"
               >
                 Terms of Service
               </Link>
               <Link
-                href="#"
+                href="/cookie-policy"
                 className="text-zinc-300 hover:text-white transition-colors"
               >
                 Cookie Policy
-              </Link>
-              <Link
-                href="#"
-                className="text-zinc-300 hover:text-white transition-colors"
-              >
-                Accessibility
               </Link>
             </div>
 
