@@ -270,7 +270,6 @@ const PaymentPage = () => {
                   </div>
 
                   <div className="font-semibold text-rose-600">
-                    {item.product.availableRegions[0].currency}{" "}
                     {(item.product.price * item.quantity).toFixed(2)}
                   </div>
                 </div>

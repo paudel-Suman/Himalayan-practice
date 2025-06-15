@@ -93,7 +93,6 @@ const ProductDetailPage = ({
       quantity: quantity,
       productId: item.id,
       total: item.price,
-      regionId: "np",
     };
 
     console.log("sentData", apiPayload);
