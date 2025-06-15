@@ -4,8 +4,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Image from "next/image";
+import { bannerType } from "@/types/banner";
 
-const Hero = () => {
+const Hero = ({ banner }: { banner: bannerType[] }) => {
   const settings = {
     dots: false,
     fade: false,
@@ -20,13 +21,13 @@ const Hero = () => {
     arrows: false,
   };
   return (
-    <>
+    <div className="min-h-screen">
       <Slider {...settings}>
-        {slideimages.map((item, index) => (
+        {banner.map((item, index) => (
           <div key={index}>
-            <figure className="">
+            <figure >
               <Image
-                src={item.img}
+                src={item.image}
                 alt="hero"
                 width={1000}
                 height={500}
@@ -36,15 +37,8 @@ const Hero = () => {
           </div>
         ))}
       </Slider>
-    </>
+    </div>
   );
 };
-const slideimages = [
-  {
-    img: "/banner/banner.jpg",
-  },
-  {
-    img: "/banner/banner.jpg",
-  },
-];
+
 export default Hero;

@@ -41,8 +41,8 @@ const contactdata = [
   },
   {
     title: "Mailing Address",
-    desc: "info@mysticnepaladventure.com",
-    desc2: " mnatours@hotmail.com",
+    desc: "info@himalayagarment.com",
+    desc2: " himalayagarment@hotmail.com",
     icon: <Icon icon="famicons:mail-outline" />,
   },
 ];

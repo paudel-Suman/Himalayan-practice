@@ -127,18 +127,26 @@ export default async function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/about"
+                  href="/privacy"
                   className="text-sm hover:text-white transition-colors"
                 >
-                  About Us
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/terms"
                   className="text-sm hover:text-white transition-colors"
                 >
-                  Careers
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cookie-policy"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  Cookie Policy
                 </Link>
               </li>
             </ul>
@@ -153,28 +161,6 @@ export default async function Footer() {
             {/* Copyright */}
             <div className="text-sm text-zinc-300 text-center lg:text-left">
               © {new Date().getFullYear()} Himalay Garment. All rights reserved.
-            </div>
-
-            {/* Legal Links */}
-            <div className="flex flex-wrap justify-center lg:justify-end gap-6 text-sm">
-              <Link
-                href="/privacy"
-                className="text-zinc-300 hover:text-white transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms"
-                className="text-zinc-300 hover:text-white transition-colors"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/cookie-policy"
-                className="text-zinc-300 hover:text-white transition-colors"
-              >
-                Cookie Policy
-              </Link>
             </div>
 
             {/* Payment Methods */}

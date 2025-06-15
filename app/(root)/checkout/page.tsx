@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Cart } from "@/types/cart";
 import { shippingAddress } from "@/types/shippingaddress";
+import SpinLoader from "@/app/spin-loader";
 
 const CheckoutPage = () => {
   const { store } = useMyContext();
@@ -151,6 +152,7 @@ const CheckoutPage = () => {
         toast.error(data.message || data.error);
         return;
       }
+
       toast.success("Address Saved Successfully");
       setLoading(false);
       setIsAddNew(false);
@@ -203,6 +205,8 @@ const CheckoutPage = () => {
       console.error(error);
     }
   };
+
+  if (loading) return <SpinLoader />;
 
   return (
     <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">

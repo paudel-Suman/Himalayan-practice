@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import {
@@ -10,20 +10,42 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useMyContext } from "@/app/(root)/context/store";
+import { getCategory } from "@/actions/fetchapi";
+import { categoryType } from "@/types/category";
 
 const BottomCategory = () => {
   const { store, logout } = useMyContext();
+  const [category, setCategory] = useState<categoryType[]>([]);
   const handleLogout = async () => {
     logout();
   };
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const products = await getCategory();
+        setCategory(products);
+      } catch (error) {
+        console.error("Failed to fetch Category:", error);
+      }
+    };
+
+    fetchCategory();
+  }, []); // runs only once on mount
   return (
-    <div className="bg-primarymain p-2 text-white">
+    <div className="bg-primarymain min-h-8 p-2 text-white">
       <div className="max-w-7xl mx-auto flex justify-between gap-6">
         <div className="flex gap-6">
-          <h2>Womens </h2>
-          <h2>Mens </h2>
-          <h2>Bags</h2>
+          {category.map((item) => (
+            <div key={item.id}>
+              <Link
+                href={`/search?categoryId=${item.id}`}
+                className="text-sm hover:text-white transition-colors"
+              >
+                {item.name}
+              </Link>
+            </div>
+          ))}
         </div>
         <div className="flex gap-6">
           <Link href="/cart">

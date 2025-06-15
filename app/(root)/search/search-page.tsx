@@ -160,7 +160,7 @@ const SearchPage = ({
           )}
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-center h-[60vh]">
+        <div className="flex flex-col justify-center items-center h-[70vh]">
           <h2 className="text-rose-600 font-bold text-3xl">
             Product Not Found
           </h2>

@@ -38,6 +38,11 @@ const nextConfig: NextConfig = {
         hostname: "example.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "img.freepik.com",
+        port: "",
+      },
     ],
   },
 };

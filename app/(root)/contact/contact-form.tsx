@@ -27,7 +27,7 @@ const ContactForm = () => {
           ))}
         </div>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28237.4372563045!2d85.26903907431641!3d27.78884310000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1f001dcf200f%3A0xca48ca5d9313fbe4!2sMystic%20Nepal%20Adventure%20(p.).Ltd!5e0!3m2!1sen!2snp!4v1741168743483!5m2!1sen!2snp"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6880.247193938896!2d85.31134507535812!3d27.71402517617878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb190286e454ad%3A0xb002146d30bac2e5!2sHimalayan%20Java%20-%20Tridevi%20Thamel!5e1!3m2!1sen!2snp!4v1749985423270!5m2!1sen!2snp"
           loading="lazy"
           height="full"
           className="w-full h-full mx-auto rounded-lg shadow-md"
@@ -70,7 +70,7 @@ const ContactForm = () => {
             />
           </div>
 
-          <Button>Submit</Button>
+          <Button className="bg-primarymain">Submit</Button>
         </form>
       </div>
     </main>

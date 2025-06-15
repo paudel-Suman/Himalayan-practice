@@ -4,15 +4,19 @@ import Hero from "./hero";
 import Trending from "./trending";
 import { getCategory, getTrendingProducts } from "@/actions/fetchapi";
 import WomenCollection from "./women-collection";
-// import TrendingBlogs from "./trending-blogs";
 import Testimonials from "./testimonials";
 import { producttype } from "@/types/product";
 import Category from "./category";
 import { categoryType } from "@/types/category";
+import { bannerType } from "@/types/banner";
+import { getBanner } from "@/actions/fetchbanner";
+import Loading from "@/app/loading";
 
 const HomeMain = () => {
   const [trendingproducts, setTrendingProducts] = useState<producttype[]>([]);
   const [category, setCategory] = useState<categoryType[]>([]);
+  const [banner, setBanner] = useState<bannerType[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTrending = async () => {
@@ -25,7 +29,7 @@ const HomeMain = () => {
     };
 
     fetchTrending();
-  }, []); // runs only once on mount
+  }, []);
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -38,18 +42,35 @@ const HomeMain = () => {
     };
 
     fetchCategory();
-  }, []); // runs only once on mount
+  }, []);
+
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        setLoading(true);
+        const bannerinfo = await getBanner();
+        setBanner(bannerinfo);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch Banner:", error);
+      }
+    };
+
+    fetchBanner();
+  }, []);
+
+  if (loading) return <Loading />;
 
   return (
     <>
-      <Hero />
+      <Hero banner={banner} />
       <div className="max-w-7xl xl:mx-auto mx-4 my-20 space-y-20">
         <Category category={category} />
-        {/* <TrendingBlogs /> */}
       </div>
       <Trending trendingproducts={trendingproducts} />
       <div className="max-w-7xl xl:mx-auto mx-4 my-20 space-y-20">
         <WomenCollection trendingproducts={trendingproducts} />
+        {/* <TrendingBlogs /> */}
       </div>
       <Testimonials />
     </>
