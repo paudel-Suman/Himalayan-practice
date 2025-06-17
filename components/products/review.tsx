@@ -2,9 +2,11 @@
 import { getProductReview } from "@/actions/fetchapi";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
-// import moment from "moment";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import moment from "moment";
+import { useMyContext } from "@/app/(root)/context/store";
+import { reviewType } from "@/types/review";
 
 type reviewtype = {
   comment: string;
@@ -12,6 +14,8 @@ type reviewtype = {
 
 const Review = ({ productId }: { productId: number }) => {
   const [productReview, setProductReview] = useState<reviewtype | null>(null);
+  const { store } = useMyContext();
+  console.log(productId);
   const [formData, setFormData] = useState({
     comment: "",
     rating: 0,
@@ -19,10 +23,29 @@ const Review = ({ productId }: { productId: number }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleRating = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      rating: index + 1,
+    }));
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { id, value } = e.target;
+
+    {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+    }
+  };
+
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/review/add-review`,
@@ -30,6 +53,7 @@ const Review = ({ productId }: { productId: number }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
           },
           body: JSON.stringify({
             comment: formData.comment,
@@ -40,11 +64,24 @@ const Review = ({ productId }: { productId: number }) => {
       );
 
       const data = await res.json();
-
       if (!res.ok) {
         console.error(data.message || data.error);
         return;
       }
+      // setProductReview((prev) => {
+      //   if (!prev) return prev;
+      //   return {
+      //     ...prev,
+      //     productReview: [
+      //       {
+      //         user: { name: store?.auth?.user?.name || "John Doe" },
+      //         comment: formData.comment,
+      //         rating: formData.rating,
+      //       },
+      //       ...prev.productReview,
+      //     ],
+      //   };
+      // });
 
       // Optionally reset the form
       setFormData({
@@ -79,8 +116,8 @@ const Review = ({ productId }: { productId: number }) => {
   return (
     <section className="grid grid-cols-2 gap-8 my-8 min-h-screen">
       <div>
-        {/* {productReview.length > 0 ? (
-          productReview?.map((item, index: number) => (
+        {productReview?.length > 0 ? (
+          productReview?.map((item: reviewType, index: number) => (
             <div key={index} className="flex items-start gap-4 pb-6 border-b">
               <div className="h-12 w-12 aspect-square rounded-full bg-gray-200 flex items-center justify-center"></div>
               <div className="space-y-2">
@@ -112,7 +149,7 @@ const Review = ({ productId }: { productId: number }) => {
           <p className="text-gray-500">
             No reviews yet. Be the first to review!
           </p>
-        )} */}
+        )}
       </div>
       <div>
         {/* Review form */}
@@ -125,7 +162,7 @@ const Review = ({ productId }: { productId: number }) => {
                 id="comment"
                 rows={4}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                // onChange={handleChange}
+                onChange={handleChange}
                 value={formData.comment}
                 required
               ></textarea>
@@ -137,7 +174,7 @@ const Review = ({ productId }: { productId: number }) => {
                   <button
                     key={i}
                     type="button"
-                    // onClick={() => handleRating(i)}
+                    onClick={() => handleRating(i)}
                     className="text-gray-300 hover:text-yellow-500"
                   >
                     <Star
