@@ -8,12 +8,8 @@ import moment from "moment";
 import { useMyContext } from "@/app/(root)/context/store";
 import { reviewType } from "@/types/review";
 
-type reviewtype = {
-  comment: string;
-};
-
 const Review = ({ productId }: { productId: number }) => {
-  const [productReview, setProductReview] = useState<reviewtype | null>(null);
+  const [productReview, setProductReview] = useState<reviewType[] | null>(null);
   const { store } = useMyContext();
   console.log(productId);
   const [formData, setFormData] = useState({
@@ -99,24 +95,32 @@ const Review = ({ productId }: { productId: number }) => {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        const review = await getProductReview(productId);
-        console.log("review", review);
-        setProductReview(review);
+        const res = await getProductReview(productId);
+
+        // Handle both array and single object responses
+        if (Array.isArray(res)) {
+          setProductReview(res);
+        } else {
+          // If it's a single review, wrap it in an array
+          setProductReview([res]);
+        }
       } catch (error) {
         console.error("Failed to fetch review:", error);
+        setProductReview([]); // Set to empty array on error
       }
     };
 
     fetchReview();
   }, [productId]);
 
+  
   if (!productReview)
     return <p className="text-slate-300">Loading review...</p>;
 
   return (
     <section className="grid grid-cols-2 gap-8 my-8 min-h-screen">
       <div>
-        {productReview?.length > 0 ? (
+        {productReview ? (
           productReview?.map((item: reviewType, index: number) => (
             <div key={index} className="flex items-start gap-4 pb-6 border-b">
               <div className="h-12 w-12 aspect-square rounded-full bg-gray-200 flex items-center justify-center"></div>
