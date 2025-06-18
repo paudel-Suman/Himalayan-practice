@@ -1,4 +1,3 @@
-
 export interface LoginResponse {
   success: boolean;
   statusCode: string;
@@ -7,11 +6,16 @@ export interface LoginResponse {
     id: string;
     name: string;
     email: string;
-    role: string;
+    role: Role[];
     avatar?: string;
     token: string;
   };
 }
+export type Role = {
+  id: string;
+  name: string;
+};
+
 
 export type RegionalAdminData = {
   id?: string;
@@ -21,6 +25,8 @@ export type RegionalAdminData = {
   role: string;
   avatar: string;
   createdAt: string;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
 };
 
 export type CustomerData = {
@@ -72,6 +78,7 @@ export interface UserDatailsResponse {
   data: CustomerData;
 }
 export type CustomerResponseWithMeta = {
+  users: never[];
   customers: CustomerData[];
   meta: Meta;
 };
@@ -94,7 +101,6 @@ export interface RegionBySymbolResponse {
   statusCode: string;
   message: string;
 }
-
 
 export interface VerifyEmailResponse {
   success: boolean;

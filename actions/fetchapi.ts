@@ -1,6 +1,6 @@
 import { categoryType } from "@/types/category";
 import { producttype } from "@/types/product";
-import { reviewtype } from "@/types/review";
+import { reviewType } from "@/types/review";
 
 export async function getTrendingProducts(): Promise<producttype[]> {
   try {
@@ -55,7 +55,7 @@ export async function getSingleProduct(slug: string): Promise<producttype> {
   }
 }
 
-export async function getProductReview(productId: number): Promise<reviewtype> {
+export async function getProductReview(productId: number): Promise<reviewType> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_API}/review/fetch-review-by-productId/${productId}`
