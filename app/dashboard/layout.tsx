@@ -104,7 +104,7 @@ export default AdminLayout;
 const navitems = [
   {
     title: "Overview",
-    path: "/admin",
+    path: "/dashboard",
     icon: "/icons/overview.png",
   },
   {
