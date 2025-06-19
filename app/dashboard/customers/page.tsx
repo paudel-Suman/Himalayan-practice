@@ -14,6 +14,7 @@ import { customerService } from "@/services/superadmin/customer-service";
 import moment from "moment";
 import { Input } from "@/components/ui/input";
 import Loading from "@/app/loading";
+import { Badge } from "@/components/ui/badge";
 
 const CustomerPage = () => {
   const [customers, setCustomers] = useState<RegionalAdminData[]>([]);
@@ -82,7 +83,6 @@ const CustomerPage = () => {
             <TableHead>Email Verified</TableHead>
             <TableHead>Phone Verified</TableHead>
             <TableHead>Created At</TableHead>
-            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -90,12 +90,23 @@ const CustomerPage = () => {
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.email}</TableCell>
-              <TableCell>{item.isEmailVerified ? "Yes" : "No"}</TableCell>
-              <TableCell>{item.isPhoneVerified ? "Yes" : "No"}</TableCell>
+              <TableCell>
+                {item.isEmailVerified ? (
+                  <Badge className="bg-green-500">Yes</Badge>
+                ) : (
+                  <Badge className="bg-red-500">No</Badge>
+                )}
+              </TableCell>
+              <TableCell>
+                {item.isPhoneVerified ? (
+                  <Badge className="bg-green-500">Yes</Badge>
+                ) : (
+                  <Badge className="bg-red-500">No</Badge>
+                )}
+              </TableCell>
               <TableCell>
                 {moment(item.createdAt).format("MMMM Do YYYY")}
               </TableCell>
-              <TableCell>{item.name}</TableCell>
             </TableRow>
           ))}
         </TableBody>
