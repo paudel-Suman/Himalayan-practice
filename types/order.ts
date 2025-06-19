@@ -17,6 +17,7 @@ export type Order = {
   shippingAddress: Address;
   billingAddress: Address;
   payment: Payment;
+  createdAt: Date;
 };
 
 export type Item = {

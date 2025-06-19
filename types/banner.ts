@@ -6,8 +6,27 @@ export type bannerType = {
   buttonText: string;
   buttonLink: string;
   isActive: boolean;
-  position: string; // If it's always a string like "1", keep it as string. Use `number` if it's numeric.
+  position: string;
   displayImage: string;
-  displayNumber: string; // Keep as string if you expect leading zeroes or non-numeric usage
+  displayNumber: string;
   displayText: string;
+  createdAt: Date;
+};
+
+export interface BannerResponse {
+  success: boolean;
+  statusCode: string;
+  message: string;
+  data: BannerResponseWithMeta;
+}
+
+export type BannerResponseWithMeta = {
+  banners: bannerType[];
+  meta: Meta;
+};
+export type Meta = {
+  currentPage: number;
+  totalPages: number;
+  totalBlogs: number;
+  limit: number;
 };

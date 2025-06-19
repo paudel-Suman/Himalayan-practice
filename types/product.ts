@@ -3,7 +3,7 @@ export type producttype = {
   name: string;
   slug: string;
   description: string;
-  category: string;
+  category: categoryType;
   price: number;
   rating: number;
   featureImage: string;
@@ -12,6 +12,7 @@ export type producttype = {
   color: ProductColor[];
   productAttributes: ProductAttribute[];
   stock: StockType;
+  createdAt: Date;
 };
 
 export type ProductAttribute = {
@@ -59,3 +60,34 @@ export type categoryType = {
   id: string;
   name: string;
 };
+
+export type Meta = {
+  currentPage: number;
+  totalPages: number;
+  limit: number;
+};
+
+export interface ProductResponse {
+  success: boolean;
+  statusCode: string;
+  message: string;
+  data: ProductResponseWithMeta;
+}
+export type ProductResponseWithMeta = {
+  products: producttype[];
+  pagination: Meta;
+};
+
+export interface SearchProductResponse {
+  success: boolean;
+  statusCode: string;
+  message: string;
+  products: producttype[];
+}
+
+export interface ProductSizeResponse {
+  success: boolean;
+  statusCode: string;
+  message: string;
+  sizes: ProductSize[];
+}
