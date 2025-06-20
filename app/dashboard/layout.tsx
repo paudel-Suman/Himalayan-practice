@@ -17,7 +17,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   return (
     <main className="grid grid-cols-12 bg-gradient-to-br from-zinc-50/50 via-zinc-50 to-sky-200/50">
-      <section className="bg-white col-span-2 h-screen sticky top-0">
+      <section className="bg-white border-r shadow-sm col-span-2 h-screen sticky top-0">
         {/* company logo */}
         <div className="h-16 bg-[#F7F7F7] border flex justify-center items-center">
           <Image
