@@ -16,10 +16,25 @@ import moment from "moment";
 import Image from "next/image";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Loading from "@/app/loading";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const BlogsPage = () => {
   const [blogs, setBlogs] = useState<blogType[]>([]);
   const [loading, setLoading] = useState(true);
+  const token = Cookies.get("token");
+
   // const [currentPage, setCurrentPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
   // const [editView, setEditView] = useState(false);
@@ -48,6 +63,32 @@ const BlogsPage = () => {
       setLoading(false);
     }
   };
+
+  const handleDelete = async (id: any) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/blog/delete-blog/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        setBlogs((prev) => prev.filter((item) => item.id !== id));
+        toast.success("Product Deleted Successfully");
+      } else {
+        toast.error("Failed to Delete Product");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
   // const handleEdit = (blog: blogType) => {
   //   setEditView(true);
   //   setBlog(blog);
@@ -116,12 +157,35 @@ const BlogsPage = () => {
                       height="20"
                       className="text-blue-500"
                     />
-                    <Icon
-                      icon="ant-design:delete-outlined"
-                      width="20"
-                      height="20"
-                      className="text-red-500"
-                    />
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Icon
+                          icon="ant-design:delete-outlined"
+                          width="20"
+                          height="20"
+                          className="text-red-500"
+                        />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            remove your data from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </TableCell>
               </TableRow>

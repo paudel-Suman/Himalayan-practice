@@ -15,10 +15,27 @@ import moment from "moment";
 import Image from "next/image";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Loading from "@/app/loading";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const BannerPage = () => {
   const [banners, setBanners] = useState<bannerType[]>([]);
   const [loading, setLoading] = useState(true);
+  const token = Cookies.get("token");
+
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
   const fetchBanners = async (pageNumber = 1) => {
@@ -37,10 +54,43 @@ const BannerPage = () => {
     fetchBanners();
   }, []);
 
+  const handleDelete = async (id: any) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/banner/delete-banner/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        setBanners((prev) => prev.filter((item) => item.id !== id));
+        toast.success("Coupon Deleted Successfully");
+      } else {
+        toast.error("Failed to Delete Coupon");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (loading) return <Loading />;
   return (
     <div>
-      <PageHeader title="Banner" className="text-start w-fit !text-md mb-8" />
+      <div className="flex justify-between">
+        <PageHeader title="Banner" className="text-start w-fit !text-md mb-8" />
+
+        <Link href="/dashboard/banner/add">
+          <Button>
+            <Icon icon="gridicons:add" width="24" height="24" />
+            Add Banner
+          </Button>
+        </Link>
+      </div>
 
       <Table>
         <TableHeader>
@@ -82,12 +132,35 @@ const BannerPage = () => {
                     height="20"
                     className="text-blue-500"
                   />
-                  <Icon
-                    icon="ant-design:delete-outlined"
-                    width="20"
-                    height="20"
-                    className="text-red-500"
-                  />
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Icon
+                        icon="ant-design:delete-outlined"
+                        width="20"
+                        height="20"
+                        className="text-red-500"
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          remove your data from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </TableCell>
             </TableRow>

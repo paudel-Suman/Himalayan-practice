@@ -16,13 +16,28 @@ import moment from "moment";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Badge } from "@/components/ui/badge";
 import Loading from "@/app/loading";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const OrderPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrders, setFilteredOrders] = useState<Order[]>(orders);
-  console.log(filteredOrders)
+  const token = Cookies.get("token");
+
+  console.log(filteredOrders);
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -56,7 +71,29 @@ const OrderPage = () => {
       setOrders((await response).orders);
     }
   };
+  const handleDelete = async (id: any) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/order/delete-order/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
+      if (res.ok) {
+        setOrders((prev) => prev.filter((item) => item.id !== id));
+        toast.success("Order Deleted Successfully");
+      } else {
+        toast.error("Failed to Delete Order");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   if (loading) return <Loading />;
 
   return (
@@ -116,12 +153,35 @@ const OrderPage = () => {
                     height="20"
                     className="text-blue-500"
                   />
-                  <Icon
-                    icon="ant-design:delete-outlined"
-                    width="20"
-                    height="20"
-                    className="text-red-500"
-                  />
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Icon
+                        icon="ant-design:delete-outlined"
+                        width="20"
+                        height="20"
+                        className="text-red-500"
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          remove your data from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </TableCell>
             </TableRow>

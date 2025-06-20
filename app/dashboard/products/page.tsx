@@ -16,9 +16,25 @@ import moment from "moment";
 import Image from "next/image";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Loading from "@/app/loading";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const ProductPage = () => {
   const [products, setProducts] = useState<producttype[]>([]);
+  const token = Cookies.get("token");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] =
@@ -56,6 +72,29 @@ const ProductPage = () => {
       setProducts((await response).products);
     }
   };
+  const handleDelete = async (id: any) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/product/delete-product/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        setProducts((prev) => prev.filter((item) => item.id !== id));
+        toast.success("Product Deleted Successfully");
+      } else {
+        toast.error("Failed to Delete Product");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (loading) return <Loading />;
 
@@ -73,6 +112,13 @@ const ProductPage = () => {
           value={searchQuery}
           onChange={handleSearch}
         />
+
+        <Link href="/dashboard/products/add">
+          <Button>
+            <Icon icon="gridicons:add" width="24" height="24" />
+            Add Products
+          </Button>
+        </Link>
       </div>
 
       <Table>
@@ -118,12 +164,36 @@ const ProductPage = () => {
                     height="20"
                     className="text-blue-500"
                   />
-                  <Icon
-                    icon="ant-design:delete-outlined"
-                    width="20"
-                    height="20"
-                    className="text-red-500"
-                  />
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Icon
+                        icon="ant-design:delete-outlined"
+                        width="20"
+                        height="20"
+                        className="text-red-500"
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </TableCell>
             </TableRow>

@@ -15,11 +15,29 @@ import {
 import moment from "moment";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Loading from "@/app/loading";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const CouponPage = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const token = Cookies.get("token");
+
   // const [filteredCoupons, setFilteredCoupons] = useState<Coupon[]>(coupons);
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
@@ -55,6 +73,30 @@ const CouponPage = () => {
     }
   };
 
+  const handleDelete = async (id: any) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/coupon/delete-coupon/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        setCoupons((prev) => prev.filter((item) => item.id !== id));
+        toast.success("Coupon Deleted Successfully");
+      } else {
+        toast.error("Failed to Delete Coupon");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (loading) return <Loading />;
 
   return (
@@ -70,6 +112,13 @@ const CouponPage = () => {
           value={searchQuery}
           onChange={handleSearch}
         />
+
+        <Link href="/dashboard/coupon/add">
+          <Button>
+            <Icon icon="gridicons:add" width="24" height="24" />
+            Add Coupon
+          </Button>
+        </Link>
       </div>
 
       {coupons.length > 0 ? (
@@ -93,10 +142,28 @@ const CouponPage = () => {
                 <TableCell>
                   {moment(item.expiryDate).format("MMMM Do YYYY")}
                 </TableCell>
-                <TableCell>{item.couponCount}</TableCell>
+                <TableCell>
+                  <Badge
+                    className={
+                      item.couponCount < 10
+                        ? "bg-red-500 text-white"
+                        : "bg-green-500 text-white"
+                    }
+                  >
+                    {item.couponCount}
+                  </Badge>{" "}
+                </TableCell>
                 <TableCell>{item.type}</TableCell>
-                <TableCell>Rs.{item.discountAmount}</TableCell>
-                <TableCell>{item.discountPercent}</TableCell>
+                {(item.discountAmount ?? 0) > 0 ? (
+                  <TableCell>Rs.{item.discountAmount}</TableCell>
+                ) : (
+                  <TableCell>-</TableCell>
+                )}
+                {(item.discountPercent ?? 0) > 0 ? (
+                  <TableCell>{item.discountPercent}%</TableCell>
+                ) : (
+                  <TableCell>-</TableCell>
+                )}
                 <TableCell>
                   {moment(item.createdAt).format("MMMM Do YYYY")}
                 </TableCell>
@@ -108,12 +175,37 @@ const CouponPage = () => {
                       height="20"
                       className="text-blue-500"
                     />
-                    <Icon
-                      icon="ant-design:delete-outlined"
-                      width="20"
-                      height="20"
-                      className="text-red-500"
-                    />
+
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Icon
+                          icon="ant-design:delete-outlined"
+                          width="20"
+                          height="20"
+                          className="text-red-500"
+                        />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </TableCell>
               </TableRow>
