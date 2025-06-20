@@ -21,13 +21,14 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  //   const [regionId, setRegionId] = useState<string | undefined>(undefined);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
+  
   const [errors, setErrors] = useState({
     name: "",
     email: "",
