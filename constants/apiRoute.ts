@@ -29,9 +29,7 @@ export const API_ROUTES = {
   SUPERADMIN_DASHBOARD: {
     DASHBOARD_ANALYTICS: withBase("/super-admin/fetch-dashboard-summary"),
     MONTHLY_METRICS: withBase("/super-admin/fetch-monthly-metrics"),
-    FETCH_ALL_REGIONAL_ADMIN: withBase(
-      "/super-admin/fetch-all-regional-admin"
-    ),
+    FETCH_ALL_REGIONAL_ADMIN: withBase("/super-admin/fetch-all-regional-admin"),
     FETCH_ALL_CUSTOMER: withBase("/super-admin/fetch-all-customer"),
     SEARCH_REGIONAL_ADMIN: withBase("/super-admin/search-regional-admin"),
     ADD_REGIONAL_ADMIN: withBase("/super-admin/create-regional-admin"),
@@ -42,7 +40,7 @@ export const API_ROUTES = {
     UPDATE_CATEGORY: withBase("/category/update-product-category"),
     DELETE_CATEGORY: withBase("/category/delete-category/"),
     ADD_BLOG: withBase("/blog/create-blog"),
-    FETCH_ALL_COUPON: withBase("//coupon/fetch-all-coupons"),
+    FETCH_ALL_COUPON: withBase("/coupon/fetch-all-coupons"),
     ADD_REGION: withBase("/region/create-region"),
     UPDATE_REGION: withBase("/region/update-region"),
     DELETE_REGION: withBase("/region/delete-region/"),
