@@ -1,12 +1,17 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { logout } from "@/lib/logout";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import Loading from "../loading";
+import toast from "react-hot-toast";
 
 type AdminLayoutProps = {
   children: React.ReactNode;
@@ -14,6 +19,20 @@ type AdminLayoutProps = {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      router.push("/admin");
+      toast.error("Please Login to Continue");
+    } else {
+      setIsChecking(false);
+    }
+  }, []);
+
+  if (isChecking) return <Loading />;
 
   return (
     <main className="grid grid-cols-12 bg-gradient-to-br from-zinc-50/50 via-zinc-50 to-sky-200/50">
@@ -80,8 +99,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </h2> */}
                 <button
                   onClick={() => {
-                    // handleLogout();
-                    // router.push("/login");
+                    logout();
                   }}
                   className="bg-red-500 hover:bg-red-600 ease-in-out duration-500 text-white font-medium py-2 rounded-md w-full mt-2"
                 >
