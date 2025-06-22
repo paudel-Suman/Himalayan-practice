@@ -43,6 +43,11 @@ const nextConfig: NextConfig = {
         hostname: "img.freepik.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "katunje.s3.ap-south-1.amazonaws.com",
+        port: "",
+      },
     ],
   },
 };
