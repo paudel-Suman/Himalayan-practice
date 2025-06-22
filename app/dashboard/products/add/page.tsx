@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { categoryType } from "@/types/category";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Select,
@@ -12,8 +12,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-
 const AddProduct = () => {
+  const [tags, setTags] = useState<string[]>([]);
+
+  const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ((e.key === "Enter" || e.key === ",") && e.currentTarget.value.trim()) {
+      e.preventDefault();
+      const newTag = e.currentTarget.value.trim();
+      if (!tags.includes(newTag)) {
+        setTags((prev) => [...prev, newTag]);
+      }
+      e.currentTarget.value = "";
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
+  };
+
   const [categories, setCategories] = React.useState<categoryType[]>([]);
   useEffect(() => {
     const fetchCategory = async () => {
@@ -83,12 +99,39 @@ const AddProduct = () => {
           </div>
           <div className="space-y-2">
             <Label>Tags</Label>
-            <Input placeholder="fashion,bags,stylish" />
+            <div className="flex flex-wrap gap-2 ">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full flex items-center gap-1"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    className="text-sm text-red-500 hover:text-red-700"
+                  >
+                    &times;
+                  </button>
+                </span>
+              ))}
+              <Input
+                type="text"
+                onKeyDown={handleTagInput}
+                placeholder="Add a tag"
+              />
+            </div>
           </div>
         </section>
 
-        <div>
+        <div className="space-y-2">
           <Label>Description</Label>
+          <textarea
+            className="w-full bg-white rounded-md p-2"
+            name="description"
+            placeholder="Description of the product"
+            rows={8}
+          ></textarea>
         </div>
       </form>
     </main>

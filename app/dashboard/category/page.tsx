@@ -30,11 +30,34 @@ import {
 } from "@/components/ui/alert-dialog";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState<categoryType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addSubCategory, setAddSubCategory] = useState(false);
   const token = Cookies.get("token");
+  const [formData, setFormData] = useState({
+    title: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const fetchAllCategories = async () => {
     try {
@@ -85,13 +108,51 @@ const CategoryPage = () => {
           className="text-start w-fit !text-md mb-8"
         />
 
-        <Link href="/dashboard/category/add">
-          <Button>
+        <div className="flex gap-4">
+          <Button onClick={() => setAddSubCategory(!addSubCategory)}>
             <Icon icon="gridicons:add" width="24" height="24" />
-            Add Category
+            Add SubCategory
           </Button>
-        </Link>
+
+          <Link href="/dashboard/category/add">
+            <Button>
+              <Icon icon="gridicons:add" width="24" height="24" />
+              Add Category
+            </Button>
+          </Link>
+        </div>
       </div>
+
+      {addSubCategory && (
+        <div
+          onClick={() => setAddSubCategory(false)}
+          className="bg-black/40 z-[20] bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10  fixed inset-0 h-screen w-full"
+        />
+      )}
+      <form
+        // onSubmit={handleSubmit}
+        className={`${
+          addSubCategory ? "block" : "hidden"
+        }  absolute z-[20] left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2  w-[20em] bg-white rounded-md p-4 space-y-4`}
+      >
+        <Label>Add SubCategory</Label>
+        <Input name="title" value={formData.title} onChange={handleChange} />
+
+        <Select>
+          <SelectTrigger className="w-full bg-white">
+            <SelectValue placeholder="Select Category" />
+          </SelectTrigger>
+
+          <SelectContent className="w-full flex flex-col">
+            {categories.map((item, index) => (
+              <SelectItem key={index} value={item.id} className="text-black">
+                {item.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button>Submit</Button>
+      </form>
 
       <Table>
         <TableHeader>

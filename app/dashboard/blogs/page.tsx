@@ -29,11 +29,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const BlogsPage = () => {
   const [blogs, setBlogs] = useState<blogType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addCategory, setAddCategory] = useState(false);
   const token = Cookies.get("token");
+  const [formData, setFormData] = useState({
+    title: "",
+  });
 
   // const [currentPage, setCurrentPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
@@ -50,6 +58,47 @@ const BlogsPage = () => {
   //     setCurrentPage(page);
   //   }
   // };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/blog-category/add-blog-category`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: formData.title,
+          }),
+        }
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error(data.message || data.error);
+        toast.error(data.message || data.error);
+        return;
+      }
+      toast.success("Banner Added Successfully");
+      // router.push("/dashboard/coupon");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchBlogs = async () => {
     try {
       setLoading(true);
@@ -88,7 +137,6 @@ const BlogsPage = () => {
     }
   };
 
-  
   // const handleEdit = (blog: blogType) => {
   //   setEditView(true);
   //   setBlog(blog);
@@ -116,8 +164,40 @@ const BlogsPage = () => {
   if (loading) return <Loading />;
 
   return (
-    <div>
-      <PageHeader title="Blogs" className="text-start w-fit !text-md mb-8" />
+    <div className="relative">
+      <div className="flex justify-between">
+        <PageHeader title="Blogs" className="text-start w-fit !text-md mb-8" />
+
+        <div className="flex gap-4">
+          <Button onClick={() => setAddCategory(!addCategory)}>
+            <Icon icon="gridicons:add" width="24" height="24" />
+            Add Category
+          </Button>
+          <Link href="/dashboard/blogs/add">
+            <Button>
+              <Icon icon="gridicons:add" width="24" height="24" />
+              Add Blogs
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {addCategory && (
+        <div
+          onClick={() => setAddCategory(false)}
+          className="bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10  fixed inset-0 h-screen w-full"
+        />
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className={`${
+          addCategory ? "block" : "hidden"
+        }  absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2  w-[20em] bg-white rounded-md p-4 space-y-4`}
+      >
+        <Label>Add Category</Label>
+        <Input name="title" value={formData.title} onChange={handleChange} />
+        <Button>Submit</Button>
+      </form>
 
       {blogs.length > 0 ? (
         <Table>
