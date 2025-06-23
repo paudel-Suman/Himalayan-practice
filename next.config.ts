@@ -45,6 +45,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "himalaygarment.s3.ap-south-1.amazonaws.com",
+        port: "",
+      },
+      {
+        protocol: "https",
         hostname: "katunje.s3.ap-south-1.amazonaws.com",
         port: "",
       },
