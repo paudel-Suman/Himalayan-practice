@@ -84,11 +84,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <Popover>
             <PopoverTrigger>
               <Image
-                src="/fav.png"
+                src="/admin.webp"
                 alt="avatar"
                 width={1000}
                 height={1000}
-                className="h-12 w-12 rounded-full border-2 border-green-500"
+                className="h-14 w-14 rounded-full "
               />
             </PopoverTrigger>
             <PopoverContent className="w-32">
