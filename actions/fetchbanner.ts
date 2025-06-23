@@ -11,7 +11,7 @@ export async function getBanner(): Promise<bannerType[]> {
     }
 
     const data = await res.json();
-    return data.data.banners || [];
+    return data.banners.banners || [];
   } catch (error) {
     console.error("Error fetching Category:", error);
     return [];

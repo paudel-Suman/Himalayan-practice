@@ -7,6 +7,7 @@ export type producttype = {
   price: number;
   rating: number;
   featureImage: string;
+  isActive: boolean;
   media: MediaType[];
   size: ProductSize[];
   color: ProductColor[];

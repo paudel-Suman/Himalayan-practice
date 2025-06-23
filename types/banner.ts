@@ -17,7 +17,7 @@ export interface BannerResponse {
   success: boolean;
   statusCode: string;
   message: string;
-  data: BannerResponseWithMeta;
+  banners: BannerResponseWithMeta;
 }
 
 export type BannerResponseWithMeta = {
