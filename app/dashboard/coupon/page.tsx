@@ -38,7 +38,8 @@ const CouponPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const token = Cookies.get("token");
 
-  // const [filteredCoupons, setFilteredCoupons] = useState<Coupon[]>(coupons);
+  const [filteredCoupons, setFilteredCoupons] = useState<Coupon[]>(coupons);
+  console.log(filteredCoupons)
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
   const fetchCoupons = async (pageNumber = 1) => {
@@ -61,12 +62,13 @@ const CouponPage = () => {
     const value = e.target.value;
     setSearchQuery(value);
   };
+
   useEffect(() => {
     searchCustomer();
   }, [searchQuery]);
   const searchCustomer = async () => {
     if (searchQuery === " ") {
-      // setFilteredCoupons(coupons);
+      setFilteredCoupons(coupons);
     } else {
       // const customers = customerService.searchCustomer(searchQuery);
       // setCoupons((await customers).customers);

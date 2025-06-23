@@ -41,7 +41,7 @@ const BannerPage = () => {
   const fetchBanners = async (pageNumber = 1) => {
     try {
       const response = await bannerService.fetchAllBanners(pageNumber);
-      setBanners((await response).data.banners);
+      setBanners((await response).banners.banners);
       // setTotalPages((await response).data.meta.totalPages);
     } catch (error) {
       console.log(error);
@@ -69,9 +69,9 @@ const BannerPage = () => {
 
       if (res.ok) {
         setBanners((prev) => prev.filter((item) => item.id !== id));
-        toast.success("Coupon Deleted Successfully");
+        toast.success("Banner Deleted Successfully");
       } else {
-        toast.error("Failed to Delete Coupon");
+        toast.error("Failed to Delete Banner");
       }
     } catch (error) {
       console.error(error);

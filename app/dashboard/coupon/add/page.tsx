@@ -32,7 +32,7 @@ const CouponAddPage = () => {
     couponCount: 0,
     expiryDate: "",
     type: "",
-    discountAmount: 0,
+    discountAmount: 0,  
     discountPercent: 0,
   });
 

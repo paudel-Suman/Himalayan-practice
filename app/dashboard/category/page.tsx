@@ -46,7 +46,8 @@ const CategoryPage = () => {
   const [addSubCategory, setAddSubCategory] = useState(false);
   const token = Cookies.get("token");
   const [formData, setFormData] = useState({
-    title: "",
+    name: "",
+    categoryId: "",
   });
 
   const handleChange = (
@@ -80,7 +81,7 @@ const CategoryPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/category/delete-category/${id}`,
         {
-          method: "DELETE",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -96,6 +97,38 @@ const CategoryPage = () => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/subcategory/create-subcategory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            categoryId: formData.categoryId,
+          }),
+        }
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error(data.message || data.error);
+        toast.error(data.message || data.error);
+        return;
+      }
+      toast.success("SubCategory Added Successfully");
+      setAddSubCategory(false);
+      // router.push("/dashboard/coupon");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -130,15 +163,24 @@ const CategoryPage = () => {
         />
       )}
       <form
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         className={`${
           addSubCategory ? "block" : "hidden"
         }  absolute z-[20] left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2  w-[20em] bg-white rounded-md p-4 space-y-4`}
       >
         <Label>Add SubCategory</Label>
-        <Input name="title" value={formData.title} onChange={handleChange} />
+        <Input name="name" value={formData.name} onChange={handleChange} />
 
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            const selected = categories.find((cat) => cat.id === value);
+            setFormData((prev) => ({
+              ...prev,
+              categoryId: value,
+              category: selected?.name || "",
+            }));
+          }}
+        >
           <SelectTrigger className="w-full bg-white">
             <SelectValue placeholder="Select Category" />
           </SelectTrigger>
@@ -151,7 +193,15 @@ const CategoryPage = () => {
             ))}
           </SelectContent>
         </Select>
-        <Button>Submit</Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setAddSubCategory(false)}
+            variant="destructive"
+          >
+            Cancel
+          </Button>
+          <Button>Submit</Button>
+        </div>
       </form>
 
       <Table>
@@ -191,7 +241,13 @@ const CategoryPage = () => {
               </TableCell>
 
               <TableCell>
-                {item.subcategories.map((sub) => sub.name).join(",")}
+                <div className="flex gap-2">
+                  {item.subcategories.map((sub, index) => (
+                    <Badge className="bg-blue-200 text-black" key={index}>
+                      {sub.name}
+                    </Badge>
+                  ))}
+                </div>
               </TableCell>
 
               <TableCell>

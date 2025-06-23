@@ -15,9 +15,21 @@ import S3UploadForm from "@/lib/s3upload-form";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { BlogCategory } from "@/types/blogs";
+import { useRouter } from "next/navigation";
+
+
 
 const BlogAddPage = () => {
   const token = Cookies.get("token");
+  const router = useRouter();
   const [image, setImage] = useState("");
   const [formData, setFormData] = useState({
     title: "",
@@ -27,18 +39,21 @@ const BlogAddPage = () => {
     category: "",
     categoryId: "",
   });
-  const [slug, setSlug] = useState("");
 
   const slugify = (text: string) => {
     return text
       .toLowerCase()
       .trim()
-      .replace(/[^a-z0-9]+/g, "-") // replace non-alphanumeric with hyphen
-      .replace(/^-+|-+$/g, ""); // remove starting/ending hyphens
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
   };
 
   useEffect(() => {
-    setSlug(slugify(formData.title));
+    const newSlug = slugify(formData.title);
+    setFormData((prev) => ({
+      ...prev,
+      slug: newSlug,
+    }));
   }, [formData.title]);
 
   const handleChange = (
@@ -54,6 +69,27 @@ const BlogAddPage = () => {
   const handleUploadBlogImage = (urls: string[]) => {
     setImage(urls[0]);
   };
+
+  const [categories, setCategories] = React.useState<BlogCategory[]>([]);
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_API}/blog-category/fetch-all-categories`
+        );
+
+        const data = await res.json();
+        setCategories(data.categories);
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to fetch reviews");
+        }
+      } catch (error) {
+        console.error("Error fetching product reviews:", error);
+        toast.error("Failed to load reviews");
+      }
+    };
+    fetchCategory();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,8 +120,8 @@ const BlogAddPage = () => {
         toast.error(data.message || data.error);
         return;
       }
-      toast.success("Banner Added Successfully");
-      // router.push("/dashboard/coupon");
+      toast.success("Blog Added Successfully");
+      router.push("/dashboard/blogs");
     } catch (error) {
       console.log(error);
     }
@@ -129,17 +165,38 @@ const BlogAddPage = () => {
           </div>
           <div className="space-y-2">
             <Label>Slug</Label>
-            <Input name="slug" value={slug} readOnly />
+            <Input name="slug" value={formData.slug} readOnly />
           </div>
           <div className="space-y-2">
             <Label>Category</Label>
-            <Input
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-            />
+            <Select
+              onValueChange={(value) => {
+                const selected = categories.find((cat) => cat.id === value);
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryId: value,
+                  category: selected?.title || "",
+                }));
+              }}
+            >
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+
+              <SelectContent className="w-full flex flex-col">
+                {categories.map((item, index) => (
+                  <SelectItem
+                    key={index}
+                    value={item.id}
+                    className="text-black"
+                  >
+                    {item.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 hidden">
             <Label>categoryId</Label>
             <Input
               name="categoryId"

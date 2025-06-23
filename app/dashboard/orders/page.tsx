@@ -57,6 +57,7 @@ const OrderPage = () => {
     const value = e.target.value;
     setSearchQuery(value);
   };
+
   useEffect(() => {
     searchOrders();
   }, [searchQuery]);
@@ -76,7 +77,7 @@ const OrderPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/order/delete-order/${id}`,
         {
-          method: "DELETE",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -108,86 +109,94 @@ const OrderPage = () => {
         />
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Order ID</TableHead>
-            <TableHead>Order Status</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Is Paid</TableHead>
-            <TableHead>Is Cancelled</TableHead>
-            <TableHead>Created Date</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.id}</TableCell>
-              <TableCell>
-                <Badge className="bg-yellow-500">{item.status}</Badge>
-              </TableCell>
-              <TableCell>Rs .{item.totalAmount}</TableCell>
-              <TableCell>
-                {item.isPaid ? (
-                  <Badge className="bg-green-500">Yes</Badge>
-                ) : (
-                  <Badge className="bg-red-500">No</Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {item.isCancelled ? (
-                  <Badge className="bg-green-500">Yes</Badge>
-                ) : (
-                  <Badge className="bg-red-500">No</Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {moment(item.createdAt).format("MMMM Do YYYY")}
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Icon
-                    icon="lucide:edit"
-                    width="20"
-                    height="20"
-                    className="text-blue-500"
-                  />
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Icon
-                        icon="ant-design:delete-outlined"
-                        width="20"
-                        height="20"
-                        className="text-red-500"
-                      />
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          remove your data from our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </TableCell>
+      {orders.length > 0 ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Order ID</TableHead>
+              <TableHead>Order Status</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Is Paid</TableHead>
+              <TableHead>Is Cancelled</TableHead>
+              <TableHead>Created Date</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {orders.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.id}</TableCell>
+                <TableCell>
+                  <Badge className="bg-yellow-500">{item.status}</Badge>
+                </TableCell>
+                <TableCell>Rs .{item.totalAmount}</TableCell>
+                <TableCell>
+                  {item.isPaid ? (
+                    <Badge className="bg-green-500">Yes</Badge>
+                  ) : (
+                    <Badge className="bg-red-500">No</Badge>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {item.isCancelled ? (
+                    <Badge className="bg-green-500">Yes</Badge>
+                  ) : (
+                    <Badge className="bg-red-500">No</Badge>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {moment(item.createdAt).format("MMMM Do YYYY")}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Icon
+                      icon="lucide:edit"
+                      width="20"
+                      height="20"
+                      className="text-blue-500"
+                    />
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Icon
+                          icon="ant-design:delete-outlined"
+                          width="20"
+                          height="20"
+                          className="text-red-500"
+                        />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            remove your data from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <div className="flex justify-center items-center h-[70vh]">
+          <h2 className="font-semibold text-2xl text-red-500">
+            No Orders received Yet
+          </h2>
+        </div>
+      )}
     </div>
   );
 };

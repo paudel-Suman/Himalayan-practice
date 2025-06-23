@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { Badge } from "@/components/ui/badge";
 
 const ProductPage = () => {
   const [products, setProducts] = useState<producttype[]>([]);
@@ -77,7 +78,7 @@ const ProductPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/product/delete-product/${id}`,
         {
-          method: "DELETE",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -129,6 +130,7 @@ const ProductPage = () => {
             <TableHead>Category</TableHead>
             <TableHead>Feature Image</TableHead>
             <TableHead>Stock</TableHead>
+            <TableHead>Is Active</TableHead>
             <TableHead>Created Date</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -153,6 +155,13 @@ const ProductPage = () => {
                 />
               </TableCell>
               <TableCell>{item.stock.quantity}</TableCell>
+              <TableCell>
+                {item.isActive ? (
+                  <Badge className="bg-green-500">Yes</Badge>
+                ) : (
+                  <Badge className="bg-red-500">No</Badge>
+                )}
+              </TableCell>
               <TableCell>
                 {moment(item.createdAt).format("MMMM Do YYYY")}
               </TableCell>

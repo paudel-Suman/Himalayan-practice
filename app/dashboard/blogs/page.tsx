@@ -93,12 +93,14 @@ const BlogsPage = () => {
         toast.error(data.message || data.error);
         return;
       }
-      toast.success("Banner Added Successfully");
+      toast.success("Blog Category Added Successfully");
+      setAddCategory(false);
       // router.push("/dashboard/coupon");
     } catch (error) {
       console.log(error);
     }
   };
+
   const fetchBlogs = async () => {
     try {
       setLoading(true);
@@ -185,18 +187,23 @@ const BlogsPage = () => {
       {addCategory && (
         <div
           onClick={() => setAddCategory(false)}
-          className="bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10  fixed inset-0 h-screen w-full"
+          className="bg-black/40 z-[20] bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10  fixed inset-0 h-screen w-full"
         />
       )}
       <form
         onSubmit={handleSubmit}
         className={`${
           addCategory ? "block" : "hidden"
-        }  absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2  w-[20em] bg-white rounded-md p-4 space-y-4`}
+        }  absolute z-[20] left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2  w-[20em] bg-white rounded-md p-4 space-y-4`}
       >
         <Label>Add Category</Label>
         <Input name="title" value={formData.title} onChange={handleChange} />
-        <Button>Submit</Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setAddCategory(false)} variant="destructive">
+            Cancel
+          </Button>
+          <Button>Submit</Button>
+        </div>
       </form>
 
       {blogs.length > 0 ? (
@@ -273,7 +280,7 @@ const BlogsPage = () => {
           </TableBody>
         </Table>
       ) : (
-        <div className="flex justify-center items-center h-[60vh]">
+        <div className="flex justify-center items-center h-[70vh]">
           <h2 className="font-semibold text-2xl text-red-500">
             No Blogs Found
           </h2>
