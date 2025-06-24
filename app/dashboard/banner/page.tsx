@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { Badge } from "@/components/ui/badge";
 
 const BannerPage = () => {
   const [banners, setBanners] = useState<bannerType[]>([]);
@@ -97,7 +98,7 @@ const BannerPage = () => {
           <TableRow>
             <TableHead>Title</TableHead>
             <TableHead>Image</TableHead>
-            <TableHead>Position</TableHead>
+            <TableHead>Is Active</TableHead>
             <TableHead>Button Text</TableHead>
             <TableHead>Button Link</TableHead>
 
@@ -118,7 +119,14 @@ const BannerPage = () => {
                   className="h-14 w-14 object-cover"
                 />
               </TableCell>
-              <TableCell>{item.position}</TableCell>
+              <TableCell>
+                {item.isActive ? (
+                  <Badge className="bg-green-500">Yes</Badge>
+                ) : (
+                  <Badge className="bg-red-500">No</Badge>
+                )}
+              </TableCell>
+
               <TableCell>{item.buttonText}</TableCell>
               <TableCell>{item.buttonLink}</TableCell>
               <TableCell>
@@ -126,12 +134,14 @@ const BannerPage = () => {
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Icon
-                    icon="lucide:edit"
-                    width="20"
-                    height="20"
-                    className="text-blue-500"
-                  />
+                  <Link href={`/dashboard/banner/edit/${item.id}`}>
+                    <Icon
+                      icon="lucide:edit"
+                      width="20"
+                      height="20"
+                      className="text-blue-500"
+                    />
+                  </Link>
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <Icon

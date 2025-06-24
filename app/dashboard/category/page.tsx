@@ -81,7 +81,7 @@ const CategoryPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/category/delete-category/${id}`,
         {
-          method: "PUT",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -252,12 +252,14 @@ const CategoryPage = () => {
 
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Icon
-                    icon="lucide:edit"
-                    width="20"
-                    height="20"
-                    className="text-blue-500"
-                  />
+                  <Link href={`/dashboard/category/edit/${item.id}`}>
+                    <Icon
+                      icon="lucide:edit"
+                      width="20"
+                      height="20"
+                      className="text-blue-500"
+                    />
+                  </Link>
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <Icon

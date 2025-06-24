@@ -9,7 +9,7 @@ const ChipTabs = ({
   productId,
 }: {
   description: string;
-  productId: number;
+  productId: string;
 }) => {
   const [selected, setSelected] = useState(tabs[0]);
 

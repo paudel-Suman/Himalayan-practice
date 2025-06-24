@@ -8,7 +8,7 @@ import moment from "moment";
 import { useMyContext } from "@/app/(root)/context/store";
 import { reviewType } from "@/types/review";
 
-const Review = ({ productId }: { productId: number }) => {
+const Review = ({ productId }: { productId: string }) => {
   const [productReview, setProductReview] = useState<reviewType[] | null>(null);
   const { store } = useMyContext();
   console.log(productId);

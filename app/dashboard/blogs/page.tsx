@@ -130,9 +130,9 @@ const BlogsPage = () => {
 
       if (res.ok) {
         setBlogs((prev) => prev.filter((item) => item.id !== id));
-        toast.success("Product Deleted Successfully");
+        toast.success("Blog Deleted Successfully");
       } else {
-        toast.error("Failed to Delete Product");
+        toast.error("Failed to Delete Blog");
       }
     } catch (error) {
       console.error(error);
@@ -238,12 +238,14 @@ const BlogsPage = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <Icon
-                      icon="lucide:edit"
-                      width="20"
-                      height="20"
-                      className="text-blue-500"
-                    />
+                    <Link href={`/dashboard/blogs/edit/${item.slug}`}>
+                      <Icon
+                        icon="lucide:edit"
+                        width="20"
+                        height="20"
+                        className="text-blue-500"
+                      />
+                    </Link>
                     <AlertDialog>
                       <AlertDialogTrigger>
                         <Icon

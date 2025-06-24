@@ -167,12 +167,14 @@ const ProductPage = () => {
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Icon
-                    icon="lucide:edit"
-                    width="20"
-                    height="20"
-                    className="text-blue-500"
-                  />
+                  <Link href={`/dashboard/products/edit/${item.slug}`}>
+                    <Icon
+                      icon="lucide:edit"
+                      width="20"
+                      height="20"
+                      className="text-blue-500"
+                    />
+                  </Link>
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <Icon

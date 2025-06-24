@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,13 +20,15 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 const EditCouponPage = () => {
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
   const [couponType, setCouponType] = useState<string>("AMOUNT");
   const token = Cookies.get("token");
-  const router = useRouter();
   const [formData, setFormData] = useState({
     code: "",
     couponCount: 0,
@@ -118,9 +120,9 @@ const EditCouponPage = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/coupon/update-coupon/`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/coupon/update-coupon/${id}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -148,6 +150,44 @@ const EditCouponPage = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const fetchSingleCoupon = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_API}/coupon/fetch-coupon-by-id/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to fetch coupon");
+        }
+
+        const couponData = data.coupon;
+
+        setCouponType(couponData.type);
+        setFormData({
+          code: couponData.code || "",
+          couponCount: couponData.couponCount || 0,
+          expiryDate: couponData.expiryDate?.split("T")[0] || "",
+          type: couponData.type || "AMOUNT",
+          discountAmount: couponData.discountAmount || 0,
+          discountPercent: couponData.discountPercent || 0,
+        });
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load coupon");
+      }
+    };
+
+    fetchSingleCoupon();
+  }, []);
 
   return (
     <main className="my-6">

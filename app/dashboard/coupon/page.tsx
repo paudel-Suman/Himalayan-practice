@@ -39,7 +39,7 @@ const CouponPage = () => {
   const token = Cookies.get("token");
 
   const [filteredCoupons, setFilteredCoupons] = useState<Coupon[]>(coupons);
-  console.log(filteredCoupons)
+  console.log(filteredCoupons);
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
   const fetchCoupons = async (pageNumber = 1) => {
@@ -171,7 +171,7 @@ const CouponPage = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <Link href={`/dashboard/coupon/edit`}>
+                    <Link href={`/dashboard/coupon/edit/${item.id}`}>
                       <Icon
                         icon="lucide:edit"
                         width="20"
