@@ -55,7 +55,7 @@ export async function getSingleProduct(slug: string): Promise<producttype> {
   }
 }
 
-export async function getProductReview(productId: number): Promise<reviewType> {
+export async function getProductReview(productId: string): Promise<reviewType> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_API}/review/fetch-review-by-productId/${productId}`

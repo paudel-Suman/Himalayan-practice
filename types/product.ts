@@ -1,5 +1,5 @@
 export type producttype = {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description: string;
@@ -8,6 +8,8 @@ export type producttype = {
   rating: number;
   featureImage: string;
   isActive: boolean;
+  isFeatured: boolean;
+  isDeleted: boolean;
   media: MediaType[];
   size: ProductSize[];
   color: ProductColor[];
