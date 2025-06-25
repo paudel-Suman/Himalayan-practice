@@ -398,9 +398,9 @@ const CheckoutPage = () => {
                    }
         `}
                         >
-                          <div className="flex justify-between">
+                          <div className="flex flex-wrap justify-between">
                             <p className="font-semibold">{item.fullName}</p>
-                            <p className="bg-rose-600 text-white rounded-full px-4 py-1 text-xs">
+                            <p className="bg-rose-600 whitespace-nowrap text-white rounded-full px-4 py-1 text-xs">
                               {item.phone}
                             </p>
                           </div>

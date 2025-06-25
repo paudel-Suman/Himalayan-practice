@@ -21,7 +21,7 @@ const Hero = ({ banner }: { banner: bannerType[] }) => {
     arrows: false,
   };
   return (
-    <div className="min-h-screen">
+    <div className="md:min-h-screen h-[50vh]">
       <Slider {...settings}>
         {banner.map((item, index) => (
           <div key={index}>
@@ -31,7 +31,7 @@ const Hero = ({ banner }: { banner: bannerType[] }) => {
                 alt="hero"
                 width={1000}
                 height={500}
-                className="h-screen w-full object-cover "
+                className="md:h-screen h-[50vh] w-full object-cover "
               />
             </figure>
           </div>

@@ -118,7 +118,7 @@ const Review = ({ productId }: { productId: string }) => {
     return <p className="text-slate-300">Loading review...</p>;
 
   return (
-    <section className="grid grid-cols-2 gap-8 my-8 min-h-screen">
+    <section className="grid md:grid-cols-2 gap-8 my-8 min-h-screen">
       <div>
         {productReview ? (
           productReview?.map((item: reviewType, index: number) => (

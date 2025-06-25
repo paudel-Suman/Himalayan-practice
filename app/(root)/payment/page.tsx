@@ -166,9 +166,9 @@ const PaymentPage = () => {
               <div
                 className={`p-4 border border-dashed space-y-2 shadow-sm cursor-pointer w-[50%] bg-rose-100/50`}
               >
-                <div className="flex justify-between">
+                <div className="flex flex-wrap justify-between">
                   <p className="font-semibold">{selectedBilling.fullName}</p>
-                  <p className="bg-rose-500 text-white rounded-full px-4 py-1 text-xs">
+                  <p className="bg-rose-500 whitespace-nowrap text-white rounded-full px-4 py-1 text-xs">
                     {selectedBilling.phone}
                   </p>
                 </div>

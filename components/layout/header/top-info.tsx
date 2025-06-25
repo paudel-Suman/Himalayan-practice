@@ -5,13 +5,14 @@ const TopInfo = () => {
   return (
     <div className="bg-primarymain p-2 text-white">
       <div className="max-w-7xl mx-auto flex justify-between">
-        <div className="flex items-center gap-1">
+        <div className="flex md:text-base text-sm items-center gap-1">
           <Icon icon="ion:mail" width="16" height="16" />
 
           <h2>himalayangmt@gmail.com</h2>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="md:text-base text-sm whitespace-nowrap 
+        flex items-center gap-1">
           <Icon icon="famicons:call" width="16" height="16" />
 
           <h2>+977-9842208106</h2>

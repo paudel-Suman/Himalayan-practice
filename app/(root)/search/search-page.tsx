@@ -142,7 +142,7 @@ const SearchPage = ({
       {product.length > 0 ? (
         <div>
           {cardStyle === "default" ? (
-            <div className="grid grid-cols-4 gap-8 my-8">
+            <div className="grid lg:grid-cols-4 grid-cols-2 gap-8 my-8">
               {product.map((item, index) => (
                 <div key={index}>
                   <ProductCard products={item} />

@@ -135,7 +135,7 @@ const ProductDetailPage = ({
 
   return (
     <main>
-      <section className="grid grid-cols-2 gap-8">
+      <section className="grid md:grid-cols-2 gap-8">
         <div className="border rounded-md border-zinc-200">
           <ProductImages media={media} />
         </div>

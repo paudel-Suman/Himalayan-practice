@@ -9,9 +9,13 @@ const Category = ({ category }: { category: categoryType[] }) => {
     <div>
       <PageHeader title="Explore Our Category" />
 
-      <div className="grid grid-cols-5 gap-6 my-10">
+      <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-6 my-10">
         {category.slice(0, 8).map((item, index) => (
-          <Link href={`/search?categoryId=${item.id}`} key={index} className="relative group cursor-pointer">
+          <Link
+            href={`/search?categoryId=${item.id}`}
+            key={index}
+            className="relative group cursor-pointer"
+          >
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-md" />
             <figure className="rounded-md">
               <Image
