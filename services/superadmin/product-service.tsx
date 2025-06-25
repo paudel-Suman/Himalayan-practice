@@ -5,13 +5,13 @@ import { ProductResponse, SearchProductResponse } from "@/types/product";
 
 import Cookies from "js-cookie";
 export class productService {
-  static async fetchAllProducts(pageNumber: number): Promise<ProductResponse> {
+  static async fetchAllProducts(page: number): Promise<ProductResponse> {
     const token = Cookies.get("token");
     if (!token) {
       throw new Error(MESSAGES.TOKEN.TOKEN_NOT_FOUND);
     }
     return await apiClient<ProductResponse>(
-      `${API_ROUTES.SUPERADMIN_ADMIN.FETCH_ALL_PRODUCT}?page=${pageNumber}`,
+      `${API_ROUTES.SUPERADMIN_ADMIN.FETCH_ALL_PRODUCT}?page=${page}`,
       {
         method: "GET",
         token,

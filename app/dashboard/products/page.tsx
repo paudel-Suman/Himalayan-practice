@@ -29,6 +29,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { Badge } from "@/components/ui/badge";
@@ -40,39 +48,46 @@ const ProductPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] =
     useState<producttype[]>(products);
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(3);
   const [totalPages, setTotalPages] = useState(1);
   console.log(filteredProducts, totalPages);
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
-  const fetchProducts = async (pageNumber = 1) => {
-    try {
-      const products = productService.fetchAllProducts(pageNumber);
-      setProducts((await products).data.products);
-      setTotalPages((await products).data.pagination.totalPages);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await productService.fetchAllProducts(page);
+        setProducts(res.data.products);
+        setTotalPages(Number(res.data.pagination.totalPages));
+        console.log("Total Pages:", Number(res.data.pagination.totalPages)); // Debug
+        console.log("Current Page:", page); // Debug
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [page]);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
   };
+
   useEffect(() => {
+    const searchProducts = async () => {
+      if (searchQuery === "") {
+        setFilteredProducts(products);
+      } else {
+        const response = productService.searchProduct(searchQuery);
+        setProducts((await response).products);
+      }
+    };
     searchProducts();
   }, [searchQuery]);
-  const searchProducts = async () => {
-    if (searchQuery === "") {
-      setFilteredProducts(products);
-    } else {
-      const response = productService.searchProduct(searchQuery);
-      setProducts((await response).products);
-    }
-  };
+
   const handleDelete = async (id: any) => {
     try {
       const res = await fetch(
@@ -101,10 +116,10 @@ const ProductPage = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex flex-wrap gap-2 justify-between mb-6">
         <PageHeader
           title="Products"
-          className="text-start w-fit !text-md mb-8"
+          className="text-start w-fit !text-md "
         />
 
         <Input
@@ -211,6 +226,42 @@ const ProductPage = () => {
           ))}
         </TableBody>
       </Table>
+
+      <Pagination className="my-8">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={(e) => {
+                e.preventDefault();
+                if (page > 1) setPage(page - 1);
+              }}
+            />
+          </PaginationItem>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <PaginationItem key={i}>
+              <PaginationLink
+                isActive={page === i + 1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage(i + 1);
+                }}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={(e) => {
+                e.preventDefault();
+                if (page < totalPages) setPage(page + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };

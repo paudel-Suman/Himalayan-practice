@@ -99,8 +99,8 @@ const OrderPage = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <PageHeader title="Orders" className="text-start w-fit !text-md mb-8" />
+      <div className="flex flex-wrap gap-2 justify-between mb-6">
+        <PageHeader title="Orders" className="text-start w-fit !text-md " />
         <Input
           placeholder="Search..."
           className="max-w-sm"

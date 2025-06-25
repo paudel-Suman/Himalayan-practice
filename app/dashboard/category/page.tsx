@@ -135,13 +135,13 @@ const CategoryPage = () => {
   if (loading) return <Loading />;
   return (
     <div>
-      <div className="flex justify-between items-start">
+      <div className="flex flex-wrap gap-2 justify-between items-start mb-6">
         <PageHeader
           title="Category"
-          className="text-start w-fit !text-md mb-8"
+          className="text-start w-fit !text-md "
         />
 
-        <div className="flex gap-4">
+        <div className="flex md:gap-4 gap-2">
           <Button onClick={() => setAddSubCategory(!addSubCategory)}>
             <Icon icon="gridicons:add" width="24" height="24" />
             Add SubCategory

@@ -321,7 +321,7 @@ const ProductEditPage = () => {
       </Breadcrumb>
       <h2 className="text-xl font-bold mt-10">Edit Product</h2>
       <form onSubmit={handleSubmit} className="my-8 space-y-6">
-        <section className="grid grid-cols-3 gap-6">
+        <section className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>Product Name</Label>
             <Input
@@ -347,7 +347,7 @@ const ProductEditPage = () => {
             />
           </div>
         </section>
-        <section className="grid grid-cols-3 gap-6">
+        <section className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>Category</Label>
             <Select
@@ -412,7 +412,7 @@ const ProductEditPage = () => {
             </div>
           </div>
         </section>
-        <section className="flex items-center gap-20">
+        <section className="flex flex-wrap items-center md:gap-20 gap-8">
           <div className="space-y-2">
             <Label>Select Color</Label>
             <div className="flex gap-4">
@@ -434,7 +434,7 @@ const ProductEditPage = () => {
             <Label>Select Sizes</Label>
             <div className="flex gap-4">
               {size.map((item) => (
-                <div key={item.id} className="flex items-center gap-2">
+                <div key={item.id} className="flex flex-wrap items-center gap-2">
                   <input
                     type="checkbox"
                     id={`size-${item.id}`}

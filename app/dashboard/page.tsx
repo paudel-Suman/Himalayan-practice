@@ -82,7 +82,7 @@ const OverviewPage = () => {
 
   return (
     <main>
-      <div className="grid grid-cols-4 gap-6 mt-6">
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 mt-6">
         {overviewdata.map((item, index) => (
           <div key={index} className="bg-white shadow-sm  p-4 rounded-md">
             <div className="flex justify-between">
@@ -97,7 +97,7 @@ const OverviewPage = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 my-8">
+      <div className="grid md:grid-cols-2 my-8">
         <BarChartDemo />
         <PieChartDemo />
       </div>

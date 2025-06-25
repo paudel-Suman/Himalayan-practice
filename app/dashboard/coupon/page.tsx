@@ -29,6 +29,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
@@ -40,13 +48,14 @@ const CouponPage = () => {
 
   const [filteredCoupons, setFilteredCoupons] = useState<Coupon[]>(coupons);
   console.log(filteredCoupons);
-  // const [page, setPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(1);
-  const fetchCoupons = async (pageNumber = 1) => {
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const [totalPages, setTotalPages] = useState(1);
+  const fetchCoupons = async () => {
     try {
       const coupons = couponService.fetchAllCoupons(pageNumber);
       setCoupons((await coupons).data.coupons);
-      // setTotalPages((await coupons).data.pagination.totalPages);
+      setTotalPages((await coupons).data.pagination.totalPages);
     } catch (error) {
       console.log(error);
     } finally {
@@ -103,11 +112,8 @@ const CouponPage = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <PageHeader
-          title="Coupons"
-          className="text-start w-fit !text-md mb-8"
-        />
+      <div className="flex flex-wrap gap-2 justify-between mb-6">
+        <PageHeader title="Coupons" className="text-start w-fit !text-md" />
         <Input
           placeholder="Search..."
           className="max-w-sm"
@@ -223,6 +229,42 @@ const CouponPage = () => {
           </h2>
         </div>
       )}
+
+      <Pagination className="my-8">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={(e) => {
+                e.preventDefault();
+                if (pageNumber > 1) setPageNumber(pageNumber - 1);
+              }}
+            />
+          </PaginationItem>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <PaginationItem key={i}>
+              <PaginationLink
+                isActive={pageNumber === i + 1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageNumber(i + 1);
+                }}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={(e) => {
+                e.preventDefault();
+                if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };

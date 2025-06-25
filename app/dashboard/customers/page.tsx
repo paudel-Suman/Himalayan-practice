@@ -61,10 +61,10 @@ const CustomerPage = () => {
   if (loading) return <Loading />;
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex flex-wrap gap-2 justify-between mb-6">
         <PageHeader
           title="Customers"
-          className="text-start w-fit !text-md mb-8"
+          className="text-start w-fit !text-md "
         />
 
         <Input

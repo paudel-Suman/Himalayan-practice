@@ -85,7 +85,7 @@ const AdminLogin = () => {
           className="object-contain w-52"
         />
       </Link>
-      <Card className="w-[400px]  overflow-hidden shadow-lg ">
+      <Card className="md:w-[400px] w-[300px]  overflow-hidden shadow-lg ">
         <CardContent className="relative space-y-6 pb-6">
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

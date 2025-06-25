@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import Loading from "../loading";
 import toast from "react-hot-toast";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 type AdminLayoutProps = {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ type AdminLayoutProps = {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const pathname = usePathname();
+  const [openSidebar, setOpenSidebar] = useState(false);
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
 
@@ -32,11 +34,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    setOpenSidebar(false);
+  }, [pathname]);
   if (isChecking) return <Loading />;
 
   return (
     <main className="grid grid-cols-12 bg-gradient-to-br from-zinc-50/50 via-zinc-50 to-sky-200/50">
-      <section className="bg-white border-r shadow-sm col-span-2 h-screen sticky top-0">
+      <section className="bg-white border-r shadow-sm col-span-2 lg:block hidden h-screen sticky top-0">
         {/* company logo */}
         <div className="h-16 bg-[#F7F7F7] border flex justify-center items-center">
           <Image
@@ -49,6 +54,51 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         </div>
 
         {/* sidebar menu items */}
+        <div className=" p-2">
+          {navitems.map((item, index) => (
+            <Link
+              href={item.path}
+              key={index}
+              className={`${
+                pathname === item.path
+                  ? "bg-[#2089CA]   rounded-md text-white "
+                  : "hover:bg-zinc-100 rounded-md"
+              } flex  items-center gap-4 p-2`}
+            >
+              <div className="bg-white p-1 rounded-full">
+                {" "}
+                <Image
+                  src={item.icon}
+                  alt={item.title}
+                  width={1000}
+                  height={1000}
+                  className="h-5 w-5"
+                />
+              </div>
+              <h2 className="font-medium text-sm ">{item.title}</h2>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <div
+        className={`${
+          openSidebar ? "translate-x-0" : "-translate-x-full"
+        } ease-in-out duration-300 fixed z-[10] top-0 bg-white  h-screen w-full left-0 lg:hidden`}
+      >
+        <div className="flex justify-between items-center mx-4 mt-4 mb-6">
+          <Image
+            src="/logo/mainlogo.png"
+            alt="logo"
+            width={1000}
+            height={1000}
+            className="w-32  object-cover"
+          />
+
+          <span onClick={() => setOpenSidebar(false)}>
+            <Icon icon="hugeicons:cancel-01" width="16" height="16" />
+          </span>
+        </div>
         <div className=" p-2">
           {navitems.map((item, index) => (
             <Link
@@ -73,14 +123,39 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <h2 className="font-medium text-sm ">{item.title}</h2>
             </Link>
           ))}
+
+          <button
+            onClick={() => {
+              logout();
+            }}
+            className="mt-4 bg-red-500 px-6 py-2 rounded-md flex items-center gap-2 text-white"
+          >
+            <Icon
+              icon="material-symbols-light:logout-rounded"
+              width="24"
+              height="24"
+            />
+            LogOut
+          </button>
         </div>
-      </section>
+      </div>
 
       {/* main content section */}
-      <section className="!overflow-y-scroll col-span-10">
+      <section className="!overflow-y-scroll lg:col-span-10 col-span-full">
         {/* user profile icon */}
         <div className="h-16 bg-white border flex justify-between px-4 items-center">
-          <h2 className="text-lg font-bold text-zinc-950">Admin Dashboard</h2>
+          <div className="flex items-center gap-2">
+            <span
+              className="lg:hidden block"
+              onClick={() => setOpenSidebar(!openSidebar)}
+            >
+              <Icon icon="pajamas:hamburger" width="16" height="16" />
+            </span>
+            <h2 className="md:text-lg font-bold text-zinc-950">
+              Admin Dashboard
+            </h2>
+          </div>
+
           <Popover>
             <PopoverTrigger>
               <Image

@@ -167,8 +167,8 @@ const BlogsPage = () => {
 
   return (
     <div className="relative">
-      <div className="flex justify-between">
-        <PageHeader title="Blogs" className="text-start w-fit !text-md mb-8" />
+      <div className="flex flex-wrap gap-2 justify-between mb-6">
+        <PageHeader title="Blogs" className="text-start w-fit !text-md " />
 
         <div className="flex gap-4">
           <Button onClick={() => setAddCategory(!addCategory)}>

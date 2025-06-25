@@ -28,6 +28,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { Badge } from "@/components/ui/badge";
@@ -36,14 +44,13 @@ const BannerPage = () => {
   const [banners, setBanners] = useState<bannerType[]>([]);
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("token");
-
-  // const [page, setPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(1);
-  const fetchBanners = async (pageNumber = 1) => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const fetchBanners = async () => {
     try {
       const response = await bannerService.fetchAllBanners(pageNumber);
       setBanners((await response).banners.banners);
-      // setTotalPages((await response).data.meta.totalPages);
+      setTotalPages((await response).banners.meta.totalPages);
     } catch (error) {
       console.log(error);
     } finally {
@@ -82,8 +89,8 @@ const BannerPage = () => {
   if (loading) return <Loading />;
   return (
     <div>
-      <div className="flex justify-between">
-        <PageHeader title="Banner" className="text-start w-fit !text-md mb-8" />
+      <div className="flex flex-wrap gap-2 justify-between mb-6">
+        <PageHeader title="Banner" className="text-start w-fit !text-md " />
 
         <Link href="/dashboard/banner/add">
           <Button>
@@ -177,6 +184,42 @@ const BannerPage = () => {
           ))}
         </TableBody>
       </Table>
+
+      <Pagination className="my-8">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={(e) => {
+                e.preventDefault();
+                if (pageNumber > 1) setPageNumber(pageNumber - 1);
+              }}
+            />
+          </PaginationItem>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <PaginationItem key={i}>
+              <PaginationLink
+                isActive={pageNumber === i + 1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageNumber(i + 1);
+                }}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={(e) => {
+                e.preventDefault();
+                if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };

@@ -173,7 +173,7 @@ const CouponAddPage = () => {
       <h2 className="text-xl font-bold mt-10">Add Coupon</h2>
 
       <form onSubmit={handleSubmit} className="my-8 space-y-6">
-        <section className="grid grid-cols-3 gap-6">
+        <section className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>Coupon Code</Label>
             <Input

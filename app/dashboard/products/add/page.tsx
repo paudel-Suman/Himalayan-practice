@@ -252,7 +252,7 @@ const AddProduct = () => {
       <h2 className="text-xl font-bold mt-10">Add Product</h2>
 
       <form onSubmit={handleSubmit} className="my-8 space-y-6">
-        <section className="grid grid-cols-3 gap-6">
+        <section className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>Product Name</Label>
             <Input
@@ -278,7 +278,7 @@ const AddProduct = () => {
             />
           </div>
         </section>
-        <section className="grid grid-cols-3 gap-6">
+        <section className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>Category</Label>
             <Select
@@ -343,7 +343,7 @@ const AddProduct = () => {
             </div>
           </div>
         </section>
-        <section className="flex items-center gap-20">
+        <section className="flex flex-wrap items-center md:gap-20 gap-8">
           <div className="space-y-2">
             <Label>Select Color</Label>
             <div className="flex gap-4">
@@ -363,7 +363,7 @@ const AddProduct = () => {
           </div>
           <div className="space-y-2">
             <Label>Select Sizes</Label>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {size.map((item) => (
                 <div key={item.id} className="flex items-center gap-2">
                   <input
