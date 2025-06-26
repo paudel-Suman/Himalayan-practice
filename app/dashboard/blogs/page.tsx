@@ -199,10 +199,14 @@ const BlogsPage = () => {
         <Label>Add Category</Label>
         <Input name="title" value={formData.title} onChange={handleChange} />
         <div className="flex gap-2">
-          <Button onClick={() => setAddCategory(false)} variant="destructive">
+          <Button
+            type="button"
+            onClick={() => setAddCategory(false)}
+            variant="destructive"
+          >
             Cancel
           </Button>
-          <Button>Submit</Button>
+          <Button type="submit">Submit</Button>
         </div>
       </form>
 

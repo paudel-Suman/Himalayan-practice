@@ -195,12 +195,13 @@ const CategoryPage = () => {
         </Select>
         <div className="flex gap-2">
           <Button
+          type="button"
             onClick={() => setAddSubCategory(false)}
             variant="destructive"
           >
             Cancel
           </Button>
-          <Button>Submit</Button>
+          <Button type="submit">Submit</Button>
         </div>
       </form>
 
