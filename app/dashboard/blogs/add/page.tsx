@@ -24,14 +24,25 @@ import {
 } from "@/components/ui/select";
 import { BlogCategory } from "@/types/blogs";
 import { useRouter } from "next/navigation";
-
-
+import { Loader } from "lucide-react";
 
 const BlogAddPage = () => {
   const token = Cookies.get("token");
   const router = useRouter();
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
+    title: "",
+    slug: "",
+    image: "",
+    description: "",
+    seoMeta: {},
+    category: "",
+    categoryId: "",
+  });
+
+  const [errors, setErrors] = useState({
     title: "",
     slug: "",
     image: "",
@@ -91,10 +102,38 @@ const BlogAddPage = () => {
     fetchCategory();
   }, []);
 
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {
+      ...errors,
+    };
+
+    if (!formData.title.trim()) {
+      newErrors.title = "Blog title is required";
+      toast.error("Blog title is required");
+      valid = false;
+    }
+    if (!formData.description.trim()) {
+      newErrors.description = "Blog description is required";
+      toast.error("Blog description is required");
+      valid = false;
+    }
+    if (!formData.category.trim()) {
+      newErrors.category = "Blog category is required";
+      toast.error("Blog category is required");
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/blog/create-blog`,
         {
@@ -110,6 +149,7 @@ const BlogAddPage = () => {
             category: formData.category,
             categoryId: formData.categoryId,
             image: image,
+            seoMeta:{}
           }),
         }
       );
@@ -124,6 +164,8 @@ const BlogAddPage = () => {
       router.push("/dashboard/blogs");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,6 +203,7 @@ const BlogAddPage = () => {
               onChange={handleChange}
               placeholder="How to Increase Sales"
               className="bg-white shadow-none"
+              required
             />
           </div>
           <div className="space-y-2">
@@ -205,7 +248,6 @@ const BlogAddPage = () => {
             />
           </div>
         </section>
-
         <div className="space-y-2">
           <Label>Description</Label>
           <textarea
@@ -215,9 +257,9 @@ const BlogAddPage = () => {
             onChange={handleChange}
             placeholder="Description of the title"
             rows={8}
+            required
           ></textarea>
         </div>
-
         <div className="space-y-2">
           <Label>Display Image</Label>
           <S3UploadForm
@@ -226,8 +268,16 @@ const BlogAddPage = () => {
             onUploadComplete={handleUploadBlogImage}
           />
         </div>
-
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Submitting
+            </div>
+          ) : (
+            "Submit"
+          )}
+        </Button>{" "}
       </form>
     </main>
   );

@@ -15,11 +15,14 @@ import { Button } from "@/components/ui/button";
 import S3UploadForm from "@/lib/s3upload-form";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 
 const BannerAddPage = () => {
   const token = Cookies.get("token");
-  const [displayImage, setDisplayImage] = useState("");
   const [image, setImage] = useState("");
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -28,10 +31,7 @@ const BannerAddPage = () => {
     buttonText: "",
     buttonLink: "",
     position: "",
-    isActive: "",
-    displayImage: "",
-    displayNumber: "",
-    displayText: "",
+    isActive: true,
   });
 
   const handleChange = (
@@ -44,10 +44,6 @@ const BannerAddPage = () => {
     }));
   };
 
-  const handleUploadDisplayImageComplete = (urls: string[]) => {
-    setDisplayImage(urls[0]);
-  };
-
   const handleUploadComplete = (urls: string[]) => {
     setImage(urls[0]);
   };
@@ -56,6 +52,7 @@ const BannerAddPage = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/banner/create-banner`,
         {
@@ -70,9 +67,7 @@ const BannerAddPage = () => {
             buttonText: formData.buttonText,
             buttonLink: formData.buttonLink,
             position: formData.position,
-            displayNumber: formData.displayNumber,
-            displayText: formData.displayText,
-            displayImage: displayImage,
+            isActive: formData.isActive,
             image: image,
           }),
         }
@@ -84,10 +79,12 @@ const BannerAddPage = () => {
         toast.error(data.message || data.error);
         return;
       }
+      router.push("/dashboard/banner");
       toast.success("Banner Added Successfully");
-      // router.push("/dashboard/coupon");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,6 +122,7 @@ const BannerAddPage = () => {
               onChange={handleChange}
               placeholder="Great Friday Sales"
               className="bg-white shadow-none"
+              required
             />
           </div>
           <div className="space-y-2">
@@ -134,6 +132,8 @@ const BannerAddPage = () => {
               value={formData.buttonText}
               onChange={handleChange}
               placeholder="Know More"
+              maxLength={20}
+              required
             />
           </div>
           <div className="space-y-2">
@@ -143,15 +143,46 @@ const BannerAddPage = () => {
               value={formData.buttonLink}
               onChange={handleChange}
               placeholder="https://google.com"
+              required
             />
           </div>
           <div className="space-y-2">
-            <Label>Position</Label>
-            <Input
-              name="position"
-              value={formData.position}
-              onChange={handleChange}
-            />
+            <Label>Is Active</Label>
+            <div className="flex flex-col gap-1">
+              <label className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="isActive"
+                  value="true"
+                  className="h-4 w-4"
+                  checked={formData.isActive === true}
+                  onChange={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: true,
+                    }))
+                  }
+                />
+                <span>True</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="isActive"
+                  value="false"
+                  checked={formData.isActive === false}
+                  className="h-4 w-4"
+                  onChange={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: false,
+                    }))
+                  }
+                />
+                <span>False</span>
+              </label>
+            </div>
           </div>
         </section>
         <div className="space-y-2">
@@ -170,41 +201,20 @@ const BannerAddPage = () => {
             value={formData.description}
             onChange={handleChange}
             rows={8}
+            required
           ></textarea>
         </div>
 
-        <section className="grid md:grid-cols-3 gap-6">
-          <div className="space-y-2">
-            <Label>Display Image</Label>
-            <S3UploadForm
-              id={"display-image"}
-              multiple={false}
-              onUploadComplete={handleUploadDisplayImageComplete}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Display Number</Label>
-            <Input
-              name="displayNumber"
-              value={formData.displayNumber}
-              onChange={handleChange}
-              type="number"
-              placeholder="16557"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Display Text</Label>
-            <Input
-              name="displayText"
-              value={formData.displayText}
-              onChange={handleChange}
-              placeholder="Display Image Text"
-            />
-          </div>
-        </section>
-
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Submitting
+            </div>
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </form>
     </main>
   );

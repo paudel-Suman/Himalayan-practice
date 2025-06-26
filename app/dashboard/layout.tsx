@@ -213,8 +213,13 @@ const navitems = [
   },
 
   {
-    title: "Product",
+    title: "Products",
     path: "/dashboard/products",
+    icon: "/icons/gallery.png",
+  },
+  {
+    title: "Inactive Products",
+    path: "/dashboard/inactiveproducts",
     icon: "/icons/gallery.png",
   },
   {

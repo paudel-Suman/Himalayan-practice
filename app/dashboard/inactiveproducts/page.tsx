@@ -1,7 +1,8 @@
 "use client";
 import PageHeader from "@/components/text/page-header";
-import { bannerService } from "@/services/superadmin/banner-service";
-import { bannerType } from "@/types/banner";
+import { Input } from "@/components/ui/input";
+import { productService } from "@/services/superadmin/product-service";
+import { producttype } from "@/types/product";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -16,7 +17,6 @@ import Image from "next/image";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Loading from "@/app/loading";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,38 +36,63 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 import { Badge } from "@/components/ui/badge";
 
-const BannerPage = () => {
-  const [banners, setBanners] = useState<bannerType[]>([]);
-  const [loading, setLoading] = useState(true);
+const InactiveProductPage = () => {
+  const [products, setProducts] = useState<producttype[]>([]);
   const token = Cookies.get("token");
-  const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] =
+    useState<producttype[]>(products);
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const fetchBanners = async () => {
-    try {
-      const response = await bannerService.fetchAllBanners(pageNumber);
-      setBanners((await response).banners.banners);
-      setTotalPages((await response).banners.meta.totalPages);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+  console.log(filteredProducts, totalPages);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await productService.fetchAllProducts(page);
+        setProducts(res.data.products);
+        setTotalPages(Number(res.data.pagination.totalPages));
+        console.log("Total Pages:", Number(res.data.pagination.totalPages)); // Debug
+        console.log("Current Page:", page); // Debug
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [page]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
   };
 
   useEffect(() => {
-    fetchBanners();
-  }, []);
+    const searchProducts = async () => {
+      if (searchQuery === "") {
+        setFilteredProducts(products);
+      } else {
+        const response = productService.searchProduct(searchQuery);
+        setProducts((await response).products);
+      }
+    };
+    searchProducts();
+  }, [searchQuery]);
 
   const handleDelete = async (id: any) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/banner/delete-banner/${id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/product/delete-product/${id}`,
         {
-          method: "DELETE",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -76,10 +101,10 @@ const BannerPage = () => {
       );
 
       if (res.ok) {
-        setBanners((prev) => prev.filter((item) => item.id !== id));
-        toast.success("Banner Deleted Successfully");
+        setProducts((prev) => prev.filter((item) => item.id !== id));
+        toast.success("Product Deleted Successfully");
       } else {
-        toast.error("Failed to Delete Banner");
+        toast.error("Failed to Delete Product");
       }
     } catch (error) {
       console.error(error);
@@ -87,45 +112,56 @@ const BannerPage = () => {
   };
 
   if (loading) return <Loading />;
+
   return (
     <div>
       <div className="flex flex-wrap gap-2 justify-between mb-6">
-        <PageHeader title="Banner" className="text-start w-fit !text-md " />
+        <PageHeader
+          title="Inactive Products"
+          className="text-start w-fit !text-md "
+        />
 
-        <Link href="/dashboard/banner/add">
-          <Button>
-            <Icon icon="gridicons:add" width="24" height="24" />
-            Add Banner
-          </Button>
-        </Link>
+        <Input
+          placeholder="Search..."
+          className="max-w-sm"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Image</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Feature Image</TableHead>
+            <TableHead>Stock</TableHead>
             <TableHead>Is Active</TableHead>
-            <TableHead>Button Text</TableHead>
-            <TableHead>Button Link</TableHead>
-
             <TableHead>Created Date</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {banners.map((item) => (
+          {products.map((item) => (
             <TableRow key={item.id}>
-              <TableCell>{item.title.slice(0, 30)}</TableCell>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>Rs .{item.price}</TableCell>
+              <TableCell>{item.category.name}</TableCell>
               <TableCell>
+                {" "}
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={
+                    item.featureImage ||
+                    "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  }
+                  alt={item.name}
                   width={100}
                   height={100}
                   className="h-14 w-14 object-cover"
                 />
               </TableCell>
+              <TableCell>{item.stock.quantity}</TableCell>
               <TableCell>
                 {item.isActive ? (
                   <Badge className="bg-green-500">Yes</Badge>
@@ -133,15 +169,12 @@ const BannerPage = () => {
                   <Badge className="bg-red-500">No</Badge>
                 )}
               </TableCell>
-
-              <TableCell>{item.buttonText}</TableCell>
-              <TableCell>{item.buttonLink.slice(0, 30)}</TableCell>
               <TableCell>
                 {moment(item.createdAt).format("MMMM Do YYYY")}
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Link href={`/dashboard/banner/edit/${item.id}`}>
+                  <Link href={`/dashboard/products/edit/${item.slug}`}>
                     <Icon
                       icon="lucide:edit"
                       width="20"
@@ -165,7 +198,8 @@ const BannerPage = () => {
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently
-                          remove your data from our servers.
+                          delete your account and remove your data from our
+                          servers.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -191,7 +225,7 @@ const BannerPage = () => {
             <PaginationPrevious
               onClick={(e) => {
                 e.preventDefault();
-                if (pageNumber > 1) setPageNumber(pageNumber - 1);
+                if (page > 1) setPage(page - 1);
               }}
             />
           </PaginationItem>
@@ -199,10 +233,10 @@ const BannerPage = () => {
           {Array.from({ length: totalPages }, (_, i) => (
             <PaginationItem key={i}>
               <PaginationLink
-                isActive={pageNumber === i + 1}
+                isActive={page === i + 1}
                 onClick={(e) => {
                   e.preventDefault();
-                  setPageNumber(i + 1);
+                  setPage(i + 1);
                 }}
               >
                 {i + 1}
@@ -214,7 +248,7 @@ const BannerPage = () => {
             <PaginationNext
               onClick={(e) => {
                 e.preventDefault();
-                if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
+                if (page < totalPages) setPage(page + 1);
               }}
             />
           </PaginationItem>
@@ -224,4 +258,4 @@ const BannerPage = () => {
   );
 };
 
-export default BannerPage;
+export default InactiveProductPage;

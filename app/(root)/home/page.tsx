@@ -49,7 +49,11 @@ const HomeMain = () => {
       try {
         setLoading(true);
         const bannerinfo = await getBanner();
-        setBanner(bannerinfo);
+        const activeBanners = bannerinfo.filter(
+          (banner: { isActive: boolean }) => banner.isActive === true
+        );
+
+        setBanner(activeBanners);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch Banner:", error);

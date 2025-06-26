@@ -48,7 +48,7 @@ const ProductPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] =
     useState<producttype[]>(products);
-  const [page, setPage] = useState(3);
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   console.log(filteredProducts, totalPages);
 

@@ -16,6 +16,13 @@ export type producttype = {
   productAttributes: ProductAttribute[];
   stock: StockType;
   createdAt: Date;
+  seoMeta: SeoType;
+};
+
+export type SeoType = {
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
 };
 
 export type ProductAttribute = {

@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Loader } from "lucide-react";
 
 const EditCouponPage = () => {
   const params = useParams();
@@ -29,6 +30,7 @@ const EditCouponPage = () => {
   const router = useRouter();
   const [couponType, setCouponType] = useState<string>("AMOUNT");
   const token = Cookies.get("token");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     code: "",
     couponCount: 0,
@@ -119,6 +121,7 @@ const EditCouponPage = () => {
     if (!validateForm()) return;
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/coupon/update-coupon/${id}`,
         {
@@ -144,10 +147,12 @@ const EditCouponPage = () => {
         toast.error(data.message || data.error);
         return;
       }
-      toast.success("Coupon Added Successfully");
+      toast.success("Coupon Updated Successfully");
       router.push("/dashboard/coupon");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -219,11 +224,11 @@ const EditCouponPage = () => {
             <Label>Coupon Code</Label>
             <Input
               name="code"
-              type="number"
               value={formData.code}
               onChange={handleChange}
               placeholder="2252525"
               className="bg-white shadow-none"
+              maxLength={15}
             />
           </div>
           <div className="space-y-2">
@@ -247,7 +252,6 @@ const EditCouponPage = () => {
             />
           </div>
         </section>
-
         <div className="space-y-2">
           <Label>Type of Coupon</Label>
           <Select
@@ -266,7 +270,6 @@ const EditCouponPage = () => {
             </SelectContent>
           </Select>
         </div>
-
         <div className="space-y-2">
           <Label>{couponType === "AMOUNT" ? "Amount" : "Percentage"}</Label>
           <Input
@@ -283,8 +286,16 @@ const EditCouponPage = () => {
             placeholder={couponType === "AMOUNT" ? "e.g. 500" : "e.g. 10%"}
           />
         </div>
-
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Updating
+            </div>
+          ) : (
+            "Update"
+          )}
+        </Button>{" "}
       </form>
     </main>
   );

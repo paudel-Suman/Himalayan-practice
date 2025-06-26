@@ -48,19 +48,20 @@ const ProductCard = ({ products }: { products: producttype }) => {
     }
   };
 
-  
   return (
     <Link href={`/product/${slug}`}>
       <div className="bg-white relative border border-black/10 shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
         <figure className="overflow-hidden rounded-md">
-          <Image
-            src={featureImage}
-            alt={name}
-            width={1000}
-            height={1000}
-            priority
-            className="h-[20em] object-cover group-hover:scale-110 ease-in-out duration-300"
-          />
+          {featureImage && (
+            <Image
+              src={featureImage}
+              alt={name}
+              width={1000}
+              height={1000}
+              priority
+              className="h-[20em] object-cover group-hover:scale-110 ease-in-out duration-300"
+            />
+          )}
         </figure>
 
         <div className="absolute top-4 right-4 hidden group-hover:block opacity-0 group-hover:opacity-100 ease-in-out duration-300">

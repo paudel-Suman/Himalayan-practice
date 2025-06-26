@@ -80,26 +80,11 @@ const ViewBlogs = async ({ params }: { params: Promise<{ slug: string }> }) => {
         </Link>
         <section className="max-w-5xl mx-auto space-y-4 flex flex-col justify-center py-10 items-center">
           <h1 className=" text-5xl font-bold text-center w-full">{title}</h1>
-          <div className="text-end w-full py-2 my-5 border-b border-zinc-600 text-zinc-400 flex justify-between font-gt-walsheim text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full border-2 border-zinc-400 overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="John Doe"
-                  height={100}
-                  width={100}
-                  priority={true}
-                  className="h-full w-full object-cover object-center"
-                />
-              </div>
-              <p className="text-sm">John Doe</p>
-            </div>
-            <div className="flex items-center text-sm">
-              {moment(updatedAt).format("MMMM Do YYYY")}
-            </div>
+          <div className="flex items-center justify-center text-sm">
+            {moment(updatedAt).format("MMMM Do YYYY")}
           </div>
 
-          <div className="md:max-h-[70vh] h-[50vh] w-full">
+          <div className="md:max-h-[70vh] h-[50vh] w-full my-10">
             <Image
               src={image}
               alt={title}

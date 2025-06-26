@@ -22,17 +22,20 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import { Loader } from "lucide-react";
 
 const CouponAddPage = () => {
   const [couponType, setCouponType] = useState<string>("AMOUNT");
   const token = Cookies.get("token");
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     code: "",
     couponCount: 0,
     expiryDate: "",
     type: "",
-    discountAmount: 0,  
+    discountAmount: 0,
     discountPercent: 0,
   });
 
@@ -117,6 +120,7 @@ const CouponAddPage = () => {
     if (!validateForm()) return;
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/coupon/create-coupon`,
         {
@@ -146,6 +150,8 @@ const CouponAddPage = () => {
       router.push("/dashboard/coupon");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -178,11 +184,12 @@ const CouponAddPage = () => {
             <Label>Coupon Code</Label>
             <Input
               name="code"
-              type="number"
               value={formData.code}
               onChange={handleChange}
               placeholder="2252525"
               className="bg-white shadow-none"
+              maxLength={15}
+              required
             />
           </div>
           <div className="space-y-2">
@@ -193,6 +200,7 @@ const CouponAddPage = () => {
               onChange={handleChange}
               type="number"
               placeholder="10"
+              required
             />
           </div>
           <div className="space-y-2">
@@ -203,10 +211,10 @@ const CouponAddPage = () => {
               onChange={handleChange}
               type="date"
               placeholder="500"
+              required
             />
           </div>
         </section>
-
         <div className="space-y-2">
           <Label>Type of Coupon</Label>
           <Select
@@ -225,7 +233,6 @@ const CouponAddPage = () => {
             </SelectContent>
           </Select>
         </div>
-
         <div className="space-y-2">
           <Label>{couponType === "AMOUNT" ? "Amount" : "Percentage"}</Label>
           <Input
@@ -242,8 +249,16 @@ const CouponAddPage = () => {
             placeholder={couponType === "AMOUNT" ? "e.g. 500" : "e.g. 10%"}
           />
         </div>
-
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Submitting
+            </div>
+          ) : (
+            "Submit"
+          )}
+        </Button>{" "}
       </form>
     </main>
   );

@@ -136,10 +136,7 @@ const CategoryPage = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-2 justify-between items-start mb-6">
-        <PageHeader
-          title="Category"
-          className="text-start w-fit !text-md "
-        />
+        <PageHeader title="Category" className="text-start w-fit !text-md " />
 
         <div className="flex md:gap-4 gap-2">
           <Button onClick={() => setAddSubCategory(!addSubCategory)}>
@@ -195,7 +192,7 @@ const CategoryPage = () => {
         </Select>
         <div className="flex gap-2">
           <Button
-          type="button"
+            type="button"
             onClick={() => setAddSubCategory(false)}
             variant="destructive"
           >

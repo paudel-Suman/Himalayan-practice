@@ -215,7 +215,6 @@ const BlogsPage = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Blog Title</TableHead>
-              <TableHead>Blog Slug</TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Created Date</TableHead>
               <TableHead>Actions</TableHead>
@@ -224,8 +223,7 @@ const BlogsPage = () => {
           <TableBody>
             {blogs.map((item) => (
               <TableRow key={item.id}>
-                <TableCell>{item.title}</TableCell>
-                <TableCell>{item.slug}</TableCell>
+                <TableCell>{item.title.slice(0, 50)}</TableCell>
                 <TableCell>
                   {" "}
                   <Image

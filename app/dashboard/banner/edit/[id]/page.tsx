@@ -17,16 +17,16 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Loader } from "lucide-react";
 
 const BannerEditPage = () => {
-  const params = useParams(); 
+  const params = useParams();
   const id = params.id as string;
   const token = Cookies.get("token");
-  const [displayImage, setDisplayImage] = useState("");
   const [image, setImage] = useState("");
   const router = useRouter();
   const [bannerImage, setBannerImage] = useState("");
-  const [bannerdisplayImage, setBannerDisplayImage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -36,9 +36,6 @@ const BannerEditPage = () => {
     buttonLink: "",
     position: "",
     isActive: true,
-    displayImage: "",
-    displayNumber: "",
-    displayText: "",
   });
 
   const handleChange = (
@@ -49,10 +46,6 @@ const BannerEditPage = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const handleUploadDisplayImageComplete = (urls: string[]) => {
-    setDisplayImage(urls[0]);
   };
 
   const handleUploadComplete = (urls: string[]) => {
@@ -85,12 +78,7 @@ const BannerEditPage = () => {
           buttonText: bannerData.buttonText || "",
           buttonLink: bannerData.buttonLink || "",
           position: bannerData.position || "",
-          displayNumber: bannerData.displayNumber || 0,
-          displayText: bannerData.displayText || "",
-          displayImage:
-            (bannerData.displayImage &&
-              setBannerDisplayImage(bannerData.displayImage)) ||
-            "",
+
           image: (bannerData.image && setBannerImage(bannerData.image)) || "",
           isActive: bannerData.isActive || false,
         });
@@ -107,6 +95,7 @@ const BannerEditPage = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/banner/update-banner/${id}`,
         {
@@ -122,9 +111,6 @@ const BannerEditPage = () => {
             buttonLink: formData.buttonLink,
             position: formData.position,
             isActive: formData.isActive,
-            displayNumber: formData.displayNumber,
-            displayText: formData.displayText,
-            displayImage: displayImage || bannerdisplayImage,
             image: image || bannerImage,
           }),
         }
@@ -136,10 +122,12 @@ const BannerEditPage = () => {
         toast.error(data.message || data.error);
         return;
       }
-      toast.success("Banner Updated Successfully");
       router.push("/dashboard/banner");
+      toast.success("Banner Updated Successfully");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -268,50 +256,16 @@ const BannerEditPage = () => {
           ></textarea>
         </div>
 
-        <section className="grid md:grid-cols-3 gap-6">
-          <div className="space-y-2">
-            <Label>Display Image</Label>
-            <S3UploadForm
-              id={"display-image"}
-              multiple={false}
-              onUploadComplete={handleUploadDisplayImageComplete}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Display Number</Label>
-            <Input
-              name="displayNumber"
-              value={formData.displayNumber}
-              onChange={handleChange}
-              type="number"
-              placeholder="16557"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Display Text</Label>
-            <Input
-              name="displayText"
-              value={formData.displayText}
-              onChange={handleChange}
-              placeholder="Display Image Text"
-            />
-          </div>
-        </section>
-
-        <figure>
-          {bannerdisplayImage && (
-            <Image
-              src={bannerdisplayImage}
-              alt="banner-image"
-              width={500}
-              height={500}
-              className="h-[20em] w-full object-contain"
-            />
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Updating
+            </div>
+          ) : (
+            "Update"
           )}
-        </figure>
-
-        <Button>Submit</Button>
+        </Button>
       </form>
     </main>
   );

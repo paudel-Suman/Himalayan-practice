@@ -5,7 +5,7 @@ import { reviewType } from "@/types/review";
 export async function getTrendingProducts(): Promise<producttype[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-all-products`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-all-active-products`
     );
 
     if (!res.ok) {

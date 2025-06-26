@@ -24,13 +24,15 @@ import S3UploadForm from "@/lib/s3upload-form";
 import Cookies from "js-cookie";
 import { Button } from "@/components/ui/button";
 import { ProductColor, ProductSize } from "@/types/product";
-import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useParams } from "next/navigation";
 
-const AddProduct = () => {
+const InactiveProductEditPage = () => {
+  const params = useParams();
+  const slug = params.slug as string;
   const token = Cookies.get("token");
-  const router = useRouter();
   const [tags, setTags] = useState<string[]>([]);
+  const [productID, setproductID] = useState<string>("");
   const [stockQuantity, setStockQuantity] = useState<number>(0);
   const [selectedColorIds, setSelectedColorIds] = useState<string[]>([]);
   const [selectedSizeIds, setSelectedSizeIds] = useState<string[]>([]);
@@ -39,7 +41,7 @@ const AddProduct = () => {
   const [size, setSize] = React.useState<ProductSize[]>([]);
   const [image, setImage] = useState("");
   const [multipleimage, setMultipleImage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [featureImage, setFeatureImage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -54,7 +56,6 @@ const AddProduct = () => {
     media: [],
     productAttributes: [],
     tags: [],
-    seoMeta: {},
   });
 
   const slugify = (text: string) => {
@@ -177,6 +178,70 @@ const AddProduct = () => {
     fetchColor();
   }, []);
 
+  useEffect(() => {
+    const fetchSingleProduct = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-product-by-slug/${slug}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to fetch product");
+        }
+
+        const product = data.data;
+        setproductID(product.id);
+
+        // Pre-fill tag names
+        const fetchedTags = product.tags?.map((tag: any) => tag.name) || [];
+
+        // Pre-fill size and color IDs
+        const fetchedAttributes = product.productAttributes?.[0] || {};
+        const fetchedSizeIds = fetchedAttributes.sizeIds?.map(String) || [];
+        const fetchedColorIds = fetchedAttributes.colorIds?.map(String) || [];
+
+        setFormData({
+          name: product.name || "",
+          slug: product.slug || "",
+          description: product.description || "",
+          price: product.price || 0,
+          stock: product.stock?.quantity?.toString() || "",
+          categoryId: product.categoryId || "",
+          featureImage:
+            (product.featureImage && setFeatureImage(product.featureImage)) ||
+            "",
+          isActive: product.isActive || false,
+          isDeleted: product.isDeleted || false,
+          isFeatured: product.isFeatured || false,
+          media: product.media || [],
+          tags: product.tags || [],
+          productAttributes: product.productAttributes || [],
+        });
+
+        setTags(fetchedTags);
+        setStockQuantity(product.stock?.quantity || 0);
+        setSelectedColorIds(fetchedColorIds);
+        setSelectedSizeIds(fetchedSizeIds);
+        setImage(product.featureImage || "");
+        if (product.media?.[0]?.url) {
+          setMultipleImage(product.media[0].url);
+        }
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+        toast.error("Failed to load product");
+      }
+    };
+
+    fetchSingleProduct();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const payload = {
@@ -184,6 +249,7 @@ const AddProduct = () => {
       slug: formData.slug,
       description: formData.description,
       categoryId: formData.categoryId,
+      isActive: formData.isActive,
       price: Number(formData.price),
       featureImage: image,
       isFeatured: formData.isFeatured,
@@ -203,15 +269,13 @@ const AddProduct = () => {
           colorIds: selectedColorIds,
         },
       ],
-      seoMeta: {},
     };
 
     try {
-      setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/product/create-product`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/product/update-product/${productID}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -226,12 +290,10 @@ const AddProduct = () => {
         toast.error(data.message || data.error);
         return;
       }
-      toast.success("Product Added Successfully");
-      router.push("/dashboard/products");
+      toast.success("Product Updated Successfully");
+      // router.push("/dashboard/category");
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -253,13 +315,11 @@ const AddProduct = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-green-500">Add</BreadcrumbPage>
+            <BreadcrumbPage className="text-green-500">Edit</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
-      <h2 className="text-xl font-bold mt-10">Add Product</h2>
-
+      <h2 className="text-xl font-bold mt-10">Edit Product</h2>
       <form onSubmit={handleSubmit} className="my-8 space-y-6">
         <section className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
@@ -372,9 +432,12 @@ const AddProduct = () => {
           </div>
           <div className="space-y-2">
             <Label>Select Sizes</Label>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex gap-4">
               {size.map((item) => (
-                <div key={item.id} className="flex items-center gap-2">
+                <div
+                  key={item.id}
+                  className="flex flex-wrap items-center gap-2"
+                >
                   <input
                     type="checkbox"
                     id={`size-${item.id}`}
@@ -385,6 +448,45 @@ const AddProduct = () => {
                   <label htmlFor={`size-${item.id}`}>{item.name}</label>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Is Active</Label>
+            <div className="flex  gap-4">
+              <label className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="isActive"
+                  value="true"
+                  className="h-4 w-4"
+                  checked={formData.isActive === true}
+                  onChange={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: true,
+                    }))
+                  }
+                />
+                <span>True</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="isActive"
+                  value="false"
+                  checked={formData.isActive === false}
+                  className="h-4 w-4"
+                  onChange={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: false,
+                    }))
+                  }
+                />
+                <span>False</span>
+              </label>
             </div>
           </div>
 
@@ -446,6 +548,17 @@ const AddProduct = () => {
             onUploadComplete={handleUploadFeatureImage}
           />
         </div>
+        <figure>
+          {featureImage && (
+            <Image
+              src={featureImage}
+              alt="feature-image"
+              width={500}
+              height={500}
+              className="h-[20em] w-full object-contain"
+            />
+          )}
+        </figure>
         <div className="space-y-2">
           <Label>Multiple Media</Label>
           <S3UploadForm
@@ -454,19 +567,10 @@ const AddProduct = () => {
             onUploadComplete={handleUploadMultipleImage}
           />
         </div>
-        <Button disabled={loading}>
-          {loading ? (
-            <div className="flex gap-2">
-              <Loader className="animate-spin h-4 w-4" />
-              Submitting
-            </div>
-          ) : (
-            "Submit"
-          )}
-        </Button>{" "}
+        <Button>Submit</Button>
       </form>
     </main>
   );
 };
 
-export default AddProduct;
+export default InactiveProductEditPage;

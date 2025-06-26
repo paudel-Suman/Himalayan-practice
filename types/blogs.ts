@@ -29,8 +29,14 @@ export type blogType = {
   updatedAt?: string;
   categoryId: string;
   category?: BlogCategory;
+  seoMeta: SeoType;
 };
 
+export type SeoType = {
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+};
 export type BlogResponseWithMeta = {
   blogs: blogType[];
   meta: Meta;
