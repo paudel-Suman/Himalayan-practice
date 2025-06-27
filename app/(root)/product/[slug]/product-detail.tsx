@@ -39,16 +39,21 @@ const ProductDetailPage = ({
 
   // Ensure a color is selected by default on mount
   useEffect(() => {
-    if (firstColor && (!selectedColorId || !selectedColorName)) {
-      console.log("Setting default color:", {
-        name: firstColor.name?.trim(),
-        id: firstColor.id,
-      });
-      setSelectedColor(firstColor.name?.toLowerCase()?.trim() || "unknown");
-      setSelectedColorId(firstColor.productColorId || null);
-      setSelectedColorName(firstColor.name?.trim() || "Unknown");
+    if (
+      firstAttribute?.colorIds?.length &&
+      (!selectedColorId || !selectedColorName)
+    ) {
+      const firstColorObj = firstAttribute.colorIds[0];
+
+      setSelectedColor(
+        firstColorObj.productColor?.name?.toLowerCase()?.trim() || "unknown"
+      );
+      setSelectedColorId(firstColorObj.productColorId || null); // ✅ Use the correct key here
+      setSelectedColorName(
+        firstColorObj.productColor?.name?.trim() || "Unknown"
+      );
     }
-  }, [firstColor, selectedColorId, selectedColorName]);
+  }, [firstAttribute, selectedColorId, selectedColorName]);
 
   // Handle color change
   const handleColorChange = (
