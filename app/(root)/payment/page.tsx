@@ -21,6 +21,7 @@ const PaymentPage = () => {
   const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState("");
   const router = useRouter();
+  const [cartId, setcartId] = useState("");
 
   useEffect(() => {
     const fetchUserCart = async () => {
@@ -36,6 +37,7 @@ const PaymentPage = () => {
         );
 
         const data = await res.json();
+        setcartId(data.cart.id);
 
         if (!res.ok) {
           throw new Error(data.message || "Failed to fetch cart");
@@ -117,6 +119,7 @@ const PaymentPage = () => {
       deliveryDate: "2025-01-01 12:00:00", // Replace with actual or user-chosen date
       notes,
       items,
+      cartId: cartId,
     };
 
     try {
