@@ -134,14 +134,15 @@ const CategoryAddPage = () => {
           </div>
         </section>
 
-          <div className="space-y-2">
-            <Label>Image</Label>
-            <S3UploadForm
-              id={"category-image"}
-              multiple={false}
-              onUploadComplete={handleUploadCategoryImage}
-            />
-          </div>
+        <div className="space-y-2">
+          <Label>Image</Label>
+          <S3UploadForm
+            id={"category-image"}
+            multiple={false}
+            onUploadComplete={handleUploadCategoryImage}
+            isrequired={true}
+          />
+        </div>
 
         <Button>Submit</Button>
       </form>

@@ -8,12 +8,14 @@ import { S3UploadResponse } from "@/types/s3upload";
 import Image from "next/image";
 type S3UploadFormProps = {
   multiple?: boolean;
+  isrequired?: boolean;
   id: string;
   onUploadComplete?: (urls: string[]) => void;
 };
 
 const S3UploadForm: React.FC<S3UploadFormProps> = ({
   multiple = false,
+  isrequired = false,
   id,
   onUploadComplete,
 }) => {
@@ -83,6 +85,7 @@ const S3UploadForm: React.FC<S3UploadFormProps> = ({
           multiple={multiple}
           onChange={handleUpload}
           className="hidden"
+          required={isrequired}
         />
       </div>
       {urls.length > 0 && (

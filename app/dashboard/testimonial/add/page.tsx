@@ -147,6 +147,7 @@ const TestimonialAddPage = () => {
             id={"avatar"}
             multiple={false}
             onUploadComplete={handleUploadAvatar}
+            isrequired={true}
           />
         </div>
         <Button disabled={loading}>

@@ -149,7 +149,7 @@ const BlogAddPage = () => {
             category: formData.category,
             categoryId: formData.categoryId,
             image: image,
-            seoMeta:{}
+            seoMeta: {},
           }),
         }
       );
@@ -266,6 +266,7 @@ const BlogAddPage = () => {
             id={"blog-image"}
             multiple={false}
             onUploadComplete={handleUploadBlogImage}
+            isrequired={true}
           />
         </div>
         <Button disabled={loading}>

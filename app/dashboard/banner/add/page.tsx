@@ -191,6 +191,7 @@ const BannerAddPage = () => {
             id={"banner-image"}
             multiple={false}
             onUploadComplete={handleUploadComplete}
+            isrequired={true}
           />
         </div>
         <div className="space-y-2">

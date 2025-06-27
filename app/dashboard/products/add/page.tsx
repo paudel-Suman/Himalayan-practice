@@ -444,6 +444,7 @@ const AddProduct = () => {
             id={"feature-image"}
             multiple={false}
             onUploadComplete={handleUploadFeatureImage}
+            isrequired={true}
           />
         </div>
         <div className="space-y-2">
@@ -452,6 +453,7 @@ const AddProduct = () => {
             id={"media-image"}
             multiple={true}
             onUploadComplete={handleUploadMultipleImage}
+            isrequired={true}
           />
         </div>
         <Button disabled={loading}>
