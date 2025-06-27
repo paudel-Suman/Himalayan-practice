@@ -12,6 +12,7 @@ import { useMyContext } from "../../context/store";
 import toast from "react-hot-toast";
 import { Order } from "@/types/order";
 import SpinLoader from "@/app/spin-loader";
+import { Badge } from "@/components/ui/badge";
 
 const OrderPage = () => {
   const { store } = useMyContext();
@@ -49,6 +50,33 @@ const OrderPage = () => {
     fetchOrders();
   }, []);
 
+  const StatusBadge = ({ status }: { status: string }) => {
+    switch (status) {
+      case "PENDING":
+        return <Badge className="bg-yellow-500 text-white">Pending</Badge>;
+      case "PROCESSING":
+        return <Badge className="bg-blue-500 text-white">Processing</Badge>;
+      case "SHIPPED":
+        return <Badge className="bg-indigo-500 text-white">Shipped</Badge>;
+      case "DELIVERED":
+        return <Badge className="bg-green-600 text-white">Delivered</Badge>;
+      case "CANCELLED":
+        return <Badge className="bg-red-500 text-white">Cancelled</Badge>;
+      case "REFUNDED":
+        return <Badge className="bg-purple-600 text-white">Refunded</Badge>;
+      case "CASH ON DELIVERY":
+        return (
+          <Badge className="bg-blue-700 text-white">Cash on Delivery</Badge>
+        );
+      case "ONLINE PAYMENT":
+        return (
+          <Badge className="bg-orange-500 text-white">Online Payment</Badge>
+        );
+      default:
+        return <Badge className="bg-gray-500 text-white">{status}</Badge>;
+    }
+  };
+
   if (loading) return <SpinLoader />;
 
   return (
@@ -77,8 +105,8 @@ const OrderPage = () => {
             <TableCell>{item.shippingMethod}</TableCell>
             <TableCell>{item.shippingAddress.street}</TableCell>
             <TableCell>{item.totalAmount}</TableCell>
-            <TableCell className="text-right capitalize">
-              {item.status}
+            <TableCell className="text-right">
+              <StatusBadge status={item.status} />
             </TableCell>
           </TableRow>
         ))}
