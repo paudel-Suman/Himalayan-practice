@@ -13,7 +13,7 @@ export async function getTrendingProducts(): Promise<producttype[]> {
     }
 
     const data = await res.json();
-    return data.data.product || [];
+    return data.data.products || [];
   } catch (error) {
     console.error("Error fetching trending products:", error);
     return [];

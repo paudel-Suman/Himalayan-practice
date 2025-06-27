@@ -57,6 +57,8 @@ export const API_ROUTES = {
     DELETE_REGIONAL_ADMIN: withBase("/super-admin/delete-regional-admin"),
     UPDATE_REGIONAL_ADMIN: withBase("/super-admin/update-regional-admin/"),
     FETCH_ALL_PRODUCT: withBase("/super-admin/fetch-all-products"),
+    FETCH_ALL_DELETE_PRODUCT: withBase("/product/fetch-all-delete-products"),
+    FETCH_ALL_ACTIVE_PRODUCT: withBase("/product/fetch-all-active-products"),
     SEARCH_PRODUCT: withBase("/super-admin/search-products"),
     FETCH_ALL_ORDERS: withBase("/super-admin/fetch-all-orders"),
     SEARCH_ORDER: withBase("/super-admin/search-orders"),
