@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Loader } from "lucide-react";
 
 const CategoryEditPage = () => {
   const params = useParams();
@@ -25,6 +26,8 @@ const CategoryEditPage = () => {
   const token = Cookies.get("token");
   const router = useRouter();
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [categoryImage, setCategoryImage] = useState("");
 
   const [formData, setFormData] = useState({
@@ -98,10 +101,13 @@ const CategoryEditPage = () => {
 
     fetchSingleCategory();
   }, []);
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/category/update-product-category`,
         {
@@ -114,7 +120,7 @@ const CategoryEditPage = () => {
             id: id,
             name: formData.name,
             slug: formData.slug,
-            image: image,
+            image: image || categoryImage,
             subcategories: formData.subcategories,
           }),
         }
@@ -130,6 +136,8 @@ const CategoryEditPage = () => {
       router.push("/dashboard/category");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -174,7 +182,6 @@ const CategoryEditPage = () => {
             <Input name="slug" value={formData.slug} readOnly />
           </div>
         </section>
-
         <div className="space-y-2">
           <Label>Image</Label>
           <S3UploadForm
@@ -183,7 +190,6 @@ const CategoryEditPage = () => {
             onUploadComplete={handleUploadCategoryImage}
           />
         </div>
-
         <figure>
           {categoryImage && (
             <Image
@@ -195,8 +201,16 @@ const CategoryEditPage = () => {
             />
           )}
         </figure>
-
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Updating
+            </div>
+          ) : (
+            "Update"
+          )}
+        </Button>{" "}
       </form>
     </main>
   );

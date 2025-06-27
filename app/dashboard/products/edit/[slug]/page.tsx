@@ -26,10 +26,13 @@ import { Button } from "@/components/ui/button";
 import { ProductColor, ProductSize } from "@/types/product";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const ProductEditPage = () => {
   const params = useParams();
   const slug = params.slug as string;
+  const router = useRouter();
   const token = Cookies.get("token");
   const [tags, setTags] = useState<string[]>([]);
   const [productID, setproductID] = useState<string>("");
@@ -42,6 +45,7 @@ const ProductEditPage = () => {
   const [image, setImage] = useState("");
   const [multipleimage, setMultipleImage] = useState("");
   const [featureImage, setFeatureImage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -272,6 +276,7 @@ const ProductEditPage = () => {
     };
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/product/update-product/${productID}`,
         {
@@ -291,9 +296,11 @@ const ProductEditPage = () => {
         return;
       }
       toast.success("Product Updated Successfully");
-      // router.push("/dashboard/category");
+      router.push("/dashboard/products");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -434,7 +441,10 @@ const ProductEditPage = () => {
             <Label>Select Sizes</Label>
             <div className="flex gap-4">
               {size.map((item) => (
-                <div key={item.id} className="flex flex-wrap items-center gap-2">
+                <div
+                  key={item.id}
+                  className="flex flex-wrap items-center gap-2"
+                >
                   <input
                     type="checkbox"
                     id={`size-${item.id}`}
@@ -564,7 +574,16 @@ const ProductEditPage = () => {
             onUploadComplete={handleUploadMultipleImage}
           />
         </div>
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Updating
+            </div>
+          ) : (
+            "Update"
+          )}
+        </Button>{" "}
       </form>
     </main>
   );
