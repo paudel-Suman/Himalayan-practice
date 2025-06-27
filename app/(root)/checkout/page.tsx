@@ -34,7 +34,6 @@ const CheckoutPage = () => {
   const searchParams = useSearchParams();
   const discountAmt = searchParams.get("discount");
   const [selectedBilling, setSelectedBilling] = useState<string | null>(null);
-
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -47,6 +46,16 @@ const CheckoutPage = () => {
 
   const handleSelect = (id: string) => {
     setSelectedBilling(id);
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+
+      [name]: value,
+    }));
   };
   useEffect(() => {
     const fetchUserCart = async () => {
@@ -78,51 +87,41 @@ const CheckoutPage = () => {
     fetchUserCart();
   }, []);
 
-  useEffect(() => {
-    const getUserShippingAddress = async () => {
-      console.log("Fetching shipping addresses...");
-      console.log("Auth token available:", !!store.auth.token);
+  const getUserShippingAddress = async () => {
+    console.log("Fetching shipping addresses...");
+    console.log("Auth token available:", !!store.auth.token);
 
-      try {
-        setLoading(true);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_API}/shipping-address/fetch-all-shipping-addresses`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${store.auth.token}`,
-            },
-          }
-        );
-        const data = await res.json();
-        console.log(data);
-        setShippingAddress(data.addresses);
-        console.log("User shipping Address", data);
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/shipping-address/fetch-all-shipping-addresses`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store.auth.token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      setShippingAddress(data.addresses);
+      console.log("User shipping Address", data);
 
-        // Set the first shipping address as selected by default
-        if (data.addresses && data.addresses.length > 0) {
-          setSelectedBilling(data.addresses[0].id);
-        }
-        if (!res.ok) {
-          throw new Error(data.message || "Failed to fetch shipping addresses");
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching shipping addresses:", error);
+      // Set the first shipping address as selected by default
+      if (data.addresses && data.addresses.length > 0) {
+        setSelectedBilling(data.addresses[0].id);
       }
-    };
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to fetch shipping addresses");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching shipping addresses:", error);
+    }
+  };
+  useEffect(() => {
     getUserShippingAddress();
   }, []);
-
-  // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-
-      [name]: value,
-    }));
-  };
 
   const handleSubmitBillingDetails = async (
     e: React.FormEvent<HTMLFormElement>
@@ -159,10 +158,23 @@ const CheckoutPage = () => {
       }
 
       toast.success("Address Saved Successfully");
-      setLoading(false);
       setIsAddNew(false);
+
+      await getUserShippingAddress();
+
+      setFormData({
+        fullName: "",
+        phone: "",
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "",
+      });
     } catch (error) {
       console.error("Registration failed", error);
+    } finally {
+      setLoading(false);
     }
   };
 
