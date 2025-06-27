@@ -62,7 +62,7 @@ const Trending = ({
   };
   return (
     <div className="bg-gradient-to-tl from-primarymain via-primarymain/90 to-primarymain/80 py-10">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl lg:mx-auto mx-4">
         <PageHeader title="Trending Products" className="text-white" />
 
         {trendingproducts.length > 4 ? (
@@ -91,7 +91,7 @@ const Trending = ({
             </div>
           </section>
         ) : (
-          <div className="grid grid-cols-4 gap-6 my-6">
+          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 my-6">
             {trendingproducts.map((item, index) => (
               <div key={index}>
                 <ProductCard products={item} />

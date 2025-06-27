@@ -66,7 +66,9 @@ const OrderPage = () => {
       <TableBody>
         {order.map((item) => (
           <TableRow key={item.id}>
-            <TableCell className="font-medium">{item.id}</TableCell>
+            <TableCell className="font-medium">
+              {item.id.slice(-5).toUpperCase()}
+            </TableCell>
             <TableCell>
               {item.items.map((prod) => (
                 <div key={prod.id}>{prod.product?.name}</div>

@@ -88,7 +88,7 @@ const WomenCollection = ({
           </div>
         </section>
       ) : (
-        <div className="grid grid-cols-4 gap-6 my-6">
+        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 my-6">
           {trendingproducts.slice(0, 8).map((item, index) => (
             <div key={index}>
               <ProductCard products={item} />

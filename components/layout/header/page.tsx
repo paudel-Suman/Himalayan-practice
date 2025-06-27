@@ -32,14 +32,14 @@ const Header = () => {
         </Link>
         <form onSubmit={handleSubmit}>
           <input
-            className="border border-zinc-400 rounded-full p-2 text-sm md:w-[350px] w-[150px] focus:border-blue-500 outline-none"
+            className="border border-zinc-400 rounded-full p-2 text-sm lg:w-[350px] md:w-[200px] w-[150px] focus:border-blue-500 outline-none"
             type="text"
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
-        <figure className="md:absolute hidden left-1/2 -translate-x-1/2">
+        <figure className="md:block hidden absolute  left-1/2 -translate-x-1/2">
           <Link href="/">
             <Image
               src="/logo/mainlogo.png"

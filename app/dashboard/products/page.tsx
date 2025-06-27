@@ -56,7 +56,7 @@ const ProductPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await productService.fetchAllProducts(page);
+        const res = await productService.fetchAllActiveProducts(page);
         setProducts(res.data.products);
         setTotalPages(Number(res.data.pagination.totalPages));
         console.log("Total Pages:", Number(res.data.pagination.totalPages)); // Debug
@@ -117,10 +117,7 @@ const ProductPage = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-2 justify-between mb-6">
-        <PageHeader
-          title="Products"
-          className="text-start w-fit !text-md "
-        />
+        <PageHeader title="Products" className="text-start w-fit !text-md " />
 
         <Input
           placeholder="Search..."

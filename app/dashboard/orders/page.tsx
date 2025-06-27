@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 const OrderPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -95,6 +96,35 @@ const OrderPage = () => {
       console.error(error);
     }
   };
+
+  const StatusBadge = ({ status }: { status: string }) => {
+    switch (status) {
+      case "PENDING":
+        return <Badge className="bg-yellow-500 text-white">Pending</Badge>;
+      case "PROCESSING":
+        return <Badge className="bg-blue-500 text-white">Processing</Badge>;
+      case "SHIPPED":
+        return <Badge className="bg-indigo-500 text-white">Shipped</Badge>;
+      case "DELIVERED":
+        return <Badge className="bg-green-600 text-white">Delivered</Badge>;
+      case "CANCELLED":
+        return <Badge className="bg-red-500 text-white">Cancelled</Badge>;
+      case "REFUNDED":
+        return <Badge className="bg-purple-600 text-white">Refunded</Badge>;
+      case "CASH ON DELIVERY":
+        return (
+          <Badge className="bg-blue-700 text-white">Cash on Delivery</Badge>
+        );
+      case "ONLINE PAYMENT":
+        return (
+          <Badge className="bg-orange-500 text-white">Online Payment</Badge>
+        );
+      default:
+        return <Badge className="bg-gray-500 text-white">{status}</Badge>;
+    }
+  };
+
+  
   if (loading) return <Loading />;
 
   return (
@@ -115,6 +145,7 @@ const OrderPage = () => {
             <TableRow>
               <TableHead>Order ID</TableHead>
               <TableHead>Order Status</TableHead>
+              <TableHead>Payment Method</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Is Paid</TableHead>
               <TableHead>Is Cancelled</TableHead>
@@ -125,10 +156,18 @@ const OrderPage = () => {
           <TableBody>
             {orders.map((item) => (
               <TableRow key={item.id}>
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{item.id.slice(-5).toUpperCase()}</TableCell>
                 <TableCell>
-                  <Badge className="bg-yellow-500">{item.status}</Badge>
+                  <StatusBadge status={item.status} />
                 </TableCell>
+                <TableCell>
+                  {item.status == "CASH ON DELIVERY" ? (
+                    <Badge className="bg-blue-500">Cash on Delivery</Badge>
+                  ) : (
+                    <Badge className="bg-orange-500">Online Payment</Badge>
+                  )}
+                </TableCell>
+
                 <TableCell>Rs .{item.totalAmount}</TableCell>
                 <TableCell>
                   {item.isPaid ? (
@@ -149,12 +188,14 @@ const OrderPage = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <Icon
-                      icon="lucide:edit"
-                      width="20"
-                      height="20"
-                      className="text-blue-500"
-                    />
+                    <Link href={`/dashboard/orders/edit/${item.id}`}>
+                      <Icon
+                        icon="lucide:edit"
+                        width="20"
+                        height="20"
+                        className="text-blue-500"
+                      />
+                    </Link>
                     <AlertDialog>
                       <AlertDialogTrigger>
                         <Icon

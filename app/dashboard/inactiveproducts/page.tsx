@@ -55,7 +55,7 @@ const InactiveProductPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await productService.fetchAllProducts(page);
+        const res = await productService.fetchAllInactiveProducts(page);
         setProducts(res.data.products);
         setTotalPages(Number(res.data.pagination.totalPages));
         console.log("Total Pages:", Number(res.data.pagination.totalPages)); // Debug
