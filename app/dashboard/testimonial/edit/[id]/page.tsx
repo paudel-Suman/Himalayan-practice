@@ -103,7 +103,7 @@ const TestimonialAddPage = () => {
             name: formData.name,
             message: formData.message,
             designation: formData.designation,
-            avatar: image,
+            avatar: image || testimonialAvatar,
           }),
         }
       );

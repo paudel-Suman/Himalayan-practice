@@ -27,10 +27,12 @@ import toast from "react-hot-toast";
 import { TestimonialType } from "@/types/testimonial";
 import PageHeader from "@/components/text/page-header";
 import { Button } from "@/components/ui/button";
+import Loading from "@/app/loading";
 
 const TestimonialPage = () => {
   const token = Cookies.get("token");
   const [testimonials, setTestimonials] = useState<TestimonialType[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleDelete = async (id: any) => {
     try {
@@ -59,6 +61,7 @@ const TestimonialPage = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
+        setLoading(true);
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_API}/testimonial/fetch-all-testimonial`
         );
@@ -71,11 +74,14 @@ const TestimonialPage = () => {
       } catch (error) {
         console.error("Error fetching product reviews:", error);
         toast.error("Failed to load reviews");
+      } finally {
+        setLoading(false);
       }
     };
     fetchTestimonials();
   }, []);
 
+  if (loading) return <Loading />;
   return (
     <div>
       <div className="flex flex-wrap gap-2 justify-between items-start mb-6">
