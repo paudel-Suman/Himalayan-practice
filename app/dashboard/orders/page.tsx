@@ -161,7 +161,7 @@ const OrderPage = () => {
                   <StatusBadge status={item.status} />
                 </TableCell>
                 <TableCell>
-                  {item.status == "CASH ON DELIVERY" ? (
+                  {item.shippingMethod === "CASH ON DELIVERY" ? (
                     <Badge className="bg-blue-500">Cash on Delivery</Badge>
                   ) : (
                     <Badge className="bg-orange-500">Online Payment</Badge>
