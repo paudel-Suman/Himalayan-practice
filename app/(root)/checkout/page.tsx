@@ -98,6 +98,11 @@ const CheckoutPage = () => {
         console.log(data);
         setShippingAddress(data.addresses);
         console.log("User shipping Address", data);
+
+        // Set the first shipping address as selected by default
+        if (data.addresses && data.addresses.length > 0) {
+          setSelectedBilling(data.addresses[0].id);
+        }
         if (!res.ok) {
           throw new Error(data.message || "Failed to fetch shipping addresses");
         }
@@ -579,6 +584,7 @@ const CheckoutPage = () => {
                       pathname: `/payment`,
                       query: {
                         billingaddress: selectedBilling,
+                        discount: discountAmt,
                       },
                     }}
                   >
