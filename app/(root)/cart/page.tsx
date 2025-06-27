@@ -94,16 +94,18 @@ const CartPage = () => {
         );
 
         const data = await res.json();
-
         if (!res.ok) {
+          if (data?.cart === null) {
+            setCart([]);
+            return;
+          }
           throw new Error(data.message || "Failed to fetch cart");
         }
-
-        setCart(data.cart.items);
-        setLoading(false);
+        setCart(data?.cart?.items || []);
       } catch (error) {
         console.error("Error fetching cart:", error);
-        toast.error("Failed to load cart");
+      } finally {
+        setLoading(false);
       }
     };
     fetchUserCart();
