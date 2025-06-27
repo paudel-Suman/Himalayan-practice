@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, Info, Minus, Plus, Trash2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
 const CartPage = () => {
   const { store, setStore } = useMyContext();
@@ -16,6 +17,8 @@ const CartPage = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponDiscount, setCoupounDiscount] = useState(0);
   const [discounrRate, setDiscountRate] = useState(0);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Increase quantity
   const increaseQuantity = (
@@ -106,6 +109,10 @@ const CartPage = () => {
     fetchUserCart();
   }, []);
 
+  if (!store.auth.token) {
+    router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+    return;
+  }
   const handleDelete = async (cartId: string) => {
     const previousCart = [...cart];
     const updatedCart = cart.filter((item) => item.id !== cartId);
@@ -180,6 +187,12 @@ const CartPage = () => {
         return;
       }
 
+      // Check if discount is greater than subtotal
+      if (calculatedDiscount > Number(subtotal)) {
+        toast.error("Coupon discount cannot exceed subtotal.");
+        return;
+      }
+
       setCoupounDiscount(calculatedDiscount);
       toast.success("Coupon Applied Successfully");
     } catch (error) {
@@ -196,7 +209,8 @@ const CartPage = () => {
       0
     );
     const discount = couponDiscount;
-    const deliveryFee = 50.0; // Fixed delivery fee
+    const deliveryFee = 50.0;
+
     const total = subtotal - discount + deliveryFee;
 
     return {
