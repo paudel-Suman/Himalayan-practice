@@ -36,6 +36,7 @@ const ProductDetailPage = ({
   const { name, description, price, media, productAttributes, stock, id } =
     productdetails;
   const availableStock = stock.quantity;
+  console.log(availableStock);
 
   // Ensure a color is selected by default on mount
   useEffect(() => {
@@ -238,45 +239,54 @@ const ProductDetailPage = ({
               ))}
             </div>
           </div>
+          {availableStock > 0 && (
+            <section className="space-y-6">
+              <div className="flex items-center w-fit border rounded-md">
+                <button
+                  onClick={decreaseQuantity}
+                  className="px-3 py-2 border-r cursor-pointer hover:bg-gray-100"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span className="px-4 py-2">{quantity}</span>
+                <button
+                  onClick={increaseQuantity}
+                  className="px-3 py-2 border-l cursor-pointer hover:bg-gray-100"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
 
-          <div className="flex items-center w-fit border rounded-md">
-            <button
-              onClick={decreaseQuantity}
-              className="px-3 py-2 border-r cursor-pointer hover:bg-gray-100"
-              aria-label="Decrease quantity"
-            >
-              <Minus className="h-4 w-4" />
-            </button>
-            <span className="px-4 py-2">{quantity}</span>
-            <button
-              onClick={increaseQuantity}
-              className="px-3 py-2 border-l cursor-pointer hover:bg-gray-100"
-              aria-label="Increase quantity"
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-          </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart(productdetails, quantity);
+                  }}
+                  className="flex items-center cursor-pointer bg-primarymain text-white hover:bg-primarymain/90"
+                >
+                  {loading ? (
+                    <Loader className="animate-spin h-4 w-4" />
+                  ) : (
+                    <ShoppingBag className="h-4 w-4" />
+                  )}
+                  {loading ? "ADDING" : " ADD TO CART"}
+                </Button>
 
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(productdetails, quantity);
-              }}
-              className="flex items-center cursor-pointer bg-primarymain text-white hover:bg-primarymain/90"
-            >
-              {loading ? (
-                <Loader className="animate-spin h-4 w-4" />
-              ) : (
-                <ShoppingBag className="h-4 w-4" />
-              )}
-              {loading ? "ADDING" : " ADD TO CART"}
-            </Button>
+                <div
+                  className={`bg-rose-600 text-white rounded-full p-2 w-fit`}
+                >
+                  <Heart className="h-4 w-4" />
+                </div>
+              </div>
+            </section>
+          )}
 
-            <div className={`bg-rose-600 text-white rounded-full p-2 w-fit`}>
-              <Heart className="h-4 w-4" />
-            </div>
-          </div>
+          {availableStock == 0 && (
+            <p className="text-red-500 font-semibold my-8">Product is Out of Stock</p>
+          )}
         </div>
       </section>
 
