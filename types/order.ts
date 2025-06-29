@@ -27,7 +27,20 @@ export type Item = {
   quantity: number;
   price: string;
   product: producttype;
+  size: Size;
+  color: Color;
 };
+
+export type Size = {
+  id: string;
+  name: string;
+  sizeNumber: string;
+}
+export type Color = {
+  id: string;
+  name: string;
+  hex: string;
+}
 
 export type Address = {
   id: string;
