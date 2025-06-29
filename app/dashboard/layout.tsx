@@ -210,11 +210,6 @@ const navitems = [
     path: "/dashboard/social",
     icon: "/icons/link.png",
   },
-  {
-    title: "Customers",
-    path: "/dashboard/customers",
-    icon: "/icons/customer.png",
-  },
 
   {
     title: "Category",
@@ -242,6 +237,11 @@ const navitems = [
     title: "Banner",
     path: "/dashboard/banner",
     icon: "/icons/banner.png",
+  },
+  {
+    title: "Customers",
+    path: "/dashboard/customers",
+    icon: "/icons/customer.png",
   },
   {
     title: "Orders",
