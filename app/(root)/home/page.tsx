@@ -11,10 +11,13 @@ import { categoryType } from "@/types/category";
 import { bannerType } from "@/types/banner";
 import { getBanner } from "@/actions/fetchbanner";
 import Loading from "@/app/loading";
+import { getTestimonials } from "@/actions/fetchtestimonials";
+import { TestimonialType } from "@/types/testimonial";
 
 const HomeMain = () => {
   const [trendingproducts, setTrendingProducts] = useState<producttype[]>([]);
   const [category, setCategory] = useState<categoryType[]>([]);
+  const [testimonial, setTestimonial] = useState<TestimonialType[]>([]);
   const [banner, setBanner] = useState<bannerType[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -42,6 +45,19 @@ const HomeMain = () => {
     };
 
     fetchCategory();
+  }, []);
+
+  useEffect(() => {
+    const fetchtestimonial = async () => {
+      try {
+        const testimonials = await getTestimonials();
+        setTestimonial(testimonials);
+      } catch (error) {
+        console.error("Failed to fetch Testimonials:", error);
+      }
+    };
+
+    fetchtestimonial();
   }, []);
 
   useEffect(() => {
@@ -76,7 +92,7 @@ const HomeMain = () => {
         <WomenCollection trendingproducts={trendingproducts} />
         {/* <TrendingBlogs /> */}
       </div>
-      <Testimonials />
+      <Testimonials testimonial={testimonial} />
     </>
   );
 };
