@@ -201,26 +201,47 @@ const navitems = [
     icon: "/icons/overview.png",
   },
   {
+    title: "Company Profile",
+    path: "/dashboard/company",
+    icon: "/icons/info.png",
+  },
+  {
+    title: "Social Links",
+    path: "/dashboard/social",
+    icon: "/icons/link.png",
+  },
+  {
     title: "Customers",
     path: "/dashboard/customers",
-    icon: "/icons/jobs.png",
+    icon: "/icons/customer.png",
   },
 
   {
     title: "Category",
     path: "/dashboard/category",
-    icon: "/icons/services.png",
+    icon: "/icons/category.png",
   },
 
   {
     title: "Products",
     path: "/dashboard/products",
-    icon: "/icons/gallery.png",
+    icon: "/icons/product.png",
   },
   {
     title: "Inactive Products",
     path: "/dashboard/inactiveproducts",
-    icon: "/icons/gallery.png",
+    icon: "/icons/inactive.png",
+  },
+
+  {
+    title: "Coupon",
+    path: "/dashboard/coupon",
+    icon: "/icons/coupon.png",
+  },
+  {
+    title: "Banner",
+    path: "/dashboard/banner",
+    icon: "/icons/banner.png",
   },
   {
     title: "Orders",
@@ -230,31 +251,11 @@ const navitems = [
   {
     title: "Blogs",
     path: "/dashboard/blogs",
-    icon: "/icons/client.png",
-  },
-  {
-    title: "Coupon",
-    path: "/dashboard/coupon",
-    icon: "/icons/testimonials.png",
-  },
-  {
-    title: "Banner",
-    path: "/dashboard/banner",
-    icon: "/icons/book.png",
+    icon: "/icons/content.png",
   },
   {
     title: "Testimonials",
     path: "/dashboard/testimonial",
-    icon: "/icons/client.png",
-  },
-  {
-    title: "Company Profile",
-    path: "/dashboard/company",
-    icon: "/icons/client.png",
-  },
-  {
-    title: "Social Links",
-    path: "/dashboard/social",
     icon: "/icons/client.png",
   },
 ];
