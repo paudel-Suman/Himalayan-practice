@@ -247,4 +247,14 @@ const navitems = [
     path: "/dashboard/testimonial",
     icon: "/icons/client.png",
   },
+  {
+    title: "Company Profile",
+    path: "/dashboard/company",
+    icon: "/icons/client.png",
+  },
+  {
+    title: "Social Links",
+    path: "/dashboard/social",
+    icon: "/icons/client.png",
+  },
 ];

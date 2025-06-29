@@ -49,7 +49,7 @@ const TestimonialAddPage = () => {
   };
 
   useEffect(() => {
-    const fetchSingleCategory = async () => {
+    const fetchSingleTestimonial = async () => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_API}/testimonial/fetch-testimonial-by-id/${id}`,
@@ -83,7 +83,7 @@ const TestimonialAddPage = () => {
       }
     };
 
-    fetchSingleCategory();
+    fetchSingleTestimonial();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

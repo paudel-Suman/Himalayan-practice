@@ -216,63 +216,44 @@ const OrderEditPage = () => {
                     {item.product.name}
                   </h3>
 
-                  {/* Attributes */}
-                  {item.product.productAttributes?.map((attr) => (
-                    <div key={attr.id} className="mt-2 space-y-1">
-                      {/* Sizes */}
-                      {attr.sizeIds?.length > 0 && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span className="font-medium text-gray-800">
-                            Sizes:
-                          </span>
-                          {attr.sizeIds.map((size) => (
-                            <span
-                              key={size.productSizeId}
-                              className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs border border-blue-100"
-                            >
-                              {size.productSize?.sizeNumber ||
-                                size.productSize?.name}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                  <section className="space-y-2 my-2">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="font-medium text-gray-800">Sizes:</span>
 
-                      {/* Colors */}
-                      {attr.colorIds?.length > 0 && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                          <span className="font-medium text-gray-800">
-                            Color:
-                          </span>
-                          {attr.colorIds.map((color) => (
-                            <div
-                              key={color.productColorId}
-                              className="w-5 h-5 rounded-full border shadow-sm"
-                              style={{
-                                backgroundColor: color.productColor?.hex,
-                              }}
-                              title={color.productColor?.name}
-                            ></div>
-                          ))}
-                        </div>
-                      )}
+                      <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs border border-blue-100">
+                        {item.size.name}
+                      </span>
                     </div>
-                  ))}
 
-                  {/* Pricing & Quantity */}
-                  <div className="mt-4 space-y-1 text-sm text-gray-700">
-                    <p className="flex items-center gap-2">
-                      <span className="font-medium text-gray-800">Price:</span>
-                      <span className="text-green-600 font-semibold">
-                        Rs. {item.price}
-                      </span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="font-medium text-gray-800">
-                        Quantity:
-                      </span>
-                      <span>{item.quantity}</span>
-                    </p>
-                  </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="font-medium text-gray-800">Colors:</span>
+
+                      <span
+                        className="w-5 h-5 rounded-full border shadow-sm"
+                        style={{
+                          backgroundColor: item.color.hex,
+                        }}
+                      ></span>
+                    </div>
+
+                    {/* Pricing & Quantity */}
+                    <div className=" space-y-1 text-sm text-gray-700">
+                      <p className="flex items-center gap-2">
+                        <span className="font-medium text-gray-800">
+                          Quantity:
+                        </span>
+                        <span>{item.quantity}</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="font-medium text-gray-800">
+                          Price:
+                        </span>
+                        <span className="text-green-600 font-semibold">
+                          Rs. {item.price}
+                        </span>
+                      </p>
+                    </div>
+                  </section>
                 </div>
               </div>
             ))}

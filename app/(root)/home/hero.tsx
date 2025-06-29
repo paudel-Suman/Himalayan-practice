@@ -27,7 +27,7 @@ const Hero = ({ banner }: { banner: bannerType[] }) => {
   const slides = banner.length === 1 ? [...banner, banner[0]] : banner;
 
   return (
-    <div className="md:min-h-screen h-[50vh]">
+    <div className="md:h-[calc(100vh-17vh)] h-[50vh]">
       <Slider {...settings}>
         {slides.map((item, index) => (
           <div key={index} className="relative">
