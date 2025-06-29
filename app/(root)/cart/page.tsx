@@ -118,13 +118,23 @@ const CartPage = () => {
   const handleDelete = async (cartId: string) => {
     const previousCart = [...cart];
     const updatedCart = cart.filter((item) => item.id !== cartId);
+
     setCart(updatedCart);
+    setStore((prev: any) => ({
+      ...prev,
+      cart: updatedCart,
+    }));
+    localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
 
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/cart/delete-cart-item/${cartId}`,
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
         }
       );
 
@@ -137,7 +147,14 @@ const CartPage = () => {
       toast.success("Item removed from cart");
     } catch (error) {
       console.error("Error deleting cart item:", error);
+
       setCart(previousCart);
+      setStore((prev: any) => ({
+        ...prev,
+        cart: previousCart,
+      }));
+      localStorage.setItem("katunje-cart", JSON.stringify(previousCart));
+
       toast.error("Failed to delete item from cart");
     }
   };
@@ -167,8 +184,10 @@ const CartPage = () => {
       }
 
       const coupon = data.coupon;
-
-      // Check if coupon has expired
+      if (coupon.couponCount <= 0) {
+        toast.error("Coupon usage limit has been reached");
+        return;
+      }
       const now = new Date();
       const expiryDate = new Date(coupon.expiryDate);
       if (expiryDate < now) {

@@ -11,7 +11,7 @@ import Image from "next/image";
 import { shippingAddress } from "@/types/shippingaddress";
 
 const PaymentPage = () => {
-  const { store } = useMyContext();
+  const { store, setStore } = useMyContext();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [cart, setCart] = useState([]);
   const [selectedBilling, setSelectedBilling] = useState<shippingAddress>();
@@ -109,14 +109,16 @@ const PaymentPage = () => {
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
+      colorId: item.color.id,
+      sizeId: item.size.id,
     }));
 
     const payload = {
       shippingAddress: billingaddress,
       billingAddress: billingaddress,
-      shippingMethod: paymentMethod.toUpperCase(), // Must match enum in backend if any
+      shippingMethod: paymentMethod.toUpperCase(),
       totalAmount: parseFloat(total),
-      deliveryDate: "2025-01-01 12:00:00", // Replace with actual or user-chosen date
+      deliveryDate: "2025-01-01 12:00:00",
       notes,
       items,
       cartId: cartId,
@@ -142,16 +144,24 @@ const PaymentPage = () => {
       }
 
       toast.success("Order placed successfully!");
+
+      setCart([]);
+      setStore((prev: any) => ({
+        ...prev,
+        cart: [],
+      }));
+      localStorage.setItem("katunje-cart", JSON.stringify([]));
+
       router.push(`/profile/orders`);
     } catch (error) {
       console.error("Order error:", error);
-
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
         toast.error("Something went wrong");
       }
     }
+
     console.log("payload", payload);
   };
 

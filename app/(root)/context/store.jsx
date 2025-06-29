@@ -6,6 +6,9 @@ const CreateContext = createContext();
 
 export const StoreProvider = ({ children }) => {
   const { data: session } = useSession();
+  const [cartCount, setCartCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
+
   const [store, setStore] = useState({
     wishlist: [],
     cart: [],
@@ -72,10 +75,17 @@ export const StoreProvider = ({ children }) => {
       const cartData = await response.json();
 
       if (cartData) {
-        localStorage.setItem("katunje-cart", JSON.stringify(cartData?.items));
+        localStorage.setItem(
+          "katunje-cart",
+          JSON.stringify(cartData?.cart.items)
+        );
+
+        setCartCount(
+          cartData.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+        );
       }
 
-      return cartData?.items || [];
+      return cartData?.cart.items || [];
     } catch (error) {
       console.error("Error fetching cart:", error);
       return [];
@@ -109,9 +119,14 @@ export const StoreProvider = ({ children }) => {
 
     getData();
   }, [session]);
-
+  useEffect(() => {
+    const count = store.cart.reduce((sum, item) => sum + item.quantity, 0);
+    setCartCount(count);
+  }, [store.cart]);
   return (
-    <CreateContext.Provider value={{ store, setStore, login, logout }}>
+    <CreateContext.Provider
+      value={{ store, setStore, login, logout, cartCount, setCartCount }}
+    >
       {children}
     </CreateContext.Provider>
   );

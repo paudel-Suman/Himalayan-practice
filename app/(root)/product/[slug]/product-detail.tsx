@@ -15,7 +15,7 @@ const ProductDetailPage = ({
 }: {
   productdetails: producttype;
 }) => {
-  const { store } = useMyContext();
+  const { store, setStore } = useMyContext();
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const firstAttribute = productdetails.productAttributes[0];
@@ -101,16 +101,15 @@ const ProductDetailPage = ({
       total: item.price,
     };
 
-    console.log("sentData", apiPayload);
-
     if (!store.auth.token) {
       toast.error("Please login to add to Cart.");
-
       redirect(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      return; 
     }
 
     try {
       setLoading(true);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/cart/add-to-cart/create`,
         {
@@ -127,8 +126,28 @@ const ProductDetailPage = ({
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to add item to cart");
       }
+
+      const updatedCartRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/cart/fetch-user-cart`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+        }
+      );
+
+      const cartData = await updatedCartRes.json();
+      const updatedCart = cartData?.cart?.items || [];
+
+      setStore((prev:any) => ({
+        ...prev,
+        cart: updatedCart,
+      }));
+
+      localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+
       toast.success("Item added to cart successfully!");
-      setLoading(false);
     } catch (error: unknown) {
       console.error("Error adding to cart:", error);
       let errorMessage = "Failed to add item to cart";
@@ -136,6 +155,8 @@ const ProductDetailPage = ({
         errorMessage = error.message || errorMessage;
       }
       toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -284,8 +305,8 @@ const ProductDetailPage = ({
             </section>
           )}
 
-          {availableStock == 0 && (
-            <p className="text-red-500 font-semibold my-8">Product is Out of Stock</p>
+          {availableStock < 0 && (
+            <p className="text-red-500 font-semibold my-8">Out of Stock !</p>
           )}
         </div>
       </section>
