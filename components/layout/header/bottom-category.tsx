@@ -30,6 +30,7 @@ const BottomCategory = () => {
   const { store, logout } = useMyContext();
   const [isOpen, setIsOpen] = useState(false);
   const currentRoute = usePathname();
+  const { cartCount } = useMyContext(); 
 
   useEffect(() => {
     setIsOpen(false);
@@ -51,7 +52,8 @@ const BottomCategory = () => {
     };
 
     fetchCategory();
-  }, []); // runs only once on mount
+  }, []);
+
   return (
     <div className="bg-primarymain min-h-8 p-2 text-white">
       <div className="max-w-7xl mx-auto flex justify-between gap-6">
@@ -73,9 +75,15 @@ const BottomCategory = () => {
         </div>
 
         <div className="flex items-center md:gap-6 gap-2">
-          <Link href="/cart">
+          <Link href="/cart" className="relative">
             <Icon icon="mdi:cart" width="24" height="24" />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-4 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
           </Link>
+
           <Link href="/profile/wishlist">
             <Icon icon="ri:heart-fill" width="24" height="24" />
           </Link>

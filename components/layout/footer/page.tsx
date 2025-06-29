@@ -1,11 +1,14 @@
 import { getCategory } from "@/actions/fetchapi";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { getCompanyInfo } from "@/actions/fetchcompanydata";
+import { getSocials } from "@/actions/fetchsocial";
 import { Mail, Phone, MapPin, CreditCard } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Footer() {
   const category = await getCategory();
+  const socials = await getSocials();
+  const company = await getCompanyInfo();
   return (
     <footer className="bg-gradient-to-tl from-primarymain via-primarymain/90 to-primarymain/80 text-gray-200">
       {/* Main Footer Content */}
@@ -16,32 +19,31 @@ export default async function Footer() {
             <div className="flex items-center mb-4">
               <figure>
                 <Image
-                  src="/logo/himalya.png"
+                  src={company.footerLogoUrl}
                   alt="logo"
                   width={1000}
                   height={1000}
-                  className="object-contain w-40"
+                  className="object-contain h-[5em] w-fit"
                 />
               </figure>
             </div>
             <p className="text-gray-400 mb-6 max-w-sm">
-              Your premier destination for fashion-forward clothing and
-              accessories. Quality meets style in every piece we curate.
+              {company.metaDescription}
             </p>
 
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center">
                 <Phone className="w-4 h-4 mr-3 text-zinc-300" />
-                <span className="text-sm">1-800-STYLE-HUB</span>
+                <span className="text-sm">{company.phoneNumber}</span>
               </div>
               <div className="flex items-center">
                 <Mail className="w-4 h-4 mr-3 text-zinc-300" />
-                <span className="text-sm">hello@stylehub.com</span>
+                <span className="text-sm">{company.contactEmail}</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-3 text-zinc-300" />
-                <span className="text-sm">123 Fashion Ave, NY 10001</span>
+                <span className="text-sm">{company.address}</span>
               </div>
             </div>
 
@@ -51,20 +53,18 @@ export default async function Footer() {
                 {/* Social Media */}
                 <div>
                   <div className="flex justify-center lg:justify-start space-x-4">
-                    <Link href="#">
-                      <Icon icon="logos:facebook" width="30" height="30" />{" "}
-                    </Link>
-
-                    <Link href="#">
-                      <Icon
-                        icon="skill-icons:instagram"
-                        width="30"
-                        height="30"
-                      />{" "}
-                    </Link>
-                    <Link href="#">
-                      <Icon icon="logos:whatsapp-icon" width="30" height="30" />
-                    </Link>
+                    {socials.map((item) => (
+                      <div key={item.id}>
+                        <Link href={item.url}>
+                          <Image
+                            src={item.iconUrl}
+                            alt={item.platform}
+                            width={30}
+                            height={30}
+                          />
+                        </Link>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
