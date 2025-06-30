@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import moment from "moment";
 import { useMyContext } from "@/app/(root)/context/store";
 import { reviewType } from "@/types/review";
+import Loading from "@/app/loading";
 
 const Review = ({ productId }: { productId: string }) => {
   const [productReview, setProductReview] = useState<reviewType[] | null>(null);
@@ -64,22 +65,8 @@ const Review = ({ productId }: { productId: string }) => {
         console.error(data.message || data.error);
         return;
       }
-      // setProductReview((prev) => {
-      //   if (!prev) return prev;
-      //   return {
-      //     ...prev,
-      //     productReview: [
-      //       {
-      //         user: { name: store?.auth?.user?.name || "John Doe" },
-      //         comment: formData.comment,
-      //         rating: formData.rating,
-      //       },
-      //       ...prev.productReview,
-      //     ],
-      //   };
-      // });
 
-      // Optionally reset the form
+      await fetchReview();
       setFormData({
         comment: "",
         rating: 0,
@@ -92,30 +79,28 @@ const Review = ({ productId }: { productId: string }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchReview = async () => {
-      try {
-        const res = await getProductReview(productId);
+  const fetchReview = async () => {
+    try {
+      const res = await getProductReview(productId);
 
-        // Handle both array and single object responses
-        if (Array.isArray(res)) {
-          setProductReview(res);
-        } else {
-          // If it's a single review, wrap it in an array
-          setProductReview([res]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch review:", error);
-        setProductReview([]); // Set to empty array on error
+      // Handle both array and single object responses
+      if (Array.isArray(res)) {
+        setProductReview(res);
+      } else {
+        // If it's a single review, wrap it in an array
+        setProductReview([res]);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch review:", error);
+      setProductReview([]); // Set to empty array on error
+    }
+  };
 
+  useEffect(() => {
     fetchReview();
   }, [productId]);
 
-  
-  if (!productReview)
-    return <p className="text-slate-300">Loading review...</p>;
+  if (!productReview) return <Loading />;
 
   return (
     <section className="grid md:grid-cols-2 gap-8 my-8 min-h-screen">

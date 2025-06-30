@@ -104,7 +104,7 @@ const ProductDetailPage = ({
     if (!store.auth.token) {
       toast.error("Please login to add to Cart.");
       redirect(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
-      return; 
+      return;
     }
 
     try {
@@ -140,7 +140,7 @@ const ProductDetailPage = ({
       const cartData = await updatedCartRes.json();
       const updatedCart = cartData?.cart?.items || [];
 
-      setStore((prev:any) => ({
+      setStore((prev: any) => ({
         ...prev,
         cart: updatedCart,
       }));
