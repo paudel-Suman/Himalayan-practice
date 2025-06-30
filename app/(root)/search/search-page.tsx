@@ -31,7 +31,7 @@ const SearchPage = ({
     const fetchCategory = async () => {
       try {
         const res = await fetch(
-          `https://api.katunje.com/v1/category/fetch-all-categories`
+          `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-categories`
         );
 
         const data = await res.json();
