@@ -111,7 +111,7 @@ const TestimonialPage = () => {
           {testimonials.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
-              <TableCell>{item.message}</TableCell>
+              <TableCell>{item.message.slice(0,40) + "...."}</TableCell>
               <TableCell>
                 <Image
                   src={
