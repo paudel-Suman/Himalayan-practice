@@ -44,7 +44,7 @@ const Header = () => {
               alt="logo"
               width={1000}
               height={1000}
-              className="object-contain w-40"
+              className="object-contain h-10 w-fit"
             />
           </Link>
         )}
