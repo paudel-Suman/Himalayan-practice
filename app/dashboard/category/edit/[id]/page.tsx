@@ -34,6 +34,7 @@ const CategoryEditPage = () => {
     name: "",
     slug: "",
     image: "",
+    isActive: true,
     subcategories: [] as string[],
   });
 
@@ -89,6 +90,7 @@ const CategoryEditPage = () => {
         setFormData({
           name: categoryData.name || "",
           slug: categoryData.slug || "",
+          isActive: categoryData.isActive || false,
           image:
             (categoryData.image && setCategoryImage(categoryData.image)) || "",
           subcategories: categoryData.subcategories || "",
@@ -101,7 +103,6 @@ const CategoryEditPage = () => {
 
     fetchSingleCategory();
   }, []);
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,6 +121,7 @@ const CategoryEditPage = () => {
             id: id,
             name: formData.name,
             slug: formData.slug,
+            isActive: formData.isActive,
             image: image || categoryImage,
             subcategories: formData.subcategories,
           }),
@@ -166,7 +168,7 @@ const CategoryEditPage = () => {
       <h2 className="text-xl font-bold mt-10">Edit Category</h2>
 
       <form onSubmit={handleSubmit} className="my-8 space-y-6">
-        <section className="grid grid-cols-2 gap-6">
+        <section className="grid grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>Category Name</Label>
             <Input
@@ -180,6 +182,45 @@ const CategoryEditPage = () => {
           <div className="space-y-2">
             <Label>Slug</Label>
             <Input name="slug" value={formData.slug} readOnly />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Is Active</Label>
+            <div className="flex flex-col gap-1">
+              <label className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="isActive"
+                  value="true"
+                  className="h-4 w-4"
+                  checked={formData.isActive === true}
+                  onChange={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: true,
+                    }))
+                  }
+                />
+                <span>True</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="isActive"
+                  value="false"
+                  checked={formData.isActive === false}
+                  className="h-4 w-4"
+                  onChange={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: false,
+                    }))
+                  }
+                />
+                <span>False</span>
+              </label>
+            </div>
           </div>
         </section>
         <div className="space-y-2">
