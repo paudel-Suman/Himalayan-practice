@@ -44,6 +44,9 @@ const ProductEditPage = () => {
   const [size, setSize] = React.useState<ProductSize[]>([]);
   const [image, setImage] = useState("");
   const [multipleimage, setMultipleImage] = useState("");
+  const [prevmultipleimage, setPrevMultipleImage] = useState<
+    { mediaUrl: string; mediaType?: string }[]
+  >([]);
   const [featureImage, setFeatureImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -224,7 +227,7 @@ const ProductEditPage = () => {
           isActive: product.isActive || false,
           isDeleted: product.isDeleted || false,
           isFeatured: product.isFeatured || false,
-          media: product.media || [],
+          media: (product.media && setPrevMultipleImage(product.media)) || [],
           tags: product.tags || [],
           productAttributes: product.productAttributes || [],
         });
@@ -255,17 +258,17 @@ const ProductEditPage = () => {
       categoryId: formData.categoryId,
       isActive: formData.isActive,
       price: Number(formData.price),
-      featureImage: image,
+      featureImage: image || featureImage,
       isFeatured: formData.isFeatured,
       stock: {
         quantity: stockQuantity,
       },
       media: [
-        {
-          url: multipleimage,
-          type: "IMAGE",
-        },
+        ...(multipleimage
+          ? [{ url: multipleimage, type: "IMAGE" }]
+          : prevmultipleimage.map((m) => ({ url: m.mediaUrl, type: "IMAGE" }))),
       ],
+
       tags: tags.map((tag) => ({ name: tag })),
       productAttributes: [
         {
@@ -574,6 +577,17 @@ const ProductEditPage = () => {
             onUploadComplete={handleUploadMultipleImage}
           />
         </div>
+        {prevmultipleimage.map((item, index) => (
+          <figure key={index}>
+            <Image
+              src={item.mediaUrl}
+              alt="feature-image"
+              width={500}
+              height={500}
+              className="h-[20em] w-full object-contain"
+            />
+          </figure>
+        ))}
         <Button disabled={loading}>
           {loading ? (
             <div className="flex gap-2">
