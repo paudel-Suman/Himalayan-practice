@@ -81,7 +81,7 @@ const CategoryPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/category/delete-category/${id}`,
         {
-          method: "DELETE",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
