@@ -25,7 +25,7 @@ export async function getTrendingProducts(): Promise<producttype[]> {
 export async function getCategory(): Promise<categoryType[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-categories`,
+      `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-active-categories`,
       {
         cache: "no-cache",
       }
