@@ -25,7 +25,11 @@ const TopInfo = () => {
         <div className="flex md:text-base text-sm items-center gap-1">
           <Icon icon="ion:mail" width="16" height="16" />
 
-          {company && <h2>{company.contactEmail}</h2>}
+          {company && (
+            <a href={`mailto:${company.contactEmail}`}>
+              {company.contactEmail}
+            </a>
+          )}
         </div>
 
         <div
@@ -34,7 +38,9 @@ const TopInfo = () => {
         >
           <Icon icon="famicons:call" width="16" height="16" />
 
-          {company && <h2>{company.phoneNumber}</h2>}
+          {company && (
+            <a href={`tel:${company.phoneNumber}`}>{company.phoneNumber}</a>
+          )}
         </div>
       </div>
     </div>
