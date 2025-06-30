@@ -26,7 +26,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: TestimonialType }) => {
           <Icon icon="flat-color-icons:google" width="30" height="30" />
         </div>
       </div>
-      <p className="my-4 sm:text-sm text-xs text-zinc-700">{message}</p>
+      <p className="my-4 sm:text-sm text-xs text-zinc-700 md:h-20 line-clmap-4">{message}</p>
     </div>
   );
 };
