@@ -3,7 +3,10 @@ import { CompanyType } from "@/types/company";
 export async function getCompanyInfo(): Promise<CompanyType> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/site-setting/fetch-site-setting`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/site-setting/fetch-site-setting`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {

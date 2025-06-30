@@ -3,7 +3,10 @@ import { SocialType } from "@/types/social";
 export async function getSocials(): Promise<SocialType[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/site-setting/fetch-all-social-media`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/site-setting/fetch-all-social-media`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {

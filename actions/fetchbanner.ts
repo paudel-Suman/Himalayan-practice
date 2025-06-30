@@ -3,7 +3,10 @@ import { bannerType } from "@/types/banner";
 export async function getBanner(): Promise<bannerType[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/banner/fetch-all-banner`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/banner/fetch-all-banner`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {

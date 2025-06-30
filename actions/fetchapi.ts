@@ -5,7 +5,10 @@ import { reviewType } from "@/types/review";
 export async function getTrendingProducts(): Promise<producttype[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-all-active-products`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-all-active-products`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {
@@ -22,7 +25,10 @@ export async function getTrendingProducts(): Promise<producttype[]> {
 export async function getCategory(): Promise<categoryType[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-categories`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-categories`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {
@@ -40,7 +46,10 @@ export async function getCategory(): Promise<categoryType[]> {
 export async function getSingleProduct(slug: string): Promise<producttype> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-product-by-slug/${slug}`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-product-by-slug/${slug}`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {
@@ -58,7 +67,10 @@ export async function getSingleProduct(slug: string): Promise<producttype> {
 export async function getProductReview(productId: string): Promise<reviewType> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_API}/review/fetch-review-by-productId/${productId}`
+      `${process.env.NEXT_PUBLIC_SERVER_API}/review/fetch-review-by-productId/${productId}`,
+      {
+        cache: "no-cache",
+      }
     );
 
     if (!res.ok) {
