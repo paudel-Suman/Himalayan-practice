@@ -1,7 +1,7 @@
 import { getCategory } from "@/actions/fetchapi";
 import { getCompanyInfo } from "@/actions/fetchcompanydata";
 import { getSocials } from "@/actions/fetchsocial";
-import { Mail, Phone, MapPin, CreditCard } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,11 +36,21 @@ export default async function Footer() {
             <div className="space-y-3">
               <div className="flex items-center">
                 <Phone className="w-4 h-4 mr-3 text-zinc-300" />
-                <span className="text-sm">{company.phoneNumber}</span>
+                <span className="text-sm">
+                  {" "}
+                  <a href={`mailto:${company.contactEmail}`}>
+                    {company.contactEmail}
+                  </a>
+                </span>
               </div>
               <div className="flex items-center">
                 <Mail className="w-4 h-4 mr-3 text-zinc-300" />
-                <span className="text-sm">{company.contactEmail}</span>
+                <span className="text-sm">
+                  {" "}
+                  <a href={`tel:${company.phoneNumber}`}>
+                    {company.phoneNumber}
+                  </a>
+                </span>
               </div>
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-3 text-zinc-300" />
@@ -56,7 +66,7 @@ export default async function Footer() {
                   <div className="flex justify-start space-x-4">
                     {socials.map((item) => (
                       <div key={item.id}>
-                        <Link href={item.url}>
+                        <Link href={item.url} target="_blank">
                           <Image
                             src={item.iconUrl}
                             alt={item.platform}
@@ -165,23 +175,16 @@ export default async function Footer() {
             </div>
 
             {/* Payment Methods */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-zinc-300 mr-2">We accept:</span>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-5 bg-white rounded flex items-center justify-center">
-                  <CreditCard className="w-4 h-3 text-gray-700" />
-                </div>
-                <div className="w-8 h-5 bg-white rounded flex items-center justify-center">
-                  <span className="text-xs text-gray-700 font-bold">V</span>
-                </div>
-                <div className="w-8 h-5 bg-white rounded flex items-center justify-center">
-                  <span className="text-xs text-gray-700 font-bold">M</span>
-                </div>
-                <div className="w-8 h-5 bg-white rounded flex items-center justify-center">
-                  <span className="text-xs text-gray-700 font-bold">P</span>
-                </div>
-              </div>
-            </div>
+            <h2 className="text-sm">
+              Designed and Developed by{" "}
+              <Link
+                href="https://www.nepaltechinnov.com/"
+                target="_blank"
+                className="text-blue-500"
+              >
+                NepalTech
+              </Link>{" "}
+            </h2>
           </div>
         </div>
       </div>
