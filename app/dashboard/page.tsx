@@ -31,11 +31,28 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import Loading from "../loading";
 import PageHeader from "@/components/text/page-header";
+import { getDashboardStats } from "@/services/superadmin/fetch-count";
+import { DashboardStats } from "@/types/dashboardstats";
 
 const OverviewPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("token");
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await getDashboardStats();
+        console.log("stats", res);
+        setStats(res);
+      } catch (err) {
+        console.error("Failed to fetch dashboard stats", err);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -78,6 +95,32 @@ const OverviewPage = () => {
     }
   };
 
+  if (!stats) {
+    return <Loading />;
+  }
+
+  const overviewdata = [
+    {
+      title: "Total Sales",
+      num: stats.totalSales,
+      icon: "/icons/growth.png",
+    },
+    {
+      title: "Customers",
+      num: stats.customersCount,
+      icon: "/icons/client.png",
+    },
+    {
+      title: "Orders",
+      num: stats.ordersCount,
+      icon: "/icons/check-mark.png",
+    },
+    {
+      title: "Products",
+      num: stats.productsCount,
+      icon: "/icons/brand.png",
+    },
+  ];
   if (loading) return <Loading />;
 
   return (
@@ -191,26 +234,3 @@ const OverviewPage = () => {
 };
 
 export default OverviewPage;
-
-const overviewdata = [
-  {
-    title: "Total Sales",
-    num: "Rs. 100,000",
-    icon: "/icons/growth.png",
-  },
-  {
-    title: "Customers",
-    num: "52",
-    icon: "/icons/client.png",
-  },
-  {
-    title: "Orders",
-    num: "300",
-    icon: "/icons/check-mark.png",
-  },
-  {
-    title: "Products",
-    num: "36",
-    icon: "/icons/brand.png",
-  },
-];
