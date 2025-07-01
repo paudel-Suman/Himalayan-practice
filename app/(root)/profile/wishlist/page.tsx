@@ -26,7 +26,7 @@ const WishlistPage = () => {
   return (
     <div>
       {wishlist.length > 0 ? (
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {wishlist.map((item, index) => (
             <div key={index}>
               <WishlistCard products={item.product} />
