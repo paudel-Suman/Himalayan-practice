@@ -3,16 +3,15 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import PageHeader from "@/components/text/page-header";
+import { getCompanyInfo } from "@/actions/fetchcompanydata";
 
-export default function TermsOfService() {
+export default async function TermsOfService() {
+  const company = await getCompanyInfo();
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
-          <PageHeader title="Privacy Policy" />
-          <p className="text-gray-600 text-center">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
+          <PageHeader title="Terms and Services" />
         </div>
 
         <Alert className="mb-6">
@@ -30,10 +29,10 @@ export default function TermsOfService() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-gray-700 leading-relaxed">
-              Welcome to [Your Company Name] ("we," "our," "us," or "Company").
+              Welcome to Himalaya Garment ("we," "our," "us," or "Company").
               These Terms of Service ("Terms") govern your use of our website,
               mobile application, and services (collectively, the "Service")
-              operated by [Your Company Name].
+              operated by Himalaya Garment.
             </p>
             <p className="text-gray-700 leading-relaxed">
               By accessing or using our Service, you agree to be bound by these
@@ -60,7 +59,6 @@ export default function TermsOfService() {
               <li>Secure payment processing</li>
               <li>Order management and tracking</li>
               <li>Customer support services</li>
-              <li>Account management features</li>
             </ul>
             <p className="text-gray-700 leading-relaxed">
               We reserve the right to modify, suspend, or discontinue any aspect
@@ -144,8 +142,7 @@ export default function TermsOfService() {
                   payment methods
                 </li>
                 <li>
-                  All prices are in [Currency] and include applicable taxes
-                  unless otherwise stated
+                  All prices include applicable taxes unless otherwise stated
                 </li>
                 <li>
                   You authorize us to charge your payment method for all fees
@@ -209,7 +206,7 @@ export default function TermsOfService() {
               Our return and refund policy includes the following terms:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>Returns must be initiated within [X] days of delivery</li>
+              <li>Returns must be initiated within 3 days of delivery</li>
               <li>
                 Items must be in original condition with tags and packaging
               </li>
@@ -222,7 +219,7 @@ export default function TermsOfService() {
               </li>
               <li>Refunds will be processed to the original payment method</li>
               <li>
-                Processing time for refunds is typically [X-X] business days
+                Processing time for refunds is typically 3-6 business days
               </li>
             </ul>
             <p className="text-gray-700">
@@ -262,7 +259,7 @@ export default function TermsOfService() {
           <CardContent className="space-y-4">
             <p className="text-gray-700">
               The Service and its original content, features, and functionality
-              are and will remain the exclusive property of [Your Company Name]
+              are and will remain the exclusive property of Himalaya Garement
               and its licensors. The Service is protected by copyright,
               trademark, and other laws. Our trademarks and trade dress may not
               be used without our prior written consent.
@@ -360,8 +357,8 @@ export default function TermsOfService() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-700">
-              You agree to defend, indemnify, and hold harmless [Your Company
-              Name] and its officers, directors, employees, and agents from and
+              You agree to defend, indemnify, and hold harmless Himalaya Garment
+              and its officers, directors, employees, and agents from and
               against any claims, liabilities, damages, judgments, awards,
               losses, costs, expenses, or fees arising out of or relating to
               your violation of these Terms or your use of the Service.
@@ -380,8 +377,7 @@ export default function TermsOfService() {
               </h3>
               <p className="text-gray-700">
                 These Terms shall be governed by and construed in accordance
-                with the laws of [State/Country], without regard to its conflict
-                of law provisions.
+                with the laws without regard to its conflict of law provisions.
               </p>
             </div>
             <div>
@@ -394,10 +390,8 @@ export default function TermsOfService() {
                   If unresolved, disputes may be subject to binding arbitration
                 </li>
                 <li>
-                  Arbitration shall be conducted under the rules of [Arbitration
-                  Organization]
+                  Arbitration shall be conducted under the rules of Organization
                 </li>
-                <li>Any arbitration will take place in [Location]</li>
               </ol>
             </div>
           </CardContent>
@@ -465,38 +459,31 @@ export default function TermsOfService() {
 
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">18. Contact Information</CardTitle>
+            <CardTitle className="text-2xl">Contact Us</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-gray-700">
-              If you have any questions about these Terms of Service, please
-              contact us:
+              If you have any questions or concerns about this Privacy Policy or
+              how Himalayan Garment handles your data, feel free to reach out to
+              us:
             </p>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-gray-700">
-                <strong>Email:</strong> legal@yourcompany.com
+                <strong>Email:</strong>{" "}
+                <a href={`mailto:${company.contactEmail}`}>
+                  {company.contactEmail}
+                </a>
               </p>
               <p className="text-gray-700">
-                <strong>Phone:</strong> (555) 123-4567
+                <strong>Phone:</strong>{" "}
+                <a href={`tel:${company.phoneNumber}`}>{company.phoneNumber}</a>
               </p>
               <p className="text-gray-700">
-                <strong>Address:</strong> 123 Business Street, City, State 12345
-              </p>
-              <p className="text-gray-700">
-                <strong>Business Hours:</strong> Monday - Friday, 9:00 AM - 5:00
-                PM EST
+                <strong>Address:</strong> {company.address}
               </p>
             </div>
           </CardContent>
         </Card>
-
-        <div className="text-center text-sm text-gray-500 mt-8">
-          <p>
-            These Terms of Service are effective as of{" "}
-            {new Date().toLocaleDateString()} and were last updated on{" "}
-            {new Date().toLocaleDateString()}.
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -1,12 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Truck,
-  Clock,
-  Shield,
-  AlertTriangle,
-} from "lucide-react";
+import { Truck, Clock, Shield, AlertTriangle } from "lucide-react";
 import PageHeader from "@/components/text/page-header";
 
 export default function ShippingInfo() {
@@ -18,9 +13,6 @@ export default function ShippingInfo() {
             <Truck className="h-8 w-8 text-blue-600" />
             <PageHeader title="Shipping Policy" />
           </div>
-          <p className="text-gray-600 text-center">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
         </div>
 
         <Alert className="mb-6">
@@ -263,39 +255,6 @@ export default function ShippingInfo() {
               </div>
             </div>
 
-            <Separator />
-
-            <div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-900">
-                Contact Shipping Support
-              </h3>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-700">
-                      <strong>Email:</strong> shipping@yourcompany.com
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Phone:</strong> (555) 123-4567
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Live Chat:</strong> Available 9 AM - 6 PM EST
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700">
-                      <strong>Response Time:</strong> Within 24 hours
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Business Hours:</strong> Mon-Fri, 9 AM - 6 PM EST
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Weekend Support:</strong> Limited availability
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
@@ -316,18 +275,6 @@ export default function ShippingInfo() {
             </Alert>
           </CardContent>
         </Card>
-
-        <div className="text-center text-sm text-gray-500 mt-8">
-          <p>
-            This Shipping Information page is effective as of{" "}
-            {new Date().toLocaleDateString()} and was last updated on{" "}
-            {new Date().toLocaleDateString()}.
-          </p>
-          <p className="mt-2">
-            For the most current shipping rates and delivery times, please check
-            during checkout or contact our support team.
-          </p>
-        </div>
       </div>
     </div>
   );

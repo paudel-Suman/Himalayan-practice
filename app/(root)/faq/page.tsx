@@ -1,7 +1,6 @@
 "use client";
-
 import { useState } from "react";
-import { ChevronDown, HelpCircle, Mail, Search } from "lucide-react";
+import { ChevronDown, HelpCircle, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -20,20 +19,11 @@ export default function FAQPage() {
       answer:
         "Himalayan Garment accepts payments through Khalti, eSewa, Cash on Delivery (COD), and major debit/credit cards. You can select your preferred method during checkout.",
     },
-    {
-      question: "Can I track my order?",
-      answer:
-        "Yes! Once your order is confirmed and shipped, you’ll receive a tracking number via email or SMS. You can also check your order status from the 'My Orders' section in your account dashboard.",
-    },
-    {
-      question: "How do I return or exchange a product?",
-      answer:
-        "If you're not satisfied with your purchase, visit the 'My Orders' section, select the item, and choose the return/exchange option. Follow the instructions provided. Make sure the item is unused and in original packaging.",
-    },
+
     {
       question: "How do I edit or remove my listed products?",
       answer:
-        "Log in to your vendor dashboard, go to the 'Products' section, and select the item you want to edit or remove. Make your changes and click 'Save'. The updates will reflect after a quick review if necessary.",
+        "Go to user profile Dashboard then in your cart or wishlist section there is option to remove the listed products",
     },
     {
       question: "How do I update my account information?",
@@ -140,24 +130,6 @@ export default function FAQPage() {
                   </Button>
                 </div>
               )}
-            </div>
-
-            <div
-              className="mt-12 bg-navy-100 p-6 rounded-lg"
-              data-aos="zoom-in"
-            >
-              <h3 className="text-lg font-semibold text-navy-700 mb-3 text-center">
-                Still have questions?
-              </h3>
-              <div className="flex items-center justify-center">
-                <Mail className="text-navy-600 mr-2 h-5 w-5" />
-                <p className="text-navy-700">
-                  Contact our support team at
-                  <span className="text-navy-600 font-bold ml-1">
-                    info@himalayagarment.com
-                  </span>
-                </p>
-              </div>
             </div>
           </div>
         </div>
