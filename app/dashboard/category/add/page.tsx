@@ -126,6 +126,7 @@ const CategoryAddPage = () => {
               onChange={handleChange}
               placeholder="How to Increase Sales"
               className="bg-white shadow-none"
+              required
             />
           </div>
           <div className="space-y-2">
