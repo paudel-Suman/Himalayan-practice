@@ -19,13 +19,15 @@ export default async function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
               <figure>
-                <Image
-                  src={company.footerLogoUrl}
-                  alt="logo"
-                  width={1000}
-                  height={1000}
-                  className="object-contain h-[5em] w-fit"
-                />
+                <Link href="/">
+                  <Image
+                    src={company.footerLogoUrl}
+                    alt="logo"
+                    width={1000}
+                    height={1000}
+                    className="object-contain h-[5em] w-fit"
+                  />
+                </Link>
               </figure>
             </div>
             <p className="text-gray-400 mb-6 max-w-sm">
