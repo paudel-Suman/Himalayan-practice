@@ -91,7 +91,7 @@ const Trending = ({
             </div>
           </section>
         ) : (
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 my-6">
+          <div className="grid lg:grid-cols-4 grid-cols-2 gap-6 my-6">
             {trendingproducts.map((item, index) => (
               <div key={index}>
                 <ProductCard products={item} />
