@@ -50,7 +50,7 @@ const ProductCard = ({ products }: { products: producttype }) => {
 
   return (
     <Link href={`/product/${slug}`}>
-      <div className="bg-white relative border border-black/10 shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
+      <div className="bg-white relative border border-black/10 md:shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
         <figure className="overflow-hidden rounded-md">
           {featureImage && (
             <Image
@@ -59,7 +59,7 @@ const ProductCard = ({ products }: { products: producttype }) => {
               width={1000}
               height={1000}
               priority
-              className="h-[20em] object-cover group-hover:scale-110 ease-in-out duration-300"
+              className="md:h-[20em] h-[10em] object-cover group-hover:scale-110 ease-in-out duration-300"
             />
           )}
         </figure>
@@ -90,7 +90,7 @@ const ProductCard = ({ products }: { products: producttype }) => {
 
         {/* product descriptions */}
         <div className="p-2 space-y-2">
-          <h2 className="font-semibold text-base line-clamp-1 ">{name}</h2>
+          <h2 className="md:font-semibold font-medium text-base line-clamp-1 ">{name}</h2>
           <div className="flex items-center gap-2">
             <h2 className="font-semibold text-red-500 text-lg">${price}</h2>
           </div>

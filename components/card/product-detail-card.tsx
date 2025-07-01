@@ -13,9 +13,9 @@ const ProductDetailCard = ({ products }: { products: producttype }) => {
       <Link
         href={`/product/${slug}`}
         key={slug}
-        className="group p-2 group hover:bg-zinc-50 shadow-sm border border-black/10 rounded-md relative grid grid-cols-3  gap-4"
+        className="group p-2 group hover:bg-zinc-50 shadow-sm border border-black/10 rounded-md relative grid md:grid-cols-3  gap-4"
       >
-        <figure className="relative overflow-hidden md:h-[13em] h-[11em]">
+        <figure className="relative overflow-hidden md:h-[13em] h-[11em] md:col-span-1 col-span-full">
           {/* Default image (index 0) */}
           <Image
             src={featureImage}
@@ -26,11 +26,11 @@ const ProductDetailCard = ({ products }: { products: producttype }) => {
           />
         </figure>
 
-        <div className="col-span-2 md:space-y-3 space-y-2">
-          <h2 className="font-semibold md:text-lg line-clamp-2 text-sm">
+        <div className="md:col-span-2 md:space-y-3 space-y-2">
+          <h2 className="font-semibold md:text-lg line-clamp-1 text-sm">
             {name}
           </h2>
-          <p className="font-medium text-xs line-clamp-3 text-zinc-500">
+          <p className="font-medium md:text-sm text-xs line-clamp-3 text-zinc-500 h-16">
             {description}
           </p>
           <div className="flex items-center gap-2">

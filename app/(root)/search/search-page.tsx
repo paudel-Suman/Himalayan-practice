@@ -67,7 +67,7 @@ const SearchPage = ({
 
   return (
     <main>
-      <section className="flex justify-between">
+      <section className="flex flex-wrap space-y-4 justify-between">
         <div className="flex flex-wrap items-center gap-4">
           <Select onValueChange={handleSortChange} defaultValue={sortBy}>
             <SelectTrigger>
@@ -142,7 +142,7 @@ const SearchPage = ({
       {product.length > 0 ? (
         <div>
           {cardStyle === "default" ? (
-            <div className="grid lg:grid-cols-4 grid-cols-2 gap-8 my-8">
+            <div className="grid lg:grid-cols-4 grid-cols-2 md:gap-8 gap-4 my-8">
               {product.map((item, index) => (
                 <div key={index}>
                   <ProductCard products={item} />
@@ -150,7 +150,7 @@ const SearchPage = ({
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-8 my-8">
+            <div className="grid grid-cols-2 md:gap-8 gap-4 my-8">
               {product.map((item, index) => (
                 <div key={index}>
                   <ProductDetailCard products={item} />
