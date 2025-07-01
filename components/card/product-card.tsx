@@ -92,8 +92,7 @@ const ProductCard = ({ products }: { products: producttype }) => {
         <div className="p-2 space-y-2">
           <h2 className="font-semibold text-base line-clamp-1 ">{name}</h2>
           <div className="flex items-center gap-2">
-            <h2 className="font-semibold text-primary text-lg">Rs.{price}</h2>
-            <del className="font-medium  text-lighttext">Rs.{price}</del>
+            <h2 className="font-semibold text-red-500 text-lg">${price}</h2>
           </div>
           <div className="flex items-center gap-1">
             {[...Array(rating || 5)].map((_, i) => (

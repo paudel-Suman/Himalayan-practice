@@ -45,8 +45,7 @@ const ProductDetailCard = ({ products }: { products: producttype }) => {
             </div>
           </div>
           <div className="flex items-center gap-2 text-zinc-400">
-            <p className="text-xl font-semibold text-red-500">{price}.00</p>
-            <del className="text-sm  font-semibold">180.00</del>
+            <p className="text-xl font-semibold text-red-500">${price}</p>
           </div>
         </div>
       </Link>

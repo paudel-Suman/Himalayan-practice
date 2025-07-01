@@ -194,9 +194,6 @@ const ProductDetailPage = ({
             <p className="text-primarymain font-semibold text-3xl">
               Rs. {price}
             </p>
-            <del className="text-lighttext/50 font-medium text-xl">
-              Rs. {price}
-            </del>
           </div>
 
           {/* product colors */}
