@@ -11,4 +11,5 @@ export type CompanyType = {
   metaDescription: string;
   phoneNumber:number;
   whatsappNumber:number;
+  googleMap:string;
 };

@@ -1,3 +1,4 @@
+import { getCompanyInfo } from "@/actions/fetchcompanydata";
 import { getSocials } from "@/actions/fetchsocial";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import React from "react";
 
 const ContactForm = async () => {
   const socials = await getSocials();
+  const company = await getCompanyInfo();
 
   return (
     <main className="max-w-7xl mx-auto grid lg:grid-cols-2 grid-cols-1 gap-8 md:p-4 p-2 my-14">
@@ -33,12 +35,8 @@ const ContactForm = async () => {
             ))}
           </div>
         </div>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6880.247193938896!2d85.31134507535812!3d27.71402517617878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb190286e454ad%3A0xb002146d30bac2e5!2sHimalayan%20Java%20-%20Tridevi%20Thamel!5e1!3m2!1sen!2snp!4v1749985423270!5m2!1sen!2snp"
-          loading="lazy"
-          height="full"
-          className="w-full h-full mx-auto rounded-lg shadow-md"
-        ></iframe>
+
+        <div dangerouslySetInnerHTML={{ __html: company.googleMap }} />
       </div>
       <div className="space-y-6 bg-zinc-50 rounded-lg md:p-6 p-2">
         <h2 className="font-bold text-3xl">Fill up the form</h2>

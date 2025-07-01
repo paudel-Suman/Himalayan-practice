@@ -41,6 +41,7 @@ const CompanyAddPage = () => {
     metaDescription: "",
     phoneNumber: 0,
     whatsappNumber: 0,
+    googleMap: "",
   });
 
   const handleChange = (
@@ -86,6 +87,7 @@ const CompanyAddPage = () => {
           address: companyData.address || "",
           metaTitle: companyData.metaTitle || "",
           metaDescription: companyData.metaDescription || "",
+          googleMap: companyData.googleMap || "",
           phoneNumber: companyData.phoneNumber || 0,
           whatsappNumber: companyData.whatsappNumber || 0,
           faviconUrl:
@@ -135,6 +137,7 @@ const CompanyAddPage = () => {
             whatsappNumber: formData.whatsappNumber,
             metaTitle: formData.metaTitle,
             metaDescription: formData.metaDescription,
+            googleMap: formData.googleMap,
             faviconUrl: favicon || prevfavicon,
             logoUrl: logo || prevlogo,
             footerLogoUrl: footerLogo || prevfooterLogo,
@@ -255,6 +258,18 @@ const CompanyAddPage = () => {
             />
           </div>
         </section>
+        <div className="space-y-2">
+          <Label>Google Map</Label>
+          <Input
+            name="googleMap"
+            value={formData.googleMap}
+            onChange={handleChange}
+            placeholder="Kathmandu,Nepal"
+            className="bg-white shadow-none"
+            required
+          />
+        </div>
+        <div dangerouslySetInnerHTML={{ __html: formData.googleMap }} />
         <div>
           <Label>Site Description</Label>
           <textarea
