@@ -101,6 +101,17 @@ const ProductDetailPage = ({
   };
 
   const addToCart = async (item: producttype, quantity = 1) => {
+
+    
+    if (!selectedSize) {
+      toast.error("Please select a size before adding to cart.");
+      return;
+    }
+
+    if (!selectedColorId) {
+      toast.error("Please select a color before adding to cart.");
+      return;
+    }
     const apiPayload = {
       sizeId: selectedSize,
       colorId: selectedColorId,
