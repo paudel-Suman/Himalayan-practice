@@ -33,8 +33,16 @@ const ProductDetailPage = ({
     firstColor?.name?.trim() || "Unknown"
   );
   const [quantity, setQuantity] = useState(1);
-  const { name, description, price, media, productAttributes, stock, id } =
-    productdetails;
+  const {
+    name,
+    description,
+    price,
+    media,
+    productAttributes,
+    stock,
+    id,
+    featureImage,
+  } = productdetails;
   const availableStock = stock.quantity;
   console.log(availableStock);
 
@@ -164,7 +172,7 @@ const ProductDetailPage = ({
     <main>
       <section className="grid md:grid-cols-2 gap-8">
         <div className="border rounded-md border-zinc-200">
-          <ProductImages media={media} />
+          <ProductImages media={media} featureImage={featureImage} />
         </div>
         <div className="space-y-4">
           <h2 className="font-bold text-2xl">{name}</h2>

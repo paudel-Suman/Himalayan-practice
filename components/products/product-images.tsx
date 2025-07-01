@@ -4,12 +4,18 @@ import { MediaType } from "@/types/product";
 import Image from "next/image";
 import React, { useState } from "react";
 
-const ProductImages = ({ media }: { media: MediaType[] }) => {
+const ProductImages = ({
+  media,
+  featureImage,
+}: {
+  media: MediaType[];
+  featureImage: string;
+}) => {
   const [current, setCurrent] = useState(0);
   return (
     <div className="space-y-4">
       <Image
-        src={media[current]?.mediaUrl}
+        src={media[current]?.mediaUrl || featureImage}
         alt="product image"
         height={1000}
         width={1000}
@@ -27,7 +33,7 @@ const ProductImages = ({ media }: { media: MediaType[] }) => {
             )}
           >
             <Image
-              src={item.mediaUrl}
+              src={item.mediaUrl || featureImage}
               alt="product-image"
               height={100}
               width={100}

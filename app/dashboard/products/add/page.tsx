@@ -453,7 +453,6 @@ const AddProduct = () => {
             id={"media-image"}
             multiple={true}
             onUploadComplete={handleUploadMultipleImage}
-            isrequired={true}
           />
         </div>
         <Button disabled={loading}>
