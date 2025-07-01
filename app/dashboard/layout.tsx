@@ -216,7 +216,16 @@ const navitems = [
     path: "/dashboard/category",
     icon: "/icons/category.png",
   },
-
+  {
+    title: "Size",
+    path: "/dashboard/size",
+    icon: "/icons/size.png",
+  },
+  {
+    title: "Color",
+    path: "/dashboard/color",
+    icon: "/icons/color.png",
+  },
   {
     title: "Products",
     path: "/dashboard/products",
