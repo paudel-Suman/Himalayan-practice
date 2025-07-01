@@ -121,7 +121,7 @@ const AddProduct = () => {
     const fetchCategory = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-categories`
+          `${process.env.NEXT_PUBLIC_SERVER_API}/category/fetch-all-active-categories`
         );
 
         const data = await res.json();
