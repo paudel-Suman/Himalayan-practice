@@ -26,7 +26,7 @@ const SizeAddPage = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    sizeNumber: 0,
+    sizeNumber: "",
   });
 
   const handleChange = (
