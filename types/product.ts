@@ -85,6 +85,7 @@ export interface ProductResponse {
 }
 export type ProductResponseWithMeta = {
   products: producttype[];
+  totalPages: number;
   pagination: Meta;
 };
 

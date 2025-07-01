@@ -51,6 +51,7 @@ const ProductPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   console.log(filteredProducts, totalPages);
+  console.log("totalpage",totalPages)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -58,9 +59,9 @@ const ProductPage = () => {
       try {
         const res = await productService.fetchAllActiveProducts(page);
         setProducts(res.data.products);
-        setTotalPages(Number(res.data.pagination.totalPages));
-        console.log("Total Pages:", Number(res.data.pagination.totalPages)); // Debug
-        console.log("Current Page:", page); // Debug
+        setTotalPages(Number(res.data.totalPages));
+        console.log("Total Pages:", Number(res.data.pagination.totalPages)); 
+        console.log("Current Page:", page); 
       } catch (error) {
         console.log(error);
       } finally {
