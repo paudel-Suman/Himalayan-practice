@@ -1,7 +1,26 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
+import { getCompanyInfo } from "../../../actions/fetchcompanydata";
 
-const ContactInfo = () => {
+const ContactInfo = async () => {
+  const company = await getCompanyInfo();
+  const contactdata = [
+    {
+      title: "Address Line",
+      desc: company.address,
+      icon: <Icon icon="mdi:address-marker-outline" />,
+    },
+    {
+      title: "Contact Number",
+      desc: company.phoneNumber,
+      icon: <Icon icon="fluent:call-24-regular" />,
+    },
+    {
+      title: "Mailing Address",
+      desc: company.contactEmail,
+      icon: <Icon icon="famicons:mail-outline" />,
+    },
+  ];
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 max-w-7xl mx-auto md:my-20 my-10">
       {contactdata.map((item, index) => (
@@ -17,7 +36,6 @@ const ContactInfo = () => {
               {item.title}
             </h1>
             <p className="font-medium text-sm text-lighttext">{item.desc}</p>
-            <p className="font-medium text-sm text-lighttext">{item.desc2}</p>
           </div>
         </div>
       ))}
@@ -26,23 +44,3 @@ const ContactInfo = () => {
 };
 
 export default ContactInfo;
-
-const contactdata = [
-  {
-    title: "Address Line",
-    desc: "Tarkeshwor - 02 Shantidham Marga Kathmandu Nepal",
-    icon: <Icon icon="mdi:address-marker-outline" />,
-  },
-  {
-    title: "Contact Number",
-    desc: "+977-1-5913427",
-    desc2: "985-1073427",
-    icon: <Icon icon="fluent:call-24-regular" />,
-  },
-  {
-    title: "Mailing Address",
-    desc: "info@himalayagarment.com",
-    desc2: " himalayagarment@hotmail.com",
-    icon: <Icon icon="famicons:mail-outline" />,
-  },
-];

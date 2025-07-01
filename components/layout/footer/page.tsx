@@ -10,7 +10,6 @@ export default async function Footer() {
   const socials = await getSocials();
   const company = await getCompanyInfo();
 
-
   return (
     <footer className="bg-gradient-to-tl from-primarymain via-primarymain/90 to-primarymain/80 text-gray-200">
       {/* Main Footer Content */}
@@ -54,7 +53,7 @@ export default async function Footer() {
               <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
                 {/* Social Media */}
                 <div>
-                  <div className="flex ustify-start space-x-4">
+                  <div className="flex justify-start space-x-4">
                     {socials.map((item) => (
                       <div key={item.id}>
                         <Link href={item.url}>

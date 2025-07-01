@@ -1,11 +1,14 @@
+import { getSocials } from "@/actions/fetchsocial";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const ContactForm = () => {
+const ContactForm = async () => {
+  const socials = await getSocials();
+
   return (
     <main className="max-w-7xl mx-auto grid lg:grid-cols-2 grid-cols-1 gap-8 md:p-4 p-2 my-14">
       <div className="space-y-6 overflow-hidden">
@@ -15,16 +18,20 @@ const ContactForm = () => {
           tour operator based in Kathmandu, Nepal.
         </p>
         <div className="flex items-center gap-4">
-          {social.map((item, index) => (
-            <div key={index}>
-              <Link
-                href={item.path}
-                className="font-medium text-sm  hover:ml-2 ease-in-out duration-300 hover:text-primary-600"
-              >
-                {item.icon}
-              </Link>
-            </div>
-          ))}
+          <div className="flex justify-start space-x-4">
+            {socials.map((item) => (
+              <div key={item.id}>
+                <Link href={item.url}>
+                  <Image
+                    src={item.iconUrl}
+                    alt={item.platform}
+                    width={30}
+                    height={30}
+                  />
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6880.247193938896!2d85.31134507535812!3d27.71402517617878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb190286e454ad%3A0xb002146d30bac2e5!2sHimalayan%20Java%20-%20Tridevi%20Thamel!5e1!3m2!1sen!2snp!4v1749985423270!5m2!1sen!2snp"
@@ -78,17 +85,3 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
-const social = [
-  {
-    icon: <Icon icon="logos:facebook" width="30" height="30" />,
-    path: "/",
-  },
-  {
-    icon: <Icon icon="skill-icons:instagram" width="30" height="30" />,
-    path: "/",
-  },
-  {
-    icon: <Icon icon="logos:whatsapp-icon" width="30" height="30" />,
-    path: "/",
-  },
-];
