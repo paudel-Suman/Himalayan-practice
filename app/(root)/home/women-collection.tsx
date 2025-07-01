@@ -6,11 +6,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useRef } from "react";
 import Slider from "react-slick";
 
-const WomenCollection = ({
-  trendingproducts,
-}: {
-  trendingproducts: producttype[];
-}) => {
+const WomenCollection = ({ featured }: { featured: producttype[] }) => {
   const sliderRef = useRef<Slider | null>(null);
   const settings = {
     infinite: true,
@@ -60,12 +56,12 @@ const WomenCollection = ({
   };
   return (
     <div>
-      <PageHeader title="Women's Fashion" />
+      <PageHeader title="Featured Products" />
 
-      {trendingproducts.length > 4 ? (
+      {featured.length > 4 ? (
         <section>
           <Slider {...settings} ref={sliderRef} className="my-8">
-            {trendingproducts.map((item, index) => (
+            {featured.map((item, index) => (
               <div key={index} className="px-4">
                 <ProductCard products={item} />
               </div>
@@ -88,8 +84,8 @@ const WomenCollection = ({
           </div>
         </section>
       ) : (
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 my-6">
-          {trendingproducts.slice(0, 8).map((item, index) => (
+        <div className="grid lg:grid-cols-4 grid-cols-2 gap-6 my-6">
+          {featured.slice(0, 8).map((item, index) => (
             <div key={index}>
               <ProductCard products={item} />
             </div>

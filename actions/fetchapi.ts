@@ -22,6 +22,29 @@ export async function getTrendingProducts(): Promise<producttype[]> {
     return [];
   }
 }
+
+
+export async function getFeaturedProducts(): Promise<producttype[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_API}/product/fetch-all-featured-products`,
+      {
+        cache: "no-cache",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch trending products");
+    }
+
+    const data = await res.json();
+    return data.data.products || [];
+  } catch (error) {
+    console.error("Error fetching trending products:", error);
+    return [];
+  }
+}
+
 export async function getCategory(): Promise<categoryType[]> {
   try {
     const res = await fetch(

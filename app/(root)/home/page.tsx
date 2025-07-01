@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Hero from "./hero";
 import Trending from "./trending";
-import { getCategory, getTrendingProducts } from "@/actions/fetchapi";
+import {
+  getCategory,
+  getFeaturedProducts,
+  getTrendingProducts,
+} from "@/actions/fetchapi";
 import WomenCollection from "./women-collection";
 import Testimonials from "./testimonials";
 import { producttype } from "@/types/product";
@@ -16,6 +20,7 @@ import { TestimonialType } from "@/types/testimonial";
 
 const HomeMain = () => {
   const [trendingproducts, setTrendingProducts] = useState<producttype[]>([]);
+  const [featured, setFeatured] = useState<producttype[]>([]);
   const [category, setCategory] = useState<categoryType[]>([]);
   const [testimonial, setTestimonial] = useState<TestimonialType[]>([]);
   const [banner, setBanner] = useState<bannerType[]>([]);
@@ -32,6 +37,19 @@ const HomeMain = () => {
     };
 
     fetchTrending();
+  }, []);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const products = await getFeaturedProducts();
+        setFeatured(products);
+      } catch (error) {
+        console.error("Failed to fetch featured products:", error);
+      }
+    };
+
+    fetchFeatured();
   }, []);
 
   useEffect(() => {
@@ -89,7 +107,7 @@ const HomeMain = () => {
       </div>
       <Trending trendingproducts={trendingproducts} />
       <div className="max-w-7xl xl:mx-auto mx-4 my-20 space-y-20">
-        <WomenCollection trendingproducts={trendingproducts} />
+        {featured.length > 0 && <WomenCollection featured={featured} />}
         {/* <TrendingBlogs /> */}
       </div>
       <Testimonials testimonial={testimonial} />
