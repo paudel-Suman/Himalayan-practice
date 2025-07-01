@@ -21,7 +21,7 @@ const ContactForm = async () => {
           <div className="flex justify-start space-x-4">
             {socials.map((item) => (
               <div key={item.id}>
-                <Link href={item.url}>
+                <Link href={item.url} target="_blank">
                   <Image
                     src={item.iconUrl}
                     alt={item.platform}
