@@ -146,7 +146,7 @@ const InactiveProductPage = () => {
           {products.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
-              <TableCell>Rs .{item.price}</TableCell>
+              <TableCell>$ {item.price}</TableCell>
               <TableCell>{item.category.name}</TableCell>
               <TableCell>
                 {" "}

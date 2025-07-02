@@ -168,7 +168,7 @@ const OrderPage = () => {
                   )}
                 </TableCell>
 
-                <TableCell>Rs .{item.totalAmount}</TableCell>
+                <TableCell>$.{item.totalAmount}</TableCell>
                 <TableCell>
                   {item.isPaid ? (
                     <Badge className="bg-green-500">Yes</Badge>

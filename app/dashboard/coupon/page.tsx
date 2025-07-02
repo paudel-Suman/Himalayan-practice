@@ -163,7 +163,7 @@ const CouponPage = () => {
                 </TableCell>
                 <TableCell>{item.type}</TableCell>
                 {(item.discountAmount ?? 0) > 0 ? (
-                  <TableCell>Rs.{item.discountAmount}</TableCell>
+                  <TableCell>$.{item.discountAmount}</TableCell>
                 ) : (
                   <TableCell>-</TableCell>
                 )}
