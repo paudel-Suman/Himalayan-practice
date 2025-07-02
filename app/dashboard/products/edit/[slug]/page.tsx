@@ -28,7 +28,6 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { convertOffsetToTimes } from "framer-motion";
 
 const ProductEditPage = () => {
   const params = useParams();
@@ -48,7 +47,9 @@ const ProductEditPage = () => {
   const [prevmultipleimage, setPrevMultipleImage] = useState<
     { mediaUrl: string; mediaType?: string }[]
   >([]);
-  const [attribute, setAttribute] = React.useState<ProductAttribute | null>(null);
+  const [attribute, setAttribute] = React.useState<ProductAttribute | null>(
+    null
+  );
   const [featureImage, setFeatureImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -63,7 +64,7 @@ const ProductEditPage = () => {
     isDeleted: false,
     isFeatured: false,
     media: [],
-  
+
     tags: [],
   });
 
@@ -98,14 +99,13 @@ const ProductEditPage = () => {
     //   prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     // );
 
-    setSelectedColorIds(prevIds => {
+    setSelectedColorIds((prevIds) => {
       const nextIds = prevIds.includes(id)
-        ? prevIds.filter(c => c !== id)
+        ? prevIds.filter((c) => c !== id)
         : [...prevIds, id];
 
- 
-      setColor(prev =>
-        prev.map(c => ({
+      setColor((prev) =>
+        prev.map((c) => ({
           ...c,
           selected: nextIds.includes(c.id),
         }))
@@ -113,7 +113,6 @@ const ProductEditPage = () => {
 
       return nextIds;
     });
-
   };
 
   const handleSizeToggle = (id: string) => {
@@ -131,7 +130,6 @@ const ProductEditPage = () => {
       return nextIds;
     });
   };
-
 
   const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if ((e.key === "Enter" || e.key === ",") && e.currentTarget.value.trim()) {
@@ -305,13 +303,14 @@ const ProductEditPage = () => {
 
       tags: tags.map((tag) => ({ name: tag })),
       productAttributes: [
-        {  id:attribute?.id,
+        {
+          id: attribute?.id,
           sizeIds: selectedSizeIds,
           colorIds: selectedColorIds,
         },
       ],
     };
-   console.log(JSON.stringify(payload));
+    console.log(JSON.stringify(payload));
     try {
       setLoading(true);
       const res = await fetch(
@@ -341,31 +340,30 @@ const ProductEditPage = () => {
     }
   };
   useEffect(() => {
-    if (!attribute) return;  
+    if (!attribute) return;
 
     const alreadyPickedColors = new Set(
-      (attribute.colorIds ?? []).map(c => c.productColorId)
+      (attribute.colorIds ?? []).map((c) => c.productColorId)
     );
     const alreadyPickedSizes = new Set(
-      (attribute.sizeIds ?? []).map(s => s.productSizeId)
+      (attribute.sizeIds ?? []).map((s) => s.productSizeId)
     );
-    setSelectedColorIds(attribute.colorIds.map(c => c.productColorId));
-    setSelectedSizeIds(attribute.sizeIds.map(c => c.productSizeId));
-    setColor(prev =>
-      prev.map(c => ({
+    setSelectedColorIds(attribute.colorIds.map((c) => c.productColorId));
+    setSelectedSizeIds(attribute.sizeIds.map((c) => c.productSizeId));
+    setColor((prev) =>
+      prev.map((c) => ({
         ...c,
         selected: alreadyPickedColors.has(c.id),
       }))
     );
 
-    setSize(prev =>
-      prev.map(s => ({
+    setSize((prev) =>
+      prev.map((s) => ({
         ...s,
         selected: alreadyPickedSizes.has(s.id),
       }))
     );
   }, [attribute]);
-
 
   return (
     <main className="my-4">
