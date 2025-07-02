@@ -17,9 +17,11 @@ import S3UploadForm from "@/lib/s3upload-form";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 
 const CategoryAddPage = () => {
   const token = Cookies.get("token");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [image, setImage] = useState("");
   const [formData, setFormData] = useState({
@@ -63,6 +65,7 @@ const CategoryAddPage = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/category/create-product-category`,
         {
@@ -89,6 +92,8 @@ const CategoryAddPage = () => {
       router.push("/dashboard/category");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,7 +139,6 @@ const CategoryAddPage = () => {
             <Input name="slug" value={formData.slug} readOnly />
           </div>
         </section>
-
         <div className="space-y-2">
           <Label>Image</Label>
           <S3UploadForm
@@ -144,8 +148,16 @@ const CategoryAddPage = () => {
             isrequired={true}
           />
         </div>
-
-        <Button>Submit</Button>
+        <Button disabled={loading}>
+          {loading ? (
+            <div className="flex gap-2">
+              <Loader className="animate-spin h-4 w-4" />
+              Submitting
+            </div>
+          ) : (
+            "Submit"
+          )}
+        </Button>{" "}
       </form>
     </main>
   );
