@@ -30,35 +30,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState<categoryType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [addSubCategory, setAddSubCategory] = useState(false);
   const token = Cookies.get("token");
-  const [formData, setFormData] = useState({
-    name: "",
-    categoryId: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const fetchAllCategories = async () => {
     try {
@@ -100,38 +76,6 @@ const CategoryPage = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/subcategory/create-subcategory`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            categoryId: formData.categoryId,
-          }),
-        }
-      );
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.error(data.message || data.error);
-        toast.error(data.message || data.error);
-        return;
-      }
-      toast.success("SubCategory Added Successfully");
-      setAddSubCategory(false);
-      // router.push("/dashboard/coupon");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   if (loading) return <Loading />;
   return (
     <div>
@@ -139,11 +83,6 @@ const CategoryPage = () => {
         <PageHeader title="Category" className="text-start w-fit !text-md " />
 
         <div className="flex md:gap-4 gap-2">
-          <Button onClick={() => setAddSubCategory(!addSubCategory)}>
-            <Icon icon="gridicons:add" width="24" height="24" />
-            Add SubCategory
-          </Button>
-
           <Link href="/dashboard/category/add">
             <Button>
               <Icon icon="gridicons:add" width="24" height="24" />
@@ -152,55 +91,6 @@ const CategoryPage = () => {
           </Link>
         </div>
       </div>
-
-      {addSubCategory && (
-        <div
-          onClick={() => setAddSubCategory(false)}
-          className="bg-black/40 z-[20] bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10  fixed inset-0 h-screen w-full"
-        />
-      )}
-      <form
-        onSubmit={handleSubmit}
-        className={`${
-          addSubCategory ? "block" : "hidden"
-        }  absolute z-[20] left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2  w-[20em] bg-white rounded-md p-4 space-y-4`}
-      >
-        <Label>Add SubCategory</Label>
-        <Input name="name" value={formData.name} onChange={handleChange} />
-
-        <Select
-          onValueChange={(value) => {
-            const selected = categories.find((cat) => cat.id === value);
-            setFormData((prev) => ({
-              ...prev,
-              categoryId: value,
-              category: selected?.name || "",
-            }));
-          }}
-        >
-          <SelectTrigger className="w-full bg-white">
-            <SelectValue placeholder="Select Category" />
-          </SelectTrigger>
-
-          <SelectContent className="w-full flex flex-col">
-            {categories.map((item, index) => (
-              <SelectItem key={index} value={item.id} className="text-black">
-                {item.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            onClick={() => setAddSubCategory(false)}
-            variant="destructive"
-          >
-            Cancel
-          </Button>
-          <Button type="submit">Submit</Button>
-        </div>
-      </form>
 
       <Table>
         <TableHeader>
