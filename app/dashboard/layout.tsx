@@ -267,4 +267,9 @@ const navitems = [
     path: "/dashboard/testimonial",
     icon: "/icons/client.png",
   },
+  {
+    title: "Faq",
+    path: "/dashboard/faq",
+    icon: "/icons/client.png",
+  },
 ];

@@ -1,41 +1,28 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, HelpCircle, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getFaq } from "@/actions/fetchfaq";
+import { faqType } from "@/types/faq";
 
 export default function FAQPage() {
   const [openQuestion, setOpenQuestion] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [faqs, setFaq] = useState<faqType[]>([]);
 
-  const faqs = [
-    {
-      question: "How do I place an order on Himalayan Garment?",
-      answer:
-        "To place an order, browse products, add items to your cart, and proceed to checkout. You'll need to provide shipping details and select a payment method to complete your order. Once confirmed, you'll receive an email with your order details.",
-    },
-    {
-      question: "What payment methods are accepted?",
-      answer:
-        "Himalayan Garment accepts payments through Khalti, eSewa, Cash on Delivery (COD), and major debit/credit cards. You can select your preferred method during checkout.",
-    },
+  useEffect(() => {
+    const fetchtestimonial = async () => {
+      try {
+        const faq = await getFaq();
+        setFaq(faq);
+      } catch (error) {
+        console.error("Failed to fetch faq:", error);
+      }
+    };
 
-    {
-      question: "How do I edit or remove my listed products?",
-      answer:
-        "Go to user profile Dashboard then in your cart or wishlist section there is option to remove the listed products",
-    },
-    {
-      question: "How do I update my account information?",
-      answer:
-        "To update your email, phone number, address, or password, log in and go to your profile settings. Make the necessary changes and save your updates.",
-    },
-    {
-      question: "Is my personal and payment information secure?",
-      answer:
-        "Yes, Himalayan Garment prioritizes your privacy and data security. We use encryption and secure payment gateways to ensure your personal and financial information is protected at all times.",
-    },
-  ];
+    fetchtestimonial();
+  }, []);
 
   const toggleQuestion = (index: number) => {
     setOpenQuestion(openQuestion === index ? null : index);
