@@ -100,7 +100,7 @@ const OrderPage = () => {
                       alt={item.product.name}
                       width={140}
                       height={140}
-                      className="rounded-xl border object-cover w-full"
+                      className="rounded-xl border object-cover w-full h-[13em]"
                     />
 
                     <div className="flex-1">
@@ -158,27 +158,35 @@ const OrderPage = () => {
                   <p className="text-sm font-medium">
                     OrderId :{" "}
                     <Badge className="bg-blue-500 uppercase">
-                      {prod.id.slice(-4)}
+                      {prod.id.slice(-5)}
                     </Badge>
+                  </p>
+                  <p className="text-sm font-medium">
+                    Cancelled :{" "}
+                    {prod.isCancelled ? (
+                      <Badge className="bg-green-500">Yes</Badge>
+                    ) : (
+                      <Badge className="bg-red-500">No</Badge>
+                    )}
                   </p>
 
                   <p className="text-sm font-medium">
                     Status : <StatusBadge status={prod.status} />
                   </p>
-
-                  <Link href={`/profile/orders/${prod.id}`}>
-                    <Button className="w-full bg-primarymain">
-                      View All Details
-                    </Button>
-                  </Link>
                 </div>
+
+                <Link href={`/profile/orders/${prod.id}`}>
+                  <Button className="w-full bg-primarymain">
+                    View All Details
+                  </Button>
+                </Link>
               </div>
             ))}
           </div>
         </section>
       ) : (
-        <div className="flex justify-center items-center">
-          <p>No Orders Yet</p>
+        <div className="flex justify-center items-center h-[60vh]">
+          <p className="font-semibold text-xl">No Orders Created Yet !</p>
         </div>
       )}
     </main>
