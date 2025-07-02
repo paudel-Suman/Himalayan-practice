@@ -217,6 +217,11 @@ const navitems = [
     icon: "/icons/category.png",
   },
   {
+    title: "Sub Category",
+    path: "/dashboard/sub-category",
+    icon: "/icons/category.png",
+  },
+  {
     title: "Size",
     path: "/dashboard/size",
     icon: "/icons/size.png",
@@ -270,11 +275,11 @@ const navitems = [
   {
     title: "Faq",
     path: "/dashboard/faq",
-    icon: "/icons/client.png",
+    icon: "/icons/question.png",
   },
   {
     title: "Inbox",
     path: "/dashboard/inbox",
-    icon: "/icons/client.png",
+    icon: "/icons/gmail.png",
   },
 ];
