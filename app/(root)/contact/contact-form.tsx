@@ -35,7 +35,6 @@ const ContactForm = () => {
         `${process.env.NEXT_PUBLIC_SERVER_API}/contact/add-contact`,
         {
           method: "POST",
-
           body: JSON.stringify({
             name: formData.name,
             email: formData.email,
@@ -87,6 +86,7 @@ const ContactForm = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Enter full name"
+            maxLength={20}
           />
         </div>
         <div className="flex flex-col gap-2 w-full">
@@ -98,6 +98,7 @@ const ContactForm = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Enter email address"
+            maxLength={20}
           />
         </div>
       </div>
@@ -109,6 +110,7 @@ const ContactForm = () => {
             value={formData.phone}
             onChange={handleChange}
             placeholder="+977-9800000000"
+            maxLength={15}
           />
         </div>
         <div className="flex flex-col gap-2 w-full">
@@ -118,6 +120,7 @@ const ContactForm = () => {
             value={formData.address}
             onChange={handleChange}
             placeholder="Subject matter"
+            maxLength={15}
           />
         </div>
       </div>
