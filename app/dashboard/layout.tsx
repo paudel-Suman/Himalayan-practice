@@ -272,4 +272,9 @@ const navitems = [
     path: "/dashboard/faq",
     icon: "/icons/client.png",
   },
+  {
+    title: "Inbox",
+    path: "/dashboard/inbox",
+    icon: "/icons/client.png",
+  },
 ];
