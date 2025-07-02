@@ -35,6 +35,10 @@ const ContactForm = () => {
         `${process.env.NEXT_PUBLIC_SERVER_API}/contact/add-contact`,
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",   
+            "Accept": "application/json"
+          },
 
           body: JSON.stringify({
             name: formData.name,

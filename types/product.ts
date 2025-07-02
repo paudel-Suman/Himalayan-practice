@@ -54,16 +54,18 @@ export type MediaType = {
 };
 
 export type ProductSize = {
-  id: number;
+  id: string;
   name: string;
   sizeNumber: number;
+   selected?: boolean;
 };
 
 export type ProductColor = {
   productColorId: string;
-  id: number;
+  id: string;
   name: string;
   hex: string;
+   selected?: boolean;
 };
 
 export type categoryType = {

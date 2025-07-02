@@ -23,11 +23,12 @@ import Link from "next/link";
 import S3UploadForm from "@/lib/s3upload-form";
 import Cookies from "js-cookie";
 import { Button } from "@/components/ui/button";
-import { ProductColor, ProductSize } from "@/types/product";
+import { ProductAttribute, ProductColor, ProductSize } from "@/types/product";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { convertOffsetToTimes } from "framer-motion";
 
 const ProductEditPage = () => {
   const params = useParams();
@@ -47,6 +48,7 @@ const ProductEditPage = () => {
   const [prevmultipleimage, setPrevMultipleImage] = useState<
     { mediaUrl: string; mediaType?: string }[]
   >([]);
+  const [attribute, setAttribute] = React.useState<ProductAttribute | null>(null);
   const [featureImage, setFeatureImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -61,7 +63,7 @@ const ProductEditPage = () => {
     isDeleted: false,
     isFeatured: false,
     media: [],
-    productAttributes: [],
+  
     tags: [],
   });
 
@@ -92,16 +94,44 @@ const ProductEditPage = () => {
   };
 
   const handleColorToggle = (id: string) => {
-    setSelectedColorIds((prev) =>
-      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
-    );
+    // setSelectedColorIds((prev) =>
+    //   prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    // );
+
+    setSelectedColorIds(prevIds => {
+      const nextIds = prevIds.includes(id)
+        ? prevIds.filter(c => c !== id)
+        : [...prevIds, id];
+
+ 
+      setColor(prev =>
+        prev.map(c => ({
+          ...c,
+          selected: nextIds.includes(c.id),
+        }))
+      );
+
+      return nextIds;
+    });
+
   };
 
   const handleSizeToggle = (id: string) => {
-    setSelectedSizeIds((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    );
+    setSelectedSizeIds((prevIds) => {
+      const nextIds = prevIds.includes(id)
+        ? prevIds.filter((s) => s !== id)
+        : [...prevIds, id];
+      setSize((prev) =>
+        prev.map((s) => ({
+          ...s,
+          selected: nextIds.includes(s.id),
+        }))
+      );
+
+      return nextIds;
+    });
   };
+
 
   const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if ((e.key === "Enter" || e.key === ",") && e.currentTarget.value.trim()) {
@@ -210,10 +240,9 @@ const ProductEditPage = () => {
         const fetchedTags = product.tags?.map((tag: any) => tag.name) || [];
 
         // Pre-fill size and color IDs
-        const fetchedAttributes = product.productAttributes?.[0] || {};
-        const fetchedSizeIds = fetchedAttributes.sizeIds?.map(String) || [];
-        const fetchedColorIds = fetchedAttributes.colorIds?.map(String) || [];
-
+        // const fetchedAttributes = product.productAttributes?.[0] || {};
+        // const fetchedSizeIds = fetchedAttributes.sizeIds?.map(String) || [];
+        // const fetchedColorIds = fetchedAttributes.colorIds?.map(String) || [];
         setFormData({
           name: product.name || "",
           slug: product.slug || "",
@@ -229,13 +258,16 @@ const ProductEditPage = () => {
           isFeatured: product.isFeatured || false,
           media: (product.media && setPrevMultipleImage(product.media)) || [],
           tags: product.tags || [],
-          productAttributes: product.productAttributes || [],
+          // atrributes: product.productAttributes || [],
         });
 
+        if (product.productAttributes?.length) {
+          setAttribute(product.productAttributes[0]);
+        }
         setTags(fetchedTags);
         setStockQuantity(product.stock?.quantity || 0);
-        setSelectedColorIds(fetchedColorIds);
-        setSelectedSizeIds(fetchedSizeIds);
+        // setSelectedColorIds(fetchedColorIds);
+        // setSelectedSizeIds(fetchedSizeIds);
         setImage(product.featureImage || "");
         if (product.media?.[0]?.url) {
           setMultipleImage(product.media[0].url);
@@ -251,6 +283,8 @@ const ProductEditPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(selectedColorIds);
+    console.log(selectedSizeIds);
     const payload = {
       name: formData.name,
       slug: formData.slug,
@@ -271,13 +305,13 @@ const ProductEditPage = () => {
 
       tags: tags.map((tag) => ({ name: tag })),
       productAttributes: [
-        {
+        {  id:attribute?.id,
           sizeIds: selectedSizeIds,
           colorIds: selectedColorIds,
         },
       ],
     };
-
+   console.log(JSON.stringify(payload));
     try {
       setLoading(true);
       const res = await fetch(
@@ -306,6 +340,32 @@ const ProductEditPage = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (!attribute) return;  
+
+    const alreadyPickedColors = new Set(
+      (attribute.colorIds ?? []).map(c => c.productColorId)
+    );
+    const alreadyPickedSizes = new Set(
+      (attribute.sizeIds ?? []).map(s => s.productSizeId)
+    );
+    setSelectedColorIds(attribute.colorIds.map(c => c.productColorId));
+    setSelectedSizeIds(attribute.sizeIds.map(c => c.productSizeId));
+    setColor(prev =>
+      prev.map(c => ({
+        ...c,
+        selected: alreadyPickedColors.has(c.id),
+      }))
+    );
+
+    setSize(prev =>
+      prev.map(s => ({
+        ...s,
+        selected: alreadyPickedSizes.has(s.id),
+      }))
+    );
+  }, [attribute]);
+
 
   return (
     <main className="my-4">
@@ -430,12 +490,11 @@ const ProductEditPage = () => {
                 <div key={item.id} className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    id={String(item.id)}
-                    value={String(item.id)}
-                    checked={selectedColorIds.includes(String(item.id))}
-                    onChange={() => handleColorToggle(String(item.id))}
+                    id={item.id}
+                    checked={!!item.selected}
+                    onChange={() => handleColorToggle(item.id)}
                   />
-                  <label htmlFor={String(item.id)}>{item.name}</label>
+                  <label htmlFor={item.id}>{item.name}</label>
                 </div>
               ))}
             </div>
@@ -444,18 +503,14 @@ const ProductEditPage = () => {
             <Label>Select Sizes</Label>
             <div className="flex gap-4">
               {size.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-wrap items-center gap-2"
-                >
+                <div key={item.id} className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    id={`size-${item.id}`}
-                    value={item.id}
-                    checked={selectedSizeIds.includes(String(item.id))}
-                    onChange={() => handleSizeToggle(String(item.id))}
+                    id={item.id}
+                    checked={!!item.selected}
+                    onChange={() => handleSizeToggle(item.id)}
                   />
-                  <label htmlFor={`size-${item.id}`}>{item.name}</label>
+                  <label htmlFor={item.id}>{item.name}</label>
                 </div>
               ))}
             </div>
