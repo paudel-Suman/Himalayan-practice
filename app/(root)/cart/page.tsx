@@ -273,7 +273,7 @@ const CartPage = () => {
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-zinc-500">
-                              Rs. {item.product.price.toFixed(2)}
+                              $ {item.product.price.toFixed(2)}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
@@ -332,7 +332,7 @@ const CartPage = () => {
                   </div>
                   <div className="sm:col-span-2 col-span-full flex sm:flex-col sm:mt-0 mt-4 items-end justify-between">
                     <h3 className="font-bold text-xl text-primarymain">
-                      Rs.
+                      $
                       {(item.product.price * item.quantity).toFixed(2)}
                     </h3>
                     <div className="flex items-center gap-2">
@@ -379,26 +379,26 @@ const CartPage = () => {
                   <span className="font-semibold text-md text-zinc-500">
                     Subtotal
                   </span>
-                  <span className="text-lg font-bold">Rs. {subtotal}</span>
+                  <span className="text-lg font-bold">$ {subtotal}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="font-semibold text-md text-zinc-500">
                     Discount {discounrRate}%
                   </span>
-                  <span className="text-lg font-bold">Rs. {discount}</span>
+                  <span className="text-lg font-bold">$ {discount}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="font-semibold text-md text-zinc-500">
                     Delivery Fee
                   </span>
-                  <span className="text-lg font-bold">Rs. {deliveryFee}</span>
+                  <span className="text-lg font-bold">$ {deliveryFee}</span>
                 </div>
               </div>
 
               <div className="flex justify-between items-center border-y py-4 my-4">
                 <span className="font-bold text-lg">Total</span>
                 <span className="text-xl font-bold text-rose-700">
-                  Rs. {total}
+                  $ {total}
                 </span>
               </div>
 

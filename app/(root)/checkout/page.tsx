@@ -643,7 +643,7 @@ const CheckoutPage = () => {
                     </div>
 
                     <div className="font-semibold text-rose-600">
-                      {(item.product.price * item.quantity).toFixed(2)}
+                     $ {(item.product.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
                 </div>
@@ -653,22 +653,22 @@ const CheckoutPage = () => {
             <div className="mt-6 space-y-2">
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-zinc-500">Subtotal</span>
-                <span className="font-bold"> Rs. {subtotal}</span>
+                <span className="font-bold"> $ {subtotal}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-zinc-500">Discount</span>
-                <span className="font-bold">Rs. {discount}</span>
+                <span className="font-bold">$ {discount}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-zinc-500">
                   Delivery Fee
                 </span>
-                <span className="font-bold"> Rs. {deliveryFee}</span>
+                <span className="font-bold"> $ {deliveryFee}</span>
               </div>
               <div className="flex justify-between items-center border-y py-4 my-4">
                 <span className="font-bold text-lg">Total</span>
                 <span className="text-xl font-bold text-rose-700">
-                  Rs. {total}
+                  $ {total}
                 </span>
               </div>
             </div>

@@ -104,7 +104,7 @@ const OrderPage = () => {
             </TableCell>
             <TableCell>{item.shippingMethod}</TableCell>
             <TableCell>{item.shippingAddress.street}</TableCell>
-            <TableCell>{item.totalAmount}</TableCell>
+            <TableCell>$.{item.totalAmount}</TableCell>
             <TableCell className="text-right">
               <StatusBadge status={item.status} />
             </TableCell>
