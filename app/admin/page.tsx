@@ -112,7 +112,7 @@ const AdminLogin = () => {
                         Password
                       </FormLabel>
                       <Link
-                        href="/auth/forgot-password"
+                        href="/forgot-password"
                         className="text-sm text-[color:var(--primary)] hover:text-[color:var(--primary)]/80 transition-colors"
                       >
                         Forgot password?
