@@ -51,7 +51,7 @@ const ProductPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   console.log(filteredProducts, totalPages);
-  console.log("totalpage",totalPages)
+  console.log("totalpage", totalPages);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -60,8 +60,8 @@ const ProductPage = () => {
         const res = await productService.fetchAllActiveProducts(page);
         setProducts(res.data.products);
         setTotalPages(Number(res.data.totalPages));
-        console.log("Total Pages:", Number(res.data.pagination.totalPages)); 
-        console.log("Current Page:", page); 
+        console.log("Total Pages:", Number(res.data.pagination.totalPages));
+        console.log("Current Page:", page);
       } catch (error) {
         console.log(error);
       } finally {
@@ -152,7 +152,7 @@ const ProductPage = () => {
           {products.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
-              <TableCell>Rs .{item.price}</TableCell>
+              <TableCell>${item.price}</TableCell>
               <TableCell>{item.category.name}</TableCell>
               <TableCell>
                 {" "}

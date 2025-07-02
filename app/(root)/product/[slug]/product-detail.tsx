@@ -203,7 +203,7 @@ const ProductDetailPage = ({
           </div>
           <div className="flex items-center gap-2">
             <p className="text-primarymain font-semibold text-3xl">
-              Rs. {price}
+              ${price}
             </p>
           </div>
 

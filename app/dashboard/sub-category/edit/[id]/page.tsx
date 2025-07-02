@@ -13,40 +13,30 @@ import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import S3UploadForm from "@/lib/s3upload-form";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { categoryType } from "@/types/category";
+import { categoryService } from "@/services/superadmin/category-service";
+import Loading from "@/app/loading";
 import { Loader } from "lucide-react";
 
-const CategoryAddPage = () => {
+const SubCategoryEditPage = () => {
   const token = Cookies.get("token");
-  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<categoryType[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [image, setImage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    slug: "",
-    image: "",
-    subcategoris: [],
-    // isActive: true,
+    categoryId: "",
   });
-
-  const slugify = (text: string) => {
-    return text
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
-
-  useEffect(() => {
-    const newSlug = slugify(formData.name);
-    setFormData((prev) => ({
-      ...prev,
-      slug: newSlug,
-    }));
-  }, [formData.name]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -58,16 +48,27 @@ const CategoryAddPage = () => {
     }));
   };
 
-  const handleUploadCategoryImage = (urls: string[]) => {
-    setImage(urls[0]);
+  const fetchAllCategories = async () => {
+    try {
+      const response = await categoryService.fetchAllCategories();
+      const res = response?.categories ?? [];
+      setCategories(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchAllCategories();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/category/create-product-category`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/subcategory/create-subcategory`,
         {
           method: "POST",
           headers: {
@@ -76,8 +77,7 @@ const CategoryAddPage = () => {
           },
           body: JSON.stringify({
             name: formData.name,
-            slug: formData.slug,
-            image: image,
+            categoryId: formData.categoryId,
           }),
         }
       );
@@ -88,14 +88,14 @@ const CategoryAddPage = () => {
         toast.error(data.message || data.error);
         return;
       }
-      toast.success("Blog Added Successfully");
-      router.push("/dashboard/category");
+      toast.success("SubCategory Added Successfully");
+      router.push("/dashboard/sub-category");
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
+
+  if (loading) return <Loading />;
 
   return (
     <main className="my-6">
@@ -110,52 +110,62 @@ const CategoryAddPage = () => {
 
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/dashboard/category">Category</Link>
+              <Link href="/dashboard/sub-category">Category</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-green-500">Add</BreadcrumbPage>
+            <BreadcrumbPage className="text-green-500">Edit</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h2 className="text-xl font-bold mt-10">Add Category</h2>
+      <h2 className="text-xl font-bold mt-10">Edit Sub Category</h2>
 
       <form onSubmit={handleSubmit} className="my-8 space-y-6">
-        <section className="grid grid-cols-2 gap-6">
+        <section className="grid  gap-8">
+          <div className="space-y-2">
+            <Label>Subcategory Name</Label>
+            <Input name="name" value={formData.name} onChange={handleChange} />
+          </div>
           <div className="space-y-2">
             <Label>Category Name</Label>
-            <Input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="How to Increase Sales"
-              className="bg-white shadow-none"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Slug</Label>
-            <Input name="slug" value={formData.slug} readOnly />
+
+            <Select
+              onValueChange={(value) => {
+                const selected = categories.find((cat) => cat.id === value);
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryId: value,
+                  category: selected?.name || "",
+                }));
+              }}
+            >
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+
+              <SelectContent className="w-full flex flex-col">
+                {categories.map((item, index) => (
+                  <SelectItem
+                    key={index}
+                    value={item.id}
+                    className="text-black"
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </section>
-        <div className="space-y-2">
-          <Label>Image</Label>
-          <S3UploadForm
-            id={"category-image"}
-            multiple={false}
-            onUploadComplete={handleUploadCategoryImage}
-            isrequired={true}
-          />
-        </div>
         <Button disabled={loading}>
           {loading ? (
             <div className="flex gap-2">
               <Loader className="animate-spin h-4 w-4" />
-              Submitting
+              Updating
             </div>
           ) : (
-            "Submit"
+            "Update"
           )}
         </Button>{" "}
       </form>
@@ -163,4 +173,4 @@ const CategoryAddPage = () => {
   );
 };
 
-export default CategoryAddPage;
+export default SubCategoryEditPage;
