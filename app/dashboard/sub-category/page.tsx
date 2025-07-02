@@ -1,5 +1,5 @@
 "use client";
-import {  Subcategory } from "@/types/category";
+import { Subcategory } from "@/types/category";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -109,11 +109,13 @@ const CategoryPage = () => {
               <TableCell>{item.name}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                 
+                  {item.category != null && (
                     <Badge className="bg-blue-200 text-black" >
                       {item.category.name}
                     </Badge>
-               
+                  )}
+
+
                 </div>
               </TableCell>
 
