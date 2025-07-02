@@ -219,7 +219,7 @@ const navitems = [
   {
     title: "Sub Category",
     path: "/dashboard/sub-category",
-    icon: "/icons/category.png",
+    icon: "/icons/options.png",
   },
   {
     title: "Size",
