@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -29,10 +29,13 @@ import Loading from "@/app/loading";
 import { Loader } from "lucide-react";
 
 const SubCategoryEditPage = () => {
+  const params = useParams();
+  const id = params.id as string;
   const token = Cookies.get("token");
   const [categories, setCategories] = useState<categoryType[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: "",
     categoryId: "",
@@ -60,7 +63,26 @@ const SubCategoryEditPage = () => {
     }
   };
 
+  const fetchSubCategory = async () => {
+    try {
+      const response = await categoryService.fetchSubcategoryById(id);
+      if (response.success) {
+        setFormData({
+          name: response.subCategory.name || "",
+          categoryId: response.subCategory.categoryId || ""
+        });
+      }
+
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    fetchSubCategory();
     fetchAllCategories();
   }, []);
 
@@ -68,9 +90,9 @@ const SubCategoryEditPage = () => {
     e.preventDefault();
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/subcategory/create-subcategory`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/subcategory/update-subcategory/${id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -131,6 +153,7 @@ const SubCategoryEditPage = () => {
             <Label>Category Name</Label>
 
             <Select
+             value={formData.categoryId}
               onValueChange={(value) => {
                 const selected = categories.find((cat) => cat.id === value);
                 setFormData((prev) => ({

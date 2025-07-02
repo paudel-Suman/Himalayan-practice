@@ -21,6 +21,8 @@ export const API_ROUTES = {
   CATEGORY: {
     FETCH_ALL_CATEGORY: withBase("/category/fetch-all-categories"),
     FETCH_ALL_SUB_CATEGORY: withBase("/category/fetch-all-sub-categories"),
+    FETCH_SUB_CATEGORY_BY_ID: withBase("/subcategory/fetch-subcategory-by-id/"),
+    FETCH_ALL_SUBCATEGORY: withBase("/subcategory/fetch-all-subcategory"),
   },
   BLOG: {
     FETCH_ALL_BLOG: withBase("/blog/fetch-all-blogs"),

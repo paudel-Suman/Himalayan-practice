@@ -6,6 +6,7 @@ import {
   addSubcategory,
   CategoryResponse,
   categoryType,
+  SingleSubcategoryResponse,
   SubcategoryResponse,
 } from "@/types/category";
 
@@ -49,7 +50,7 @@ export class categoryService {
       throw new Error(MESSAGES.TOKEN.TOKEN_NOT_FOUND);
     }
     return await apiClient<SubcategoryResponse>(
-      API_ROUTES.CATEGORY.FETCH_ALL_SUB_CATEGORY,
+      API_ROUTES.CATEGORY.FETCH_ALL_SUBCATEGORY,
       {
         method: "GET",
         token,
@@ -112,4 +113,20 @@ export class categoryService {
       }
     );
   }
+
+  static async fetchSubcategoryById(id: string): Promise<SingleSubcategoryResponse> {
+    const token = Cookies.get("token");
+    if (!token) {
+      throw new Error(MESSAGES.TOKEN.TOKEN_NOT_FOUND);
+    }
+    return await apiClient<SingleSubcategoryResponse>(
+      `${API_ROUTES.CATEGORY.FETCH_SUB_CATEGORY_BY_ID}${id}`,
+      {
+        method: "GET",
+        token,
+      }
+    );
+  }
+
+  
 }

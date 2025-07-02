@@ -7,6 +7,7 @@ export type Subcategory = {
   categoryId: string;
   isActive: boolean;
   createdAt: string;
+  category:categoryType
 };
 
 // Main category type
@@ -45,3 +46,11 @@ export type addSubcategory = {
   name?: string;
   categoryId?: string;
 };
+
+
+export interface SingleSubcategoryResponse {
+  success: boolean;
+  statusCode: string;
+  message: string;
+  subCategory: Subcategory;
+}

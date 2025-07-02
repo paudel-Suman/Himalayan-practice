@@ -1,5 +1,5 @@
 "use client";
-import { categoryType } from "@/types/category";
+import { categoryType, Subcategory } from "@/types/category";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -31,16 +31,16 @@ import Cookies from "js-cookie";
 import { categoryService } from "@/services/superadmin/category-service";
 
 const CategoryPage = () => {
-  const [categories, setCategories] = useState<categoryType[]>([]);
+  const [categories, setCategories] = useState<Subcategory[]>([]);
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("token");
 
   const handleDelete = async (id: any) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/category/delete-category/${id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/subcategory/delete-subcategory/${id}`,
         {
-          method: "PATCH",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -61,8 +61,8 @@ const CategoryPage = () => {
 
   const fetchAllCategories = async () => {
     try {
-      const response = await categoryService.fetchAllCategories();
-      const res = response?.categories ?? [];
+      const response = await categoryService.fetchAllSubategories();
+      const res = response?.subcategories ?? [];
       setCategories(res);
     } catch (error) {
       console.log(error);
@@ -109,11 +109,11 @@ const CategoryPage = () => {
               <TableCell>{item.name}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  {item.subcategories.map((sub, index) => (
-                    <Badge className="bg-blue-200 text-black" key={index}>
-                      {sub.name}
+                 
+                    <Badge className="bg-blue-200 text-black" >
+                      {item.category.name}
                     </Badge>
-                  ))}
+               
                 </div>
               </TableCell>
 
