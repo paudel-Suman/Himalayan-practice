@@ -70,6 +70,7 @@ export interface OrderResponse {
   statusCode: string;
   message: string;
   data: OrderWithMeta;
+  orders: OrderWithMeta;
 }
 
 export type OrderWithMeta = {

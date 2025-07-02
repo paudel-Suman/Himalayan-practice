@@ -57,10 +57,10 @@ const OverviewPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const orders = orderService.fetchAllOrders();
-        setOrders((await orders).data.orders);
+        const res = await orderService.fetchAllOrders();
+        setOrders(res.orders.orders);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching orders:", error);
       } finally {
         setLoading(false);
       }
@@ -68,8 +68,6 @@ const OverviewPage = () => {
 
     fetchOrders();
   }, []);
-
-  console.log(orders);
 
   const handleDelete = async (id: any) => {
     try {
@@ -102,7 +100,7 @@ const OverviewPage = () => {
   const overviewdata = [
     {
       title: "Total Sales",
-      num: stats.totalSales,
+      num: `$ ${stats.totalSales}`,
       icon: "/icons/growth.png",
     },
     {
@@ -162,7 +160,7 @@ const OverviewPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((item) => (
+          {orders.slice(0, 5).map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>
@@ -186,6 +184,8 @@ const OverviewPage = () => {
               <TableCell>
                 {moment(item.createdAt).format("MMMM Do YYYY")}
               </TableCell>
+
+              
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Icon
