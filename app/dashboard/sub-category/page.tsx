@@ -109,9 +109,13 @@ const CategoryPage = () => {
               <TableCell>{item.category.name}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Badge className="bg-blue-200 text-black">
-                    {item.name}
-                  </Badge>
+                  {item.category != null && (
+                    <Badge className="bg-blue-200 text-black" >
+                      {item.category.name}
+                    </Badge>
+                  )}
+
+
                 </div>
               </TableCell>
 
