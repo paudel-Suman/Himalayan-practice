@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import {  usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useMyContext } from "../context/store";
 import SpinLoader from "@/app/spin-loader";
@@ -20,11 +20,6 @@ export default function ProfileLayout({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  if (!store.auth.token) {
-    redirect(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
-  }
-
-  // 👇 Check for token on mount
   useEffect(() => {
     const token = store.auth.token || localStorage.getItem("token");
 
