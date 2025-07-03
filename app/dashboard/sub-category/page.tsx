@@ -1,5 +1,5 @@
 "use client";
-import {  Subcategory } from "@/types/category";
+import { Subcategory } from "@/types/category";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -106,14 +106,12 @@ const CategoryPage = () => {
         <TableBody>
           {categories.map((item) => (
             <TableRow key={item.id}>
-              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.category.name}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                 
-                    <Badge className="bg-blue-200 text-black" >
-                      {item.category.name}
-                    </Badge>
-               
+                  <Badge className="bg-blue-200 text-black">
+                    {item.name}
+                  </Badge>
                 </div>
               </TableCell>
 

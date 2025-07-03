@@ -49,8 +49,8 @@ const CouponPage = () => {
   const [filteredCoupons, setFilteredCoupons] = useState<Coupon[]>(coupons);
   console.log(filteredCoupons);
   const [pageNumber, setPageNumber] = useState(1);
-
   const [totalPages, setTotalPages] = useState(1);
+
   const fetchCoupons = async () => {
     try {
       const coupons = couponService.fetchAllCoupons(pageNumber);

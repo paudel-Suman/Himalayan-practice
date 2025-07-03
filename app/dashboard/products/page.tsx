@@ -46,29 +46,23 @@ const ProductPage = () => {
   const token = Cookies.get("token");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] =
-    useState<producttype[]>(products);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  console.log(filteredProducts, totalPages);
-  console.log("totalpage", totalPages);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await productService.fetchAllActiveProducts(page);
+      setProducts(res.data.products);
+      setTotalPages(Number(res.data.totalPages));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const res = await productService.fetchAllActiveProducts(page);
-        setProducts(res.data.products);
-        setTotalPages(Number(res.data.totalPages));
-        console.log("Total Pages:", Number(res.data.pagination.totalPages));
-        console.log("Current Page:", page);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, [page]);
 
@@ -79,8 +73,9 @@ const ProductPage = () => {
 
   useEffect(() => {
     const searchProducts = async () => {
-      if (searchQuery === "") {
-        setFilteredProducts(products);
+      const trimmedQuery = searchQuery.trim();
+      if (trimmedQuery == "") {
+        await fetchProducts();
       } else {
         const response = productService.searchProduct(searchQuery);
         setProducts((await response).products);
@@ -135,96 +130,103 @@ const ProductPage = () => {
         </Link>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Feature Image</TableHead>
-            <TableHead>Stock</TableHead>
-            <TableHead>Is Active</TableHead>
-            <TableHead>Created Date</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>${item.price}</TableCell>
-              <TableCell>{item.category.name}</TableCell>
-              <TableCell>
-                {" "}
-                <Image
-                  src={
-                    item.featureImage ||
-                    "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  }
-                  alt={item.name}
-                  width={100}
-                  height={100}
-                  className="h-14 w-14 object-cover"
-                />
-              </TableCell>
-              <TableCell>{item.stock.quantity}</TableCell>
-              <TableCell>
-                {item.isActive ? (
-                  <Badge className="bg-green-500">Yes</Badge>
-                ) : (
-                  <Badge className="bg-red-500">No</Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {moment(item.createdAt).format("MMMM Do YYYY")}
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link href={`/dashboard/products/edit/${item.slug}`}>
-                    <Icon
-                      icon="lucide:edit"
-                      width="20"
-                      height="20"
-                      className="text-blue-500"
+      <div className="min-h-[60vh]">
+        {products.length > 0 ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Feature Image</TableHead>
+                <TableHead>Stock</TableHead>
+                <TableHead>Is Active</TableHead>
+                <TableHead>Created Date</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {products.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>${item.price}</TableCell>
+                  <TableCell>{item.category.name}</TableCell>
+                  <TableCell>
+                    {" "}
+                    <Image
+                      src={
+                        item.featureImage ||
+                        "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      }
+                      alt={item.name}
+                      width={100}
+                      height={100}
+                      className="h-14 w-14 object-cover"
                     />
-                  </Link>
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Icon
-                        icon="ant-design:delete-outlined"
-                        width="20"
-                        height="20"
-                        className="text-red-500"
-                      />
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
+                  </TableCell>
+                  <TableCell>{item.stock.quantity}</TableCell>
+                  <TableCell>
+                    {item.isActive ? (
+                      <Badge className="bg-green-500">Yes</Badge>
+                    ) : (
+                      <Badge className="bg-red-500">No</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {moment(item.createdAt).format("MMMM Do YYYY")}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Link href={`/dashboard/products/edit/${item.slug}`}>
+                        <Icon
+                          icon="lucide:edit"
+                          width="20"
+                          height="20"
+                          className="text-blue-500"
+                        />
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                          <Icon
+                            icon="ant-design:delete-outlined"
+                            width="20"
+                            height="20"
+                            className="text-red-500"
+                          />
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete your account and remove your
+                              data from our servers.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="flex justify-center items-center h-[60vh] font-semibold text-xl">
+            No Products Found
+          </div>
+        )}
+      </div>
       <Pagination className="my-8">
         <PaginationContent>
           <PaginationItem>
