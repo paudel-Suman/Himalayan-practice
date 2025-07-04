@@ -162,11 +162,11 @@ const OverviewPage = () => {
         <TableBody>
           {orders.slice(0, 5).map((item) => (
             <TableRow key={item.id}>
-              <TableCell>{item.id}</TableCell>
+              <TableCell className="uppercase">{item.id.slice(-4)}</TableCell>
               <TableCell>
                 <Badge className="bg-yellow-500">{item.status}</Badge>
               </TableCell>
-              <TableCell>Rs .{item.totalAmount}</TableCell>
+              <TableCell>$ {item.totalAmount}</TableCell>
               <TableCell>
                 {item.isPaid ? (
                   <Badge className="bg-green-500">Yes</Badge>
@@ -185,7 +185,6 @@ const OverviewPage = () => {
                 {moment(item.createdAt).format("MMMM Do YYYY")}
               </TableCell>
 
-              
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Icon
