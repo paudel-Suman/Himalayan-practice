@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useMyContext } from "../../context/store";
-import toast from "react-hot-toast";
 import { Order } from "@/types/order";
 import SpinLoader from "@/app/spin-loader";
 import { Badge } from "@/components/ui/badge";
@@ -31,15 +30,15 @@ const OrderPage = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Failed to fetch reviews");
+        throw new Error(data.message || "Failed to fetch Orders");
       }
 
-      setOrder(data.order);
+      setOrder(data.order || []);
       console.log(data.order);
-      setLoading(false);
     } catch (error) {
-      console.error("Error fetching product reviews:", error);
-      toast.error("Failed to load reviews");
+      console.error("Error fetching Orders:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
