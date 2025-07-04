@@ -179,6 +179,41 @@ const AddProduct = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // if (!formData.name.trim()) {
+    //   toast.error("Product name is required.");
+    //   return;
+    // }
+
+    // if (!formData.description.trim()) {
+    //   toast.error("Description is required.");
+    //   return;
+    // }
+
+    // if (!formData.categoryId) {
+    //   toast.error("Please select a category.");
+    //   return;
+    // }
+
+    // if (!formData.price || formData.price <= 0) {
+    //   toast.error("Price must be greater than 0.");
+    //   return;
+    // }
+
+    // if (!stockQuantity || stockQuantity <= 0) {
+    //   toast.error("Stock quantity must be greater than 0.");
+    //   return;
+    // }
+
+    if (selectedColorIds.length === 0) {
+      toast.error("Please select at least one color.");
+      return;
+    }
+
+    if (selectedSizeIds.length === 0) {
+      toast.error("Please select at least one size.");
+      return;
+    }
     const payload = {
       name: formData.name,
       slug: formData.slug,
@@ -270,6 +305,7 @@ const AddProduct = () => {
               onChange={handleChange}
               placeholder="Stylish Fashion Bag"
               className="bg-white shadow-none"
+              required
             />
           </div>
           <div className="space-y-2">
@@ -284,6 +320,7 @@ const AddProduct = () => {
               value={formData.price}
               onChange={handleChange}
               placeholder="500"
+              required
             />
           </div>
         </section>
@@ -324,6 +361,7 @@ const AddProduct = () => {
               placeholder="20"
               value={stockQuantity}
               onChange={(e) => setStockQuantity(parseInt(e.target.value))}
+              required
             />
           </div>
           <div className="space-y-2">
