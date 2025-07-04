@@ -282,6 +282,7 @@ const CheckoutPage = () => {
                         placeholder="John Doe"
                         onChange={handleInputChange}
                         required
+                        maxLength={20}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -294,12 +295,14 @@ const CheckoutPage = () => {
                           Contact Number
                         </Label>
                         <Input
+                          type="number"
                           id="phone"
                           name="phone"
                           value={formData.phone}
                           placeholder="9898989898"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                       <div className="space-y-2">
@@ -317,6 +320,7 @@ const CheckoutPage = () => {
                           placeholder="123 Main St"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                     </div>
@@ -331,6 +335,8 @@ const CheckoutPage = () => {
                           name="city"
                           value={formData.city}
                           onChange={handleInputChange}
+                          required
+                          maxLength={20}
                         />
                       </div>
                       <div className="space-y-2">
@@ -347,6 +353,7 @@ const CheckoutPage = () => {
                           placeholder="Bagmati"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                     </div>
@@ -360,12 +367,14 @@ const CheckoutPage = () => {
                           Zip Code
                         </Label>
                         <Input
+                          type="number"
                           id="zipCode"
                           name="zipCode"
                           value={formData.zipCode}
                           placeholder="1157"
                           onChange={handleInputChange}
                           required
+                          maxLength={5}
                         />
                       </div>
                       <div className="space-y-2">
@@ -383,6 +392,7 @@ const CheckoutPage = () => {
                           placeholder="Nepal"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                     </div>
@@ -479,6 +489,7 @@ const CheckoutPage = () => {
                         placeholder="John Doe"
                         onChange={handleInputChange}
                         required
+                        maxLength={20}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -491,12 +502,14 @@ const CheckoutPage = () => {
                           Contact Number
                         </Label>
                         <Input
+                          type="number"
                           id="phone"
                           name="phone"
                           value={formData.phone}
                           placeholder="9898989898"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                       <div className="space-y-2">
@@ -514,6 +527,7 @@ const CheckoutPage = () => {
                           placeholder="123 Main St"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                     </div>
@@ -528,6 +542,8 @@ const CheckoutPage = () => {
                           name="city"
                           value={formData.city}
                           onChange={handleInputChange}
+                          maxLength={20}
+                          required
                         />
                       </div>
                       <div className="space-y-2">
@@ -544,6 +560,7 @@ const CheckoutPage = () => {
                           placeholder="Bagmati"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                     </div>
@@ -557,12 +574,14 @@ const CheckoutPage = () => {
                           Zip Code
                         </Label>
                         <Input
+                          type="number"
                           id="zipCode"
                           name="zipCode"
                           value={formData.zipCode}
                           placeholder="1157"
                           onChange={handleInputChange}
                           required
+                          maxLength={5}
                         />
                       </div>
                       <div className="space-y-2">
@@ -580,6 +599,7 @@ const CheckoutPage = () => {
                           placeholder="Nepal"
                           onChange={handleInputChange}
                           required
+                          maxLength={20}
                         />
                       </div>
                     </div>
@@ -643,7 +663,7 @@ const CheckoutPage = () => {
                     </div>
 
                     <div className="font-semibold text-rose-600">
-                     $ {(item.product.price * item.quantity).toFixed(2)}
+                      $ {(item.product.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
                 </div>
