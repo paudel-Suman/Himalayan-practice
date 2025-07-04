@@ -249,7 +249,7 @@ const OrderEditPage = () => {
                           Price:
                         </span>
                         <span className="text-green-600 font-semibold">
-                          Rs. {item.price}
+                          $ {item.price}
                         </span>
                       </p>
                     </div>
@@ -263,7 +263,7 @@ const OrderEditPage = () => {
             Total :
             <span className="text-red-500 text-2xl">
               {" "}
-              Rs.{order?.totalAmount}
+              $ {order?.totalAmount}
             </span>
           </h2>
         </div>
