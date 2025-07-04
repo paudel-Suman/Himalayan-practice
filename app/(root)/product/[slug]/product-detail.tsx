@@ -42,6 +42,7 @@ const ProductDetailPage = ({
     stock,
     id,
     featureImage,
+    isActive,
   } = productdetails;
   const availableStock = stock.quantity;
   console.log(availableStock);
@@ -101,8 +102,6 @@ const ProductDetailPage = ({
   };
 
   const addToCart = async (item: producttype, quantity = 1) => {
-
-    
     if (!selectedSize) {
       toast.error("Please select a size before adding to cart.");
       return;
@@ -202,9 +201,7 @@ const ProductDetailPage = ({
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-primarymain font-semibold text-3xl">
-              ${price}
-            </p>
+            <p className="text-primarymain font-semibold text-3xl">${price}</p>
           </div>
 
           {/* product colors */}
@@ -276,7 +273,7 @@ const ProductDetailPage = ({
               ))}
             </div>
           </div>
-          {availableStock > 0 && (
+          {availableStock > 0 && isActive === true && (
             <section className="space-y-6">
               <div className="flex items-center w-fit border rounded-md">
                 <button
@@ -321,8 +318,14 @@ const ProductDetailPage = ({
             </section>
           )}
 
-          {availableStock < 0 && (
+          {availableStock < 1 && (
             <p className="text-red-500 font-semibold my-8">Out of Stock !</p>
+          )}
+
+          {isActive === false && (
+            <p className="text-red-500 font-semibold my-8">
+              Sorry This product is not available now!
+            </p>
           )}
         </div>
       </section>
