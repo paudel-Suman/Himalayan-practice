@@ -33,6 +33,7 @@ import Loading from "../loading";
 import PageHeader from "@/components/text/page-header";
 import { getDashboardStats } from "@/services/superadmin/fetch-count";
 import { DashboardStats } from "@/types/dashboardstats";
+import Link from "next/link";
 
 const OverviewPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -74,7 +75,7 @@ const OverviewPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/order/delete-order/${id}`,
         {
-          method: "DELETE",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -119,6 +120,34 @@ const OverviewPage = () => {
       icon: "/icons/brand.png",
     },
   ];
+
+  const StatusBadge = ({ status }: { status: string }) => {
+    switch (status) {
+      case "PENDING":
+        return <Badge className="bg-yellow-500 text-white">Pending</Badge>;
+      case "PROCESSING":
+        return <Badge className="bg-blue-500 text-white">Processing</Badge>;
+      case "SHIPPED":
+        return <Badge className="bg-indigo-500 text-white">Shipped</Badge>;
+      case "DELIVERED":
+        return <Badge className="bg-green-600 text-white">Delivered</Badge>;
+      case "CANCELLED":
+        return <Badge className="bg-red-500 text-white">Cancelled</Badge>;
+      case "REFUNDED":
+        return <Badge className="bg-purple-600 text-white">Refunded</Badge>;
+      case "CASH ON DELIVERY":
+        return (
+          <Badge className="bg-blue-700 text-white">Cash on Delivery</Badge>
+        );
+      case "ONLINE PAYMENT":
+        return (
+          <Badge className="bg-orange-500 text-white">Online Payment</Badge>
+        );
+      default:
+        return <Badge className="bg-gray-500 text-white">{status}</Badge>;
+    }
+  };
+
   if (loading) return <Loading />;
 
   return (
@@ -147,87 +176,103 @@ const OverviewPage = () => {
         title="Recent Orders"
         className="text-start w-fit !text-md mb-8"
       />
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Order ID</TableHead>
-            <TableHead>Order Status</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Is Paid</TableHead>
-            <TableHead>Is Cancelled</TableHead>
-            <TableHead>Created Date</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.slice(0, 5).map((item) => (
-            <TableRow key={item.id}>
-              <TableCell className="uppercase">{item.id.slice(-4)}</TableCell>
-              <TableCell>
-                <Badge className="bg-yellow-500">{item.status}</Badge>
-              </TableCell>
-              <TableCell>$ {item.totalAmount}</TableCell>
-              <TableCell>
-                {item.isPaid ? (
-                  <Badge className="bg-green-500">Yes</Badge>
-                ) : (
-                  <Badge className="bg-red-500">No</Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {item.isCancelled ? (
-                  <Badge className="bg-green-500">Yes</Badge>
-                ) : (
-                  <Badge className="bg-red-500">No</Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {moment(item.createdAt).format("MMMM Do YYYY")}
-              </TableCell>
+      {orders.length > 0 ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Order ID</TableHead>
+              <TableHead>Order Status</TableHead>
+              <TableHead>Payment Method</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Is Paid</TableHead>
+              <TableHead>Is Cancelled</TableHead>
+              <TableHead>Created Date</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.id.slice(-5).toUpperCase()}</TableCell>
+                <TableCell>
+                  <StatusBadge status={item.status} />
+                </TableCell>
+                <TableCell>
+                  {item.shippingMethod === "CASH ON DELIVERY" ? (
+                    <Badge className="bg-blue-500">Cash on Delivery</Badge>
+                  ) : (
+                    <Badge className="bg-orange-500">Online Payment</Badge>
+                  )}
+                </TableCell>
 
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Icon
-                    icon="lucide:edit"
-                    width="20"
-                    height="20"
-                    className="text-blue-500"
-                  />
-                  <AlertDialog>
-                    <AlertDialogTrigger>
+                <TableCell>$.{item.totalAmount}</TableCell>
+                <TableCell>
+                  {item.isPaid ? (
+                    <Badge className="bg-green-500">Yes</Badge>
+                  ) : (
+                    <Badge className="bg-red-500">No</Badge>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {item.isCancelled ? (
+                    <Badge className="bg-green-500">Yes</Badge>
+                  ) : (
+                    <Badge className="bg-red-500">No</Badge>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {moment(item.createdAt).format("MMMM Do YYYY")}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Link href={`/dashboard/orders/edit/${item.id}`}>
                       <Icon
-                        icon="ant-design:delete-outlined"
+                        icon="lucide:edit"
                         width="20"
                         height="20"
-                        className="text-red-500"
+                        className="text-blue-500"
                       />
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          remove your data from our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    </Link>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Icon
+                          icon="ant-design:delete-outlined"
+                          width="20"
+                          height="20"
+                          className="text-red-500"
+                        />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            remove your data from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <div className="flex justify-center items-center h-[20vh]">
+          <h2 className="font-semibold text-2xl ">No Orders received Yet</h2>
+        </div>
+      )}
     </main>
   );
 };

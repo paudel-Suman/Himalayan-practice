@@ -124,7 +124,6 @@ const OrderPage = () => {
     }
   };
 
-  
   if (loading) return <Loading />;
 
   return (
@@ -233,9 +232,7 @@ const OrderPage = () => {
         </Table>
       ) : (
         <div className="flex justify-center items-center h-[70vh]">
-          <h2 className="font-semibold text-2xl text-red-500">
-            No Orders received Yet
-          </h2>
+          <h2 className="font-semibold text-2xl ">No Orders received Yet</h2>
         </div>
       )}
     </div>
