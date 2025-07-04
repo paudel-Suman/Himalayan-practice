@@ -248,8 +248,14 @@ const OrderEditPage = () => {
                         <span className="font-medium text-gray-800">
                           Price:
                         </span>
+                        <span className=" font-semibold">$ {item.price}</span>
+                      </p>
+                      <p className="flex items-center gap-2 text-lg">
+                        <span className="font-medium text-gray-800">
+                          Subtotal:
+                        </span>
                         <span className="text-green-600 font-semibold">
-                          $ {item.price}
+                          $ {item.quantity * Number(item.price)}
                         </span>
                       </p>
                     </div>
@@ -259,9 +265,12 @@ const OrderEditPage = () => {
             ))}
           </div>
 
-          <h2 className="text-xl font-bold">
+          <h2 className="text-md font-bold">
+            Delivery :<span className="text-yellow-600 text-lg"> $ 50</span>
+          </h2>
+          <h2 className="text-lg font-bold">
             Total :
-            <span className="text-red-500 text-2xl">
+            <span className="text-green-600 text-xl">
               {" "}
               $ {order?.totalAmount}
             </span>
