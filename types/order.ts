@@ -7,7 +7,7 @@ export type Order = {
   totalAmount: number;
   shippingAddressId: string;
   billingAddressId: string;
-  placedAt: string;
+  placedAt: Date;
   deliveryDate: string;
   notes: string;
   isPaid: boolean;

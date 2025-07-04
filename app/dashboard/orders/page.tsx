@@ -183,7 +183,7 @@ const OrderPage = () => {
                   )}
                 </TableCell>
                 <TableCell>
-                  {moment(item.createdAt).format("MMMM Do YYYY")}
+                  {moment(item.placedAt).format("MMMM Do YYYY")}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
