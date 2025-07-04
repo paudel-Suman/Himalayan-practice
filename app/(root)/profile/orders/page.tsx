@@ -93,10 +93,7 @@ const OrderPage = () => {
                     className="grid sm:grid-cols-2 items-center gap-6  "
                   >
                     <Image
-                      src={
-                        item.product.featureImage ||
-                        item.product.media[0]?.mediaUrl
-                      }
+                      src={item.product.featureImage}
                       alt={item.product.name}
                       width={140}
                       height={140}
