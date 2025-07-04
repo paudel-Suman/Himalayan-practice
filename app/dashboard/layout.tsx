@@ -41,7 +41,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   return (
     <main className="grid grid-cols-12 bg-gradient-to-br from-zinc-50/50 via-zinc-50 to-sky-200/50">
-      <section className="bg-white border-r shadow-sm col-span-2 lg:block hidden h-screen sticky top-0">
+      <section className="bg-white border-r shadow-sm col-span-2 lg:block hidden h-fit min-h-screen sticky top-0">
         {/* company logo */}
         <div className="h-16 bg-[#F7F7F7] border flex justify-center items-center">
           <Image
@@ -63,7 +63,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 pathname === item.path
                   ? "bg-[#2089CA]   rounded-md text-white "
                   : "hover:bg-zinc-100 rounded-md"
-              } flex  items-center gap-4 p-2`}
+              } flex  items-center gap-2 p-1`}
             >
               <div className="bg-white p-1 rounded-full">
                 {" "}
@@ -75,7 +75,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   className="h-5 w-5"
                 />
               </div>
-              <h2 className="font-medium text-sm ">{item.title}</h2>
+              <h2 className="font-medium text-xs ">{item.title}</h2>
             </Link>
           ))}
         </div>
@@ -84,7 +84,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <div
         className={`${
           openSidebar ? "translate-x-0" : "-translate-x-full"
-        } ease-in-out duration-300 fixed z-[10] top-0 bg-white  h-screen w-full left-0 lg:hidden`}
+        } ease-in-out duration-300 fixed z-[10] top-0 bg-white  h-full w-full left-0 lg:hidden`}
       >
         <div className="flex justify-between items-center mx-4 mt-4 mb-6">
           <Image
