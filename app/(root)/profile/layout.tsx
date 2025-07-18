@@ -73,9 +73,9 @@ export default function ProfileLayout({
               key={index}
               className={`${
                 item.href === pathname
-                  ? "bg-red-400/40 bg-opacity-10"
+                  ? "bg-green-400/40 bg-opacity-10"
                   : "bg-zinc-50"
-              } flex justify-center md:justify-start items-center gap-2 md:p-4 p-2 md:h-fit md:w-full h-10 w-10 rounded-md`}
+              } hover:bg-green-400/40 flex justify-center md:justify-start items-center gap-2 md:p-4 p-2 md:h-fit md:w-full h-10 w-10 rounded-md`}
             >
               <span>{item.icon}</span>
               <p className="font-medium text-md md:block hidden">
@@ -86,7 +86,7 @@ export default function ProfileLayout({
 
           <Button
             onClick={handleLogout}
-            className="bg-rose-600 text-white p-5 px-8 md:mt-8 flex items-center gap-2"
+            className="bg-red-600 text-white p-5 px-8 md:mt-8 flex items-center gap-2"
           >
             <Icon icon="ic:round-logout" width="24" height="24" />
             <span className="md:block hidden"> Log Out</span>
