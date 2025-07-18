@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 const CreateContext = createContext();
+const EXPIRY_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 export const StoreProvider = ({ children }) => {
   const { data: session } = useSession();
@@ -18,11 +19,37 @@ export const StoreProvider = ({ children }) => {
         typeof window !== "undefined" ? localStorage.getItem("token") : null,
     },
   });
+  // On initial load, check for token + expiry
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+      const expiry = localStorage.getItem("expiry");
 
+      const now = new Date().getTime();
+
+      if (token && user && expiry && now < parseInt(expiry)) {
+        setStore({
+          auth: {
+            user: JSON.parse(user),
+            token,
+          },
+        });
+      } else {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("expiry");
+      }
+    }
+  }, []);
   // Store token and user info on login
   const login = (user, token) => {
+    const expiryTime = new Date().getTime() + EXPIRY_DURATION;
+
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("expiry", expiryTime.toString()); // 👈 Add this line
+
     setStore((prev) => ({
       ...prev,
       auth: { user, token },
