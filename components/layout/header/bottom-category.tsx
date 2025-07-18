@@ -112,10 +112,10 @@ const BottomCategory = () => {
               ) : (
                 <div>
                   <DropdownMenuItem>
-                    <Link href="/login">Login</Link>
+                    <Link href="/login" className="w-full">Login</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/register">Register</Link>{" "}
+                    <Link href="/register" className="w-full">Register</Link>{" "}
                   </DropdownMenuItem>
                 </div>
               )}
