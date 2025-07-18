@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { usePathname, useRouter } from "next/navigation";
 import ProductDetailCard from "@/components/card/product-detail-card";
+import { useSearchParams } from "next/navigation";
 
 const SearchPage = ({
   product,
@@ -25,7 +26,12 @@ const SearchPage = ({
   const [categories, setCategories] = useState([]);
   const router = useRouter();
   const pathname = usePathname();
-  const [cardStyle, setCardStyle] = useState("default"); // "default" or "compact"
+  const [cardStyle, setCardStyle] = useState("default");
+  const searchParams = useSearchParams();
+  const hasFilters =
+    searchParams.get("sortBy") ||
+    searchParams.get("categoryId") ||
+    searchParams.get("query");
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -62,7 +68,7 @@ const SearchPage = ({
   };
 
   const handleClearFilters = () => {
-    router.push(pathname); // remove all query params
+    router.push(pathname);
   };
 
   return (
@@ -99,17 +105,19 @@ const SearchPage = ({
             </SelectContent>
           </Select>
 
-          <button
-            onClick={handleClearFilters}
-            className="bg-black hover:bg-rose-700 md:px-4 px-2 py-1 rounded-md text-white md:text-sm text-xs flex items-center gap-1"
-          >
-            <Icon
-              icon="material-symbols-light:cancel-rounded"
-              width="24"
-              height="24"
-            />
-            Clear Filter
-          </button>
+          {hasFilters && (
+            <button
+              onClick={handleClearFilters}
+              className="bg-black hover:bg-red-500 md:px-4 px-2 py-1 rounded-md text-white md:text-sm text-xs flex items-center gap-1"
+            >
+              <Icon
+                icon="material-symbols-light:cancel-rounded"
+                width="24"
+                height="24"
+              />
+              Clear Filter
+            </button>
+          )}
         </div>
         <div className="flex md:justify-center justify-between w-full md:w-fit items-center gap-4">
           <p className="text-zinc-500 whitespace-nowrap text-sm font-medium">
