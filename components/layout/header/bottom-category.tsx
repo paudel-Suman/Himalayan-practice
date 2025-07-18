@@ -103,7 +103,7 @@ const BottomCategory = () => {
               {store.auth.token ? (
                 <div>
                   <DropdownMenuItem>
-                    <Link href="/profile">Profile</Link>
+                    <Link href="/profile" className="w-full">Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <button onClick={handleLogout}>Logout</button>
