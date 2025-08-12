@@ -187,7 +187,7 @@ const ProductDetailPage = ({
         <div className="space-y-4">
           <h2 className="font-bold text-2xl">{name}</h2>
           <p
-            className="text-lighttext"
+            className="text-lighttext line-clamp-4"
             dangerouslySetInnerHTML={{ __html: description }}
           />
 
@@ -299,7 +299,7 @@ const ProductDetailPage = ({
                     e.preventDefault();
                     addToCart(productdetails, quantity);
                   }}
-                  className="flex items-center cursor-pointer bg-primarymain text-white hover:bg-primarymain/90"
+                  className="flex items-center cursor-pointer bg-green-600 text-white hover:bg-primarymain/90"
                 >
                   {loading ? (
                     <Loader className="animate-spin h-4 w-4" />
@@ -310,7 +310,7 @@ const ProductDetailPage = ({
                 </Button>
 
                 <div
-                  className={`bg-rose-600 text-white rounded-full p-2 w-fit`}
+                  className={`bg-red-600 text-white rounded-full p-2 w-fit`}
                 >
                   <Heart className="h-4 w-4" />
                 </div>

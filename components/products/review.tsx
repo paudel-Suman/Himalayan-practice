@@ -103,24 +103,39 @@ const Review = ({ productId }: { productId: string }) => {
   if (!productReview) return <Loading />;
 
   return (
-    <section className="grid md:grid-cols-2 gap-8 my-8 min-h-screen">
-      <div>
-        {productReview ? (
-          productReview?.map((item: reviewType, index: number) => (
-            <div key={index} className="flex items-start gap-4 pb-6 border-b">
-              <div className="h-12 w-12 aspect-square rounded-full bg-gray-200 flex items-center justify-center"></div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{item.user.name}</span>
+    <section className="grid md:grid-cols-2 gap-8 my-8 ">
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">
+          Customer Reviews
+        </h2>{" "}
+        {productReview.length > 0 ? (
+          productReview.map((item: reviewType, index: number) => (
+            <div
+              key={index}
+              className="flex items-start gap-4 p-4  bg-white rounded-md "
+            >
+              {/* Avatar Placeholder */}
+              <div className="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center font-semibold text-white uppercase">
+                {item.user.name.charAt(0)}
+              </div>
+
+              {/* Review Content */}
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-gray-800">
+                    {item.user.name}
+                  </span>
                   <span className="text-sm text-gray-500">
                     {moment(item.date).format("MMMM D, YYYY")}
                   </span>
                 </div>
-                <div className="flex">
+
+                {/* Stars */}
+                <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${
+                      className={`w-4 h-4 ${
                         i < item.rating
                           ? "fill-yellow-500 text-yellow-500"
                           : "text-gray-300"
@@ -128,29 +143,34 @@ const Review = ({ productId }: { productId: string }) => {
                     />
                   ))}
                 </div>
-                <p className="text-gray-600 md:text-base text-sm">
+
+                {/* Comment */}
+                <p className="text-sm text-gray-700 tracking-wide">
                   {item.comment}
                 </p>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-gray-500">
+          <p className="text-gray-500 text-sm text-center">
             No reviews yet. Be the first to review!
           </p>
         )}
       </div>
+
       <div>
         {/* Review form */}
-        <div className="border p-6 rounded-lg shadow-sm h-fit">
-          <h2 className="text-xl font-semibold mb-4">Write a Review</h2>
+        <div className="border bg-white md:p-6 p-4 rounded-lg  h-fit">
+          <h2 className="text-lg font-semibold mb-4 text-center">
+            Write a Review
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="comment">Your Review *</Label>
               <textarea
                 id="comment"
                 rows={4}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 onChange={handleChange}
                 value={formData.comment}
                 required
@@ -180,7 +200,7 @@ const Review = ({ productId }: { productId: string }) => {
 
             <Button
               type="submit"
-              className="bg-black text-white hover:bg-gray-800 w-full"
+              className="bg-green-600 text-white p-6 hover:bg-gray-800 w-full"
               disabled={isLoading}
             >
               {isLoading ? "Submitting..." : "Submit Review"}

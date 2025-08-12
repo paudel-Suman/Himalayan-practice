@@ -11,7 +11,7 @@ const ProductDetail = async ({
   const singleProduct = await getSingleProduct(slug);
 
   return (
-    <main className="max-w-7xl md:mx-auto mx-4 my-20">
+    <main className="max-w-6xl md:mx-auto mx-4 my-20">
       <ProductDetailPage productdetails={singleProduct} />
     </main>
   );

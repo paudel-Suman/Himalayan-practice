@@ -7,7 +7,7 @@ import SpinLoader from "@/app/spin-loader";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Eye, Info, Minus, Plus, Trash2 } from "lucide-react";
+import { Eye, Minus, Plus, Trash2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 const CartPage = () => {
@@ -246,7 +246,7 @@ const CartPage = () => {
   const { subtotal, discount, deliveryFee, total } = calculateTotals();
 
   return (
-    <main className="max-w-7xl mx-auto my-8 ">
+    <main className="max-w-6xl mx-auto my-8 ">
       <section>
         {cart.length > 0 ? (
           <div className="p-4 grid lg:grid-cols-8 gap-6">
@@ -254,7 +254,7 @@ const CartPage = () => {
               {cart.map((item: Cart) => (
                 <div
                   key={`${item.id}`}
-                  className="grid sm:grid-cols-5 border-y p-4 rounded-md shadow-sm py-4"
+                  className="grid sm:grid-cols-5 border p-4 rounded-md  py-4"
                 >
                   <div className="sm:col-span-3 col-span-full">
                     <div className="flex items-center gap-4">
@@ -332,8 +332,7 @@ const CartPage = () => {
                   </div>
                   <div className="sm:col-span-2 col-span-full flex sm:flex-col sm:mt-0 mt-4 items-end justify-between">
                     <h3 className="font-bold text-xl text-primarymain">
-                      $
-                      {(item.product.price * item.quantity).toFixed(2)}
+                      ${(item.product.price * item.quantity).toFixed(2)}
                     </h3>
                     <div className="flex items-center gap-2">
                       <Link href={`/product/${item.product.slug}`}>
@@ -344,7 +343,7 @@ const CartPage = () => {
                       </Link>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="bg-rose-600 hover:bg-rose-700 sm:px-4 px-2 py-1 rounded-md border flex items-center gap-1 font-medium text-sm text-white"
+                        className="bg-red-600 hover:bg-red-700 sm:px-4 px-2 py-1 rounded-md border flex items-center gap-1 font-medium text-sm text-white"
                       >
                         <Trash2 className="h-4 w-4" />
                         Delete
@@ -355,8 +354,8 @@ const CartPage = () => {
               ))}
             </div>
 
-            <div className="lg:col-span-3 col-span-full h-fit p-6 bg-zinc-50 shadow-md border rounded-md">
-              <h2 className="font-bold text-xl text-rose-700">Order Summary</h2>
+            <div className="lg:col-span-3 col-span-full h-fit p-6 bg-zinc-50  rounded-md">
+              <h2 className="font-bold text-xl text-center">Order Summary</h2>
 
               <form
                 onSubmit={handleCouponCheck}
@@ -364,14 +363,12 @@ const CartPage = () => {
               >
                 <input
                   type="text"
-                  className="border border-black/50 border-dashed focus:border-blue-500 focus:outline-none rounded-full my-4 p-3 w-3/4"
+                  className="border border-black/50 border-dashed focus:border-blue-500 focus:outline-none rounded-md my-4 p-3 w-3/4"
                   placeholder="AS78EFE89"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                 />
-                <Button className="rounded-full py-6" variant="outline">
-                  Apply Coupon
-                </Button>
+                <Button className="rounded-md  py-6">Apply Coupon</Button>
               </form>
 
               <div className="mt-6 space-y-1">
@@ -397,18 +394,12 @@ const CartPage = () => {
 
               <div className="flex justify-between items-center border-y py-4 my-4">
                 <span className="font-bold text-lg">Total</span>
-                <span className="text-xl font-bold text-rose-700">
+                <span className="text-xl font-bold text-green-500">
                   $ {total}
                 </span>
               </div>
 
-              <div className="text-sm text-zinc-500 my-6 flex gap-1 font-medium">
-                <Info className="h-6 w-8" />
-                <h2>
-                  <span className="text-black">90 Days limited warranty</span>{" "}
-                  against manufacturers defect
-                </h2>
-              </div>
+             
 
               <Link
                 href={{
@@ -418,8 +409,8 @@ const CartPage = () => {
                   },
                 }}
               >
-                <Button className="mt-8 w-full py-6 text-lg bg-black rounded-full hover:bg-primary">
-                  Checkout Now
+                <Button className="mt-8 w-full py-6 text-md bg-green-500 rounded-md hover:bg-primary">
+                  Proceed{" "}
                 </Button>
               </Link>
             </div>

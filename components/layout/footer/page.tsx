@@ -13,7 +13,7 @@ export default async function Footer() {
   return (
     <footer className="bg-gradient-to-tl from-primarymain via-primarymain/90 to-primarymain/80 text-gray-200">
       {/* Main Footer Content */}
-      <div className="max-w-7xl xl:mx-auto mx-4 px-4 py-12">
+      <div className="max-w-7xl xl:mx-auto mx-4  py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
@@ -169,7 +169,7 @@ export default async function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-800">
-        <div className="max-w-7xl xl:mx-auto mx-4 px-4 py-6">
+        <div className="max-w-7xl xl:mx-auto mx-4  py-6">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
             {/* Copyright */}
             <div className="text-sm text-zinc-300 text-center lg:text-left">

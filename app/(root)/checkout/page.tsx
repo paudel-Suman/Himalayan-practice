@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Info, Loader } from "lucide-react";
+import {  Loader } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -226,11 +226,11 @@ const CheckoutPage = () => {
   if (loading) return <SpinLoader />;
 
   return (
-    <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <main className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       {cart.length > 0 ? (
         <div className="grid lg:grid-cols-8 gap-6">
           {/* Checkout Form */}
-          <section className="lg:col-span-5 bg-white p-6 rounded-lg shadow-sm border">
+          <section className="lg:col-span-5 bg-white p-6 rounded-lg border">
             <div className="space-y-8">
               {/* Billing Information */}
               <section>
@@ -243,7 +243,7 @@ const CheckoutPage = () => {
                     <div>
                       <button
                         onClick={() => setIsAddNew(!isAddNew)}
-                        className="py-1 bg-black text-white rounded-full text-sm px-4"
+                        className="py-1 bg-black text-white rounded-md text-sm px-4"
                       >
                         Add New
                       </button>
@@ -417,17 +417,17 @@ const CheckoutPage = () => {
                         <div
                           key={item.id}
                           onClick={() => handleSelect(item.id)}
-                          className={`relative p-2 border border-dashed space-y-2 shadow-sm cursor-pointer 
+                          className={`relative p-2  space-y-2 rounded-md cursor-pointer 
                    ${
                      selectedBilling === item.id
-                       ? "bg-rose-200/50"
+                       ? "bg-green-200/50"
                        : "hover:bg-zinc-100"
                    }
         `}
                         >
                           <div className="flex flex-wrap justify-between">
                             <p className="font-semibold">{item.fullName}</p>
-                            <p className="bg-rose-600 whitespace-nowrap text-white rounded-full px-4 py-1 text-xs">
+                            <p className="bg-green-600 whitespace-nowrap text-white rounded-full px-4 py-1 text-xs">
                               {item.phone}
                             </p>
                           </div>
@@ -604,7 +604,7 @@ const CheckoutPage = () => {
                       </div>
                     </div>
 
-                    <Button className="rounded-full px-8 py-4 justify-end ">
+                    <Button className="rounded-md px-8 py-4 justify-end ">
                       {loading ? "Saving..." : "Save Now"}
                     </Button>
                   </form>
@@ -620,7 +620,7 @@ const CheckoutPage = () => {
                       },
                     }}
                   >
-                    <Button className="rounded-full px-8 py-4 justify-end">
+                    <Button className="rounded-md px-8 py-4 justify-end">
                       Next
                     </Button>
                   </Link>
@@ -630,13 +630,13 @@ const CheckoutPage = () => {
           </section>
 
           {/* Order Summary */}
-          <section className="lg:col-span-3 h-fit p-6 bg-zinc-50 border rounded-lg shadow-sm">
-            <h2 className="font-bold text-xl text-rose-700">Order Summary</h2>
+          <section className="lg:col-span-3 h-fit p-6 bg-zinc-50 rounded-lg ">
+            <h2 className="font-bold text-xl text-center">Order Summary</h2>
             <div className="space-y-4 my-2">
               {cart.map((item: Cart) => (
                 <div
                   key={`${item.productId}-${item.selectedColorId}-${item.selectedSizeId}`}
-                  className="flex gap-4 shadow-sm bg-white rounded-md p-2"
+                  className="flex gap-4  bg-white rounded-md p-2"
                 >
                   <Image
                     src={item.product.featureImage || "/placeholder.png"}
@@ -662,7 +662,7 @@ const CheckoutPage = () => {
                       </div>
                     </div>
 
-                    <div className="font-semibold text-rose-600">
+                    <div className="font-semibold text-green-500">
                       $ {(item.product.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
@@ -687,22 +687,17 @@ const CheckoutPage = () => {
               </div>
               <div className="flex justify-between items-center border-y py-4 my-4">
                 <span className="font-bold text-lg">Total</span>
-                <span className="text-xl font-bold text-rose-700">
+                <span className="text-xl font-bold text-green-500">
                   $ {total}
                 </span>
               </div>
             </div>
 
-            <div className="text-sm text-zinc-500 mt-6 flex gap-1 font-medium">
-              <Info className="h-5 w-5" />
-              <span className="text-black">90 Days limited warranty</span>{" "}
-              against manufacturers defect
-            </div>
+         
 
             <Link href={`/cart`}>
               <Button
-                variant="outline"
-                className="mt-4 w-full py-6 rounded-full"
+                className="mt-8 w-full py-6 text-md bg-green-500 rounded-md hover:bg-primary "
               >
                 Back to Cart
               </Button>

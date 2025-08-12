@@ -15,7 +15,7 @@ const ChipTabs = ({
 
   return (
     <div className="my-14">
-      <div className="flex items-center justify-center flex-wrap gap-4 mb-6">
+      <div className="flex items-center  flex-wrap gap-4 mb-6">
         {tabs.map((tab) => (
           <Chip
             text={tab}
@@ -26,8 +26,8 @@ const ChipTabs = ({
         ))}
       </div>
 
-      <div className="px-4">
-        {selected === "Description" && <div className="h-screen">{description}</div>}
+      <div className="px-4 min-h-[60vh] md:p-2 p-1 rounded-md bg-zinc-50">
+        {selected === "Description" && <div className="p-2 text-sm">{description}</div>}
         {selected === "Reviews" && <Review productId={productId} />}
       </div>
     </div>
@@ -48,7 +48,7 @@ const Chip = ({
     <button
       onClick={() => setSelected(text)}
       className={`${
-        selected ? "text-white" : " hover:text-slate-200 border hover:bg-black"
+        selected ? "text-white" : " hover:text-slate-200 border hover:bg-green-500"
       } text-sm transition-colors px-6 py-2 rounded-md relative`}
     >
       <span className="relative z-10">{text}</span>
@@ -56,7 +56,7 @@ const Chip = ({
         <motion.span
           layoutId="pill-tab"
           transition={{ type: "spring", duration: 0.5 }}
-          className="absolute inset-0 z-0 bg-gradient-to-r from-primarymain to-primarymain/80 rounded-md"
+          className="absolute inset-0 z-0 bg-green-600 rounded-md"
         />
       )}
     </button>
