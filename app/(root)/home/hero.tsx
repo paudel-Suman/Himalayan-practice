@@ -41,18 +41,24 @@ const Hero = ({ banner }: { banner: bannerType[] }) => {
               />
             </figure>
 
-            <div className="bg-gradient-to-r from-black via-black/50 to-transparent w-full h-full absolute inset-0" />
+            <div className="bg-gradient-to-r from-black/70 via-black/30 to-transparent w-full h-full absolute inset-0" />
 
-            <div className="absolute top-1/2 -translate-y-1/2 lg:w-[40%] w-[80%] lg:left-32 left-4 text-white">
-              <h2 className="md:text-4xl sm:text-2xl text-xl line-clamp-2 font-semibold">
-                {item.title}
-              </h2>
-              <p className="text-zinc-200  md:line-clamp-4 line-clamp-2 md:my-6 my-4 md:text-base text-sm">
-                {item.description}
-              </p>
-              <Link href={item.buttonLink} target="_blank">
-                <Button className="bg-primarymain">{item.buttonText}</Button>
-              </Link>
+            <div className=" absolute top-1/2 w-full -translate-y-1/2  left-1/2 -translate-x-1/2 text-white">
+              <div className="grid sm:grid-cols-2 max-w-7xl xl:mx-auto mx-4">
+                <div>
+                  <h2 className="md:text-4xl sm:text-2xl text-xl line-clamp-2 font-semibold">
+                    {item.title}
+                  </h2>
+                  <p className="text-zinc-200  md:line-clamp-4 line-clamp-2 md:my-6 my-4 md:text-base text-sm">
+                    {item.description}
+                  </p>
+                  <Link href={item.buttonLink} target="_blank">
+                    <Button className="bg-primarymain">
+                      {item.buttonText}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         ))}

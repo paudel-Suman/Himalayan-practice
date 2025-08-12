@@ -55,7 +55,7 @@ const BottomCategory = () => {
   }, []);
 
   return (
-    <div className="bg-primarymain min-h-8 p-2 text-white">
+    <div className="bg-primarymain min-h-8 p-3 text-white">
       <div className="max-w-7xl mx-auto flex justify-between gap-6">
         <div className="md:flex hidden gap-6">
           {category.map((item) => (
@@ -78,7 +78,7 @@ const BottomCategory = () => {
           <Link href="/cart" className="relative">
             <Icon icon="mdi:cart" width="24" height="24" />
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-4 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-4 bg-rose-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                 {cartCount}
               </span>
             )}

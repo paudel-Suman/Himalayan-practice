@@ -36,7 +36,7 @@ const Header = () => {
   return (
     <div className="bg-white relative">
       <TopInfo />
-      <nav className="max-w-7xl mx-auto p-2 flex justify-between items-center">
+      <nav className="max-w-7xl mx-auto py-2 flex justify-between items-center">
         {company && (
           <Link href="/" className="md:hidden block">
             <Image
@@ -51,7 +51,7 @@ const Header = () => {
 
         <form onSubmit={handleSubmit}>
           <input
-            className="border border-zinc-400 rounded-full p-2 text-sm lg:w-[350px] md:w-[200px] w-[150px] focus:border-blue-500 outline-none"
+            className="border border-zinc-400 rounded-md p-2 text-sm lg:w-[350px] md:w-[200px] w-[150px] focus:border-blue-500 outline-none"
             type="text"
             placeholder="Search"
             value={searchTerm}
@@ -66,7 +66,7 @@ const Header = () => {
                 alt="logo"
                 width={1000}
                 height={1000}
-                className="object-contain h-[3em]"
+                className="object-contain h-[3em] w-fit"
               />
             </Link>
           </figure>
@@ -74,7 +74,7 @@ const Header = () => {
 
         <div className="md:flex hidden items-center gap-8">
           {navlinks.map((item, index) => (
-            <Link href={item.path} key={index} className="font-medium">
+            <Link href={item.path} key={index} className="font-medium text-sm">
               {item.title}
             </Link>
           ))}

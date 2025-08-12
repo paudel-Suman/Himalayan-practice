@@ -408,7 +408,7 @@ const CheckoutPage = () => {
                     <Loader className="animate-spin" />
                   </p>
                 ) : shippingAddress.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-4 my-10">
+                  <div className="grid md:grid-cols-2 gap-4 my-10">
                     {shippingAddress
                       .slice()
                       .reverse()

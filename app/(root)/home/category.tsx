@@ -16,19 +16,20 @@ const Category = ({ category }: { category: categoryType[] }) => {
             key={index}
             className="relative group cursor-pointer"
           >
-            <div className="sm:w-[15em] absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-md" />
-            <figure className="rounded-md">
+            {/* <div className="sm:w-[15em] absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-md" /> */}
+            <figure className="rounded-md overflow-hidden brightess-50 border shadow-sm">
               <Image
                 src={item?.image}
                 alt={item.name}
                 width={1000}
                 height={1000}
-                className="sm:h-[10em] h-[8em] sm:w-[15em] object-cover rounded-md group-hover:border-2 group-hover:border-red-600 group-hover:sclae-125 ease-in-out duration-200"
+                className="sm:h-[10em] h-[8em] sm:w-[12em] object-contain  rounded-md   group-hover:scale-125 ease-in-out duration-200"
               />
             </figure>
-            <div className="absolute left-4 bottom-4 text-white">
-              <h2>{item.name}</h2>
-            </div>
+
+            <h2 className="text-center font-medium text-xs text-lighttext mt-4">
+              {item.name}
+            </h2>
           </Link>
         ))}
       </div>
