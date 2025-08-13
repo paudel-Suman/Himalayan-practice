@@ -201,7 +201,7 @@ const ProductDetailPage = ({
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-primarymain font-semibold text-3xl">${price}</p>
+            <p className="text-green-600 font-semibold text-3xl">${price}</p>
           </div>
 
           {/* product colors */}

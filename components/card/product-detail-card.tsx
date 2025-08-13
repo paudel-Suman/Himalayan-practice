@@ -35,17 +35,16 @@ const ProductDetailCard = ({ products }: { products: producttype }) => {
           </p>
           <div className="flex items-center gap-2">
             <div className="flex">
-              {[...Array(rating || 4)].map((_, i) => (
+              {[...Array(rating || 5)].map((_, i) => (
                 <Star
                   key={i}
                   className="h-5 w-5 fill-yellow-500 text-yellow-500"
                 />
               ))}
-              <Star className="h-5 w-5 text-gray-300" />
             </div>
           </div>
           <div className="flex items-center gap-2 text-zinc-400">
-            <p className="text-xl font-semibold text-red-500">${price}</p>
+            <p className="text-xl font-semibold text-green-600">$ {price}</p>
           </div>
         </div>
       </Link>

@@ -53,7 +53,7 @@ const Hero = ({ banner }: { banner: bannerType[] }) => {
                     {item.description}
                   </p>
                   <Link href={item.buttonLink} target="_blank">
-                    <Button className="bg-primarymain">
+                    <Button className="bg-green-700">
                       {item.buttonText}
                     </Button>
                   </Link>
