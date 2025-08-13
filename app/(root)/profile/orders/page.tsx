@@ -5,9 +5,17 @@ import { useMyContext } from "../../context/store";
 import { Order } from "@/types/order";
 import SpinLoader from "@/app/spin-loader";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import moment from "moment";
 
 const OrderPage = () => {
   const { store } = useMyContext();
@@ -79,106 +87,59 @@ const OrderPage = () => {
     <main>
       {order.length > 0 ? (
         <section>
-          <h2 className="text-xl font-semibold">Ordered Products</h2>
-          <div className="grid lg:grid-cols-2 gap-8 my-8">
-            {order.map((prod, index) => (
-              <div
-                key={index}
-                className="space-y-4  rounded-xl shadow-sm  hover:shadow-md transition border border-gray-200 bg-white p-5 gap-4"
-              >
-                {prod?.items?.map((item) => (
-                  <div
-                    key={item.id}
-                    className="grid sm:grid-cols-2 items-center gap-6  "
-                  >
-                    <Image
-                      src={item.product.featureImage}
-                      alt={item.product.name}
-                      width={140}
-                      height={140}
-                      className="rounded-xl border object-cover w-full h-[13em]"
-                    />
+          <h2 className="text-xl font-semibold text-center mb-6 mt-4">
+            Ordered Products
+          </h2>
 
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-800 mb-1">
-                        {item.product.name}
-                      </h3>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Order Status</TableHead>
+                <TableHead>Payment Method</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Is Cancelled</TableHead>
+                <TableHead>Created Date</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {order.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.id.slice(-5).toUpperCase()}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={item.status} />
+                  </TableCell>
+                  <TableCell>
+                    {item.shippingMethod === "CASH ON DELIVERY" ? (
+                      <Badge className="bg-blue-500">Cash on Delivery</Badge>
+                    ) : (
+                      <Badge className="bg-orange-500">Online Payment</Badge>
+                    )}
+                  </TableCell>
 
-                      <section className="space-y-2 my-2">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span className="font-medium text-gray-800">
-                            Sizes:
-                          </span>
+                  <TableCell>Rs.{item.totalAmount}</TableCell>
 
-                          <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs border border-blue-100">
-                            {item.size.name}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <span className="font-medium text-gray-800">
-                            Colors:
-                          </span>
-
-                          <span
-                            className="w-5 h-5 rounded-full border shadow-sm"
-                            style={{
-                              backgroundColor: item.color.hex,
-                            }}
-                          ></span>
-                        </div>
-
-                        {/* Pricing & Quantity */}
-                        <div className=" space-y-1 text-sm text-gray-700">
-                          <p className="flex items-center gap-2">
-                            <span className="font-medium text-gray-800">
-                              Quantity:
-                            </span>
-                            <span>{item.quantity}</span>
-                          </p>
-                          <p className="flex items-center gap-2">
-                            <span className="font-medium text-gray-800">
-                              Price:
-                            </span>
-                            <span className="text-green-600 font-semibold">
-                              $ {item.price}
-                            </span>
-                          </p>
-                        </div>
-                      </section>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="grid sm:grid-cols-3 sm:space-y-0 space-y-4 items-center">
-                  <p className="text-sm font-medium">
-                    OrderId :{" "}
-                    <Badge className="bg-blue-500 uppercase">
-                      {prod.id.slice(-5)}
-                    </Badge>
-                  </p>
-                  <p className="text-sm font-medium">
-                    Cancelled :{" "}
-                    {prod.isCancelled ? (
+                  <TableCell>
+                    {item.isCancelled ? (
                       <Badge className="bg-green-500">Yes</Badge>
                     ) : (
                       <Badge className="bg-red-500">No</Badge>
                     )}
-                  </p>
-
-                  <p className="text-sm font-medium">
-                    Status : <StatusBadge status={prod.status} />
-                  </p>
-                </div>
-
-                <Link href={`/profile/orders/${prod.id}`}>
-                  <Button className="w-full bg-primarymain">
-                    View All Details
-                  </Button>
-                </Link>
-              </div>
-            ))}
-          </div>
+                  </TableCell>
+                  <TableCell>
+                    {moment(item.placedAt).format("MMMM Do YYYY")}
+                  </TableCell>
+                  <TableCell className="flex justify-center">
+                    {" "}
+                    <Link href={`/profile/orders/${item.id}`}>
+                      <Button className="w-fit mx-auto py-5 ">View  Details</Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </section>
       ) : (
         <div className="flex justify-center items-center h-[60vh]">
