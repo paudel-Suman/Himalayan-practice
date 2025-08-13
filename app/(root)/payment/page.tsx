@@ -4,7 +4,7 @@ import { useMyContext } from "../context/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { Cart } from "@/types/cart";
-import {  Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -168,7 +168,9 @@ const PaymentPage = () => {
   const { subtotal, discount, deliveryFee, total } = calculateTotals();
   return (
     <main className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <section className="grid lg:grid-cols-8 gap-6">
+      <h2 className="text-center font-semibold text-xl">Choose Payment</h2>
+
+      <section className="grid lg:grid-cols-8 gap-6 my-8">
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-lg border">
           {loading ? (
             <p className="  h-[10em] flex justify-center items-center">
@@ -310,8 +312,6 @@ const PaymentPage = () => {
               </span>
             </div>
           </div>
-
-      
 
           <Link href={`/cart`}>
             <Button className="mt-4 w-full bg-green-500 py-6 rounded-md">
