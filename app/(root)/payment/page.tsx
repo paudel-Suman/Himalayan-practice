@@ -150,7 +150,7 @@ const PaymentPage = () => {
         ...prev,
         cart: [],
       }));
-      localStorage.setItem("katunje-cart", JSON.stringify([]));
+      localStorage.setItem("himalayan-cart", JSON.stringify([]));
 
       router.push(`/profile/orders`);
     } catch (error) {
