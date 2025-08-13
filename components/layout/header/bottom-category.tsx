@@ -55,8 +55,8 @@ const BottomCategory = () => {
   }, []);
 
   return (
-    <div className="bg-primarymain min-h-8 p-3 text-white">
-      <div className="max-w-7xl mx-auto flex justify-between gap-6">
+    <div className="bg-primarymain min-h-8 py-3 text-white">
+      <div className="max-w-7xl xl:mx-auto mx-4 flex justify-between gap-6">
         <div className="md:flex hidden gap-6">
           {category.map((item) => (
             <div key={item.id}>
@@ -74,7 +74,7 @@ const BottomCategory = () => {
           <Icon icon="quill:hamburger" width="32" height="32" />
         </div>
 
-        <div className="flex items-center md:gap-6 gap-2">
+        <div className="flex items-center md:gap-6 gap-4">
           <Link href="/cart" className="relative">
             <Icon icon="mdi:cart" width="24" height="24" />
             {cartCount > 0 && (

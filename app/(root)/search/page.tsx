@@ -56,7 +56,7 @@ const SearchLayout = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <main className="max-w-7xl lg:mx-auto mx-2 my-8 min-h-screen">
+    <main className="max-w-7xl xl:mx-auto mx-4 my-8 min-h-screen">
       <SearchPage product={product} sortBy={sortBy} categoryId={categoryId} />
     </main>
   );

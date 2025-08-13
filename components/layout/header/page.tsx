@@ -36,7 +36,7 @@ const Header = () => {
   return (
     <div className="bg-white relative">
       <TopInfo />
-      <nav className="max-w-7xl mx-auto py-2 flex justify-between items-center">
+      <nav className="max-w-7xl xl:mx-auto mx-4 py-2 flex justify-between items-center">
         {company && (
           <Link href="/" className="md:hidden block">
             <Image
