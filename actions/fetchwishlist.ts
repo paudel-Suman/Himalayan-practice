@@ -13,13 +13,18 @@ export async function getWishlist(token: string): Promise<wishlistType[]> {
     );
 
     if (!res.ok) {
-      throw new Error("Failed to fetch blog posts");
+      throw new Error("Failed to fetch wishlist");
     }
 
     const data = await res.json();
-    return data.data.wishlists || [];
+
+    const activeWishlists = (data.data.wishlists || []).filter(
+      (wishlist: wishlistType) => wishlist.isActive === true
+    );
+
+    return activeWishlists;
   } catch (error) {
-    console.error("Error fetching blog posts:", error);
+    console.error("Error fetching wishlist:", error);
     return [];
   }
 }

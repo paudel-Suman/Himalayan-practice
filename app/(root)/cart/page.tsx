@@ -8,7 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, Minus, Plus, Trash2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
 
 const CartPage = () => {
   const { store, setStore } = useMyContext();
@@ -17,8 +16,7 @@ const CartPage = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponDiscount, setCoupounDiscount] = useState(0);
   const [discounrRate, setDiscountRate] = useState(0);
-  const router = useRouter();
-  const pathname = usePathname();
+
 
   // Increase quantity
   const increaseQuantity = (
@@ -47,7 +45,7 @@ const CartPage = () => {
     });
     setCart(updatedCart);
     setStore({ ...store, cart: updatedCart });
-    localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
   };
 
   // Decrease quantity
@@ -76,12 +74,16 @@ const CartPage = () => {
 
     setCart(updatedCart);
     setStore({ ...store, cart: updatedCart });
-    localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
   };
 
   useEffect(() => {
     const fetchUserCart = async () => {
       try {
+        if (!store?.auth?.token) {
+          setCart([]);
+          return;
+        }
         setLoading(true);
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_API}/cart/fetch-user-cart`,
@@ -94,6 +96,14 @@ const CartPage = () => {
         );
 
         const data = await res.json();
+        const updatedCart = data?.cart?.items || [];
+
+        setStore((prev: any) => ({
+          ...prev,
+          cart: updatedCart,
+        }));
+
+        localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
         if (!res.ok) {
           if (data?.cart === null) {
             setCart([]);
@@ -109,12 +119,9 @@ const CartPage = () => {
       }
     };
     fetchUserCart();
-  }, []);
+  }, [store?.auth?.token]); 
 
-  if (!store.auth.token) {
-    router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
-    return;
-  }
+
   const handleDelete = async (cartId: string) => {
     const previousCart = [...cart];
     const updatedCart = cart.filter((item) => item.id !== cartId);
@@ -124,7 +131,7 @@ const CartPage = () => {
       ...prev,
       cart: updatedCart,
     }));
-    localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
 
     try {
       const res = await fetch(
@@ -153,7 +160,7 @@ const CartPage = () => {
         ...prev,
         cart: previousCart,
       }));
-      localStorage.setItem("katunje-cart", JSON.stringify(previousCart));
+      localStorage.setItem("himalayan-cart", JSON.stringify(previousCart));
 
       toast.error("Failed to delete item from cart");
     }

@@ -7,10 +7,17 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
 import { useMyContext } from "@/app/(root)/context/store";
+import { wishlistType } from "@/types/wishlist";
 
-const WishlistCard = ({ products }: { products: producttype }) => {
+const WishlistCard = ({
+  products,
+  setWishlist,
+}: {
+  products: producttype;
+  setWishlist: React.Dispatch<React.SetStateAction<wishlistType[]>>;
+}) => {
   const { featureImage, name, rating, price, slug } = products;
-  const { store } = useMyContext();
+  const { store, setStore } = useMyContext();
   const [wishlisted, setWishlisted] = useState(false);
   console.log(wishlisted);
 
@@ -31,11 +38,40 @@ const WishlistCard = ({ products }: { products: producttype }) => {
       );
 
       const result = await response.json();
+
       setWishlisted(result.wishlist.isActive);
+
+      const updatedWishlistRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/fetch-all-wishlist`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+        }
+      );
+
+      if (updatedWishlistRes.ok) {
+        const wishlistData = await updatedWishlistRes.json();
+        const activeWishlists = (wishlistData?.data?.wishlists || []).filter(
+          (wishlist: wishlistType) => wishlist.isActive === true
+        );
+
+        setStore((prev: any) => ({
+          ...prev,
+          wishlist: activeWishlists,
+        }));
+        setWishlist(activeWishlists);
+
+        localStorage.setItem(
+          "himalayan-wishlist",
+          JSON.stringify(activeWishlists)
+        );
+      }
 
       if (!response.ok) throw new Error(result.message || "Failed to update");
 
-      toast.success("Wishlist updated successfully.");
+      toast.success("Product Removed Successfully.");
     } catch (error) {
       console.error("Error toggling wishlist:", error);
       toast.error("Something went wrong. Please try again.");
@@ -64,7 +100,7 @@ const WishlistCard = ({ products }: { products: producttype }) => {
               e.preventDefault();
               addToWishlist(products);
             }}
-            className={`h-9 w-9 rounded-full cursor-pointer shadow-md transition-colors bg-rose-600 text-white`}
+            className={`h-9 w-9 rounded-full cursor-pointer shadow-md  bg-rose-600 hover:bg-rose-600 hover:scale-125 ease-in-out duration-200 text-white`}
           >
             <Heart className="h-4 w-4" />
             <span className="sr-only">Add to wishlist</span>

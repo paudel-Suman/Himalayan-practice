@@ -42,7 +42,7 @@ const CartProfilePage = () => {
     });
     setCart(updatedCart);
     setStore({ ...store, cart: updatedCart });
-    localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
   };
 
   // Decrease quantity
@@ -71,12 +71,16 @@ const CartProfilePage = () => {
 
     setCart(updatedCart);
     setStore({ ...store, cart: updatedCart });
-    localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
   };
 
   useEffect(() => {
     const fetchUserCart = async () => {
       try {
+        if (!store?.auth?.token) {
+          setCart([]);
+          return;
+        }
         setLoading(true);
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_API}/cart/fetch-user-cart`,
@@ -89,6 +93,14 @@ const CartProfilePage = () => {
         );
 
         const data = await res.json();
+        const updatedCart = data?.cart?.items || [];
+
+        setStore((prev: any) => ({
+          ...prev,
+          cart: updatedCart,
+        }));
+
+        localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
         if (!res.ok) {
           if (data?.cart === null) {
             setCart([]);
@@ -104,17 +116,28 @@ const CartProfilePage = () => {
       }
     };
     fetchUserCart();
-  }, []);
+  }, [store?.auth?.token]);
+
   const handleDelete = async (cartId: string) => {
     const previousCart = [...cart];
     const updatedCart = cart.filter((item) => item.id !== cartId);
+
     setCart(updatedCart);
+    setStore((prev: any) => ({
+      ...prev,
+      cart: updatedCart,
+    }));
+    localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
 
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/cart/delete-cart-item/${cartId}`,
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
         }
       );
 
@@ -127,7 +150,14 @@ const CartProfilePage = () => {
       toast.success("Item removed from cart");
     } catch (error) {
       console.error("Error deleting cart item:", error);
+
       setCart(previousCart);
+      setStore((prev: any) => ({
+        ...prev,
+        cart: previousCart,
+      }));
+      localStorage.setItem("himalayan-cart", JSON.stringify(previousCart));
+
       toast.error("Failed to delete item from cart");
     }
   };
@@ -139,9 +169,7 @@ const CartProfilePage = () => {
       <section>
         {cart.length > 0 ? (
           <section>
-            <h2 className="text-xl font-semibold text-center my-4">
-              My Cart
-            </h2>
+            <h2 className="text-xl font-semibold text-center my-4">My Cart</h2>
             <div className="p-4">
               <div className="space-y-4 ">
                 {cart.map((item: Cart) => (
@@ -227,8 +255,7 @@ const CartProfilePage = () => {
                     </div>
                     <div className="sm:col-span-2 col-span-full flex sm:flex-col sm:mt-0 mt-4 items-end justify-between">
                       <h3 className="font-bold text-xl text-green-600">
-                        $
-                        {(item.product.price * item.quantity).toFixed(2)}
+                        ${(item.product.price * item.quantity).toFixed(2)}
                       </h3>
                       <div className="flex items-center gap-2">
                         <Link href={`/product/${item.product.slug}`}>
