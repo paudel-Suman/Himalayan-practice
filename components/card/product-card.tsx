@@ -6,21 +6,30 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
-import { redirect, usePathname } from "next/navigation";
 import { useMyContext } from "@/app/(root)/context/store";
+import { wishlistType } from "@/types/wishlist";
+import { AnimatePresence } from "framer-motion";
+import LoginPoupup from "@/app/(root)/product/login-popup";
 
 const ProductCard = ({ products }: { products: producttype }) => {
   const { featureImage, name, rating, price, slug } = products;
-  const pathname = usePathname();
-  const { store } = useMyContext();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const { store, setStore } = useMyContext();
   const [wishlisted, setWishlisted] = useState(false);
 
   const addToWishlist = async (data: producttype) => {
     if (!store.auth.token) {
-      toast.error("Please login to add product to wishlist.");
-      redirect(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      const pendingItem = {
+        productId: data.id,
+      };
+      localStorage.setItem("pendingWishItem", JSON.stringify(pendingItem));
+      setShowLoginPrompt(true);
+      return;
     }
-
+    if (!store.auth.token) {
+      setShowLoginPrompt(true);
+      return;
+    }
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/add-wishlist`,
@@ -39,6 +48,33 @@ const ProductCard = ({ products }: { products: producttype }) => {
       const result = await response.json();
       setWishlisted(result.wishlist.isActive);
 
+      const updatedWishlistRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/fetch-all-wishlist`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+        }
+      );
+
+      if (updatedWishlistRes.ok) {
+        const wishlistData = await updatedWishlistRes.json();
+        const activeWishlists = (wishlistData?.data?.wishlists || []).filter(
+          (wishlist: wishlistType) => wishlist.isActive === true
+        );
+
+        setStore((prev: any) => ({
+          ...prev,
+          wishlist: activeWishlists,
+        }));
+
+        localStorage.setItem(
+          "himalayan-wishlist",
+          JSON.stringify(activeWishlists)
+        );
+      }
+
       if (!response.ok) throw new Error(result.message || "Failed to update");
 
       toast.success("Wishlist updated successfully.");
@@ -49,62 +85,73 @@ const ProductCard = ({ products }: { products: producttype }) => {
   };
 
   return (
-    <Link href={`/product/${slug}`}>
-      <div className="bg-white relative border border-black/10 md:shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
-        <figure className="overflow-hidden rounded-md">
-          {featureImage && (
-            <Image
-              src={featureImage}
-              alt={name}
-              width={1000}
-              height={1000}
-              priority
-              className="md:h-[20em] h-[10em] object-cover group-hover:scale-110 ease-in-out duration-300"
-            />
-          )}
-        </figure>
+    <div className="">
+      <Link href={`/product/${slug}`}>
+        <div className="bg-white relative border border-black/10 md:shadow-sm rounded-md p-2 group hover:bg-zinc-100 hover:border-primarymain/50">
+          <figure className="overflow-hidden rounded-md">
+            {featureImage && (
+              <Image
+                src={featureImage}
+                alt={name}
+                width={1000}
+                height={1000}
+                priority
+                className="md:h-[20em] h-[10em] object-cover group-hover:scale-110 ease-in-out duration-300"
+              />
+            )}
+          </figure>
 
-        <div className="absolute top-4 right-4 hidden group-hover:block opacity-0 group-hover:opacity-100 ease-in-out duration-300">
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={(e) => {
-              e.preventDefault();
-              addToWishlist(products);
-            }}
-            className={`h-9 w-9 rounded-full cursor-pointer shadow-md transition-colors
+          <div className="absolute top-4 right-4 hidden group-hover:block opacity-0 group-hover:opacity-100 ease-in-out duration-300">
+            <Button
+              size="icon"
+              variant="secondary"
+              onClick={(e) => {
+                e.preventDefault();
+                addToWishlist(products);
+              }}
+              className={`h-9 w-9 rounded-full cursor-pointer shadow-md transition-colors
     ${
       wishlisted
         ? "bg-rose-600 text-white"
         : "bg-white text-black hover:bg-rose-600 hover:text-white"
     }
   `} // onClick={(e) => {
-            //   e.preventDefault();
-            //   addToWishlist(product);
-            // }}
-          >
-            <Heart className="h-4 w-4" />
-            <span className="sr-only">Add to wishlist</span>
-          </Button>
-        </div>
+              //   e.preventDefault();
+              //   addToWishlist(product);
+              // }}
+            >
+              <Heart className="h-4 w-4" />
+              <span className="sr-only">Add to wishlist</span>
+            </Button>
+          </div>
 
-        {/* product descriptions */}
-        <div className="p-2 space-y-2">
-          <h2 className="md:font-semibold font-medium text-base line-clamp-1 ">{name}</h2>
-          <div className="flex items-center gap-2">
-            <h2 className="font-semibold text-green-600 text-lg">${price}</h2>
-          </div>
-          <div className="flex items-center gap-1">
-            {[...Array(rating || 5)].map((_, i) => (
-              <Star
-                key={i}
-                className="h-4 w-4 fill-yellow-500 text-yellow-500"
-              />
-            ))}
+          {/* product descriptions */}
+          <div className="p-2 space-y-2">
+            <h2 className="md:font-semibold font-medium text-base line-clamp-1 ">
+              {name}
+            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-semibold text-green-600 text-lg">${price}</h2>
+            </div>
+            <div className="flex items-center gap-1">
+              {[...Array(rating || 5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-4 w-4 fill-yellow-500 text-yellow-500"
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+
+      {/* login popup dialog */}
+        <AnimatePresence>
+          {showLoginPrompt && (
+            <LoginPoupup onClose={() => setShowLoginPrompt(false)} />
+          )}
+        </AnimatePresence>
+    </div>
   );
 };
 

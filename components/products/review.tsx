@@ -8,10 +8,14 @@ import moment from "moment";
 import { useMyContext } from "@/app/(root)/context/store";
 import { reviewType } from "@/types/review";
 import Loading from "@/app/loading";
+import { AnimatePresence } from "framer-motion";
+import ReviewLoginPopup from "@/app/(root)/product/review-login-popup";
 
 const Review = ({ productId }: { productId: string }) => {
   const [productReview, setProductReview] = useState<reviewType[] | null>(null);
   const { store } = useMyContext();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
   console.log(productId);
   const [formData, setFormData] = useState({
     comment: "",
@@ -42,8 +46,24 @@ const Review = ({ productId }: { productId: string }) => {
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    if (!store.auth.token) {
+      const pendingItem = {
+        comment: formData.comment,
+        rating: formData.rating,
+        productId: formData.productId,
+      };
+      localStorage.setItem("pendingReviewItem", JSON.stringify(pendingItem));
+      setShowLoginPrompt(true);
+      return;
+    }
+
+    if (!store.auth.token) {
+      setShowLoginPrompt(true);
+      return;
+    }
     try {
+      setIsLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/review/add-review`,
         {
@@ -98,6 +118,35 @@ const Review = ({ productId }: { productId: string }) => {
 
   useEffect(() => {
     fetchReview();
+  }, [productId]);
+
+  //listen for window dispatch events and re trigger the function
+  useEffect(() => {
+    const handleReviewSubmitted = () => {
+      fetchReview();
+    };
+
+    window.addEventListener("review-submitted", handleReviewSubmitted);
+
+    return () => {
+      window.removeEventListener("review-submitted", handleReviewSubmitted);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClearForm = () => {
+      setFormData({
+        comment: "",
+        rating: 0,
+        productId: productId,
+      });
+    };
+
+    window.addEventListener("clear-review-form", handleClearForm);
+
+    return () => {
+      window.removeEventListener("clear-review-form", handleClearForm);
+    };
   }, [productId]);
 
   if (!productReview) return <Loading />;
@@ -208,6 +257,13 @@ const Review = ({ productId }: { productId: string }) => {
           </form>
         </div>
       </div>
+
+      {/* login popup dialog */}
+      <AnimatePresence>
+        {showLoginPrompt && (
+          <ReviewLoginPopup onClose={() => setShowLoginPrompt(false)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 };

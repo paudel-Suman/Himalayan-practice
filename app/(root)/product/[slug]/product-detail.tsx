@@ -8,7 +8,9 @@ import { Heart, Loader, Minus, Plus, ShoppingBag } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useMyContext } from "../../context/store";
-import { redirect, usePathname } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
+import LoginPoupup from "../login-popup";
+import { wishlistType } from "@/types/wishlist";
 
 const ProductDetailPage = ({
   productdetails,
@@ -16,7 +18,7 @@ const ProductDetailPage = ({
   productdetails: producttype;
 }) => {
   const { store, setStore } = useMyContext();
-  const pathname = usePathname();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
   const firstAttribute = productdetails.productAttributes[0];
   const firstColor = firstAttribute?.colorIds[0]?.productColor;
@@ -32,6 +34,9 @@ const ProductDetailPage = ({
   const [selectedColorName, setSelectedColorName] = useState(
     firstColor?.name?.trim() || "Unknown"
   );
+  const [wishlisted, setWishlisted] = useState(false);
+  console.log(wishlisted);
+
   const [quantity, setQuantity] = useState(1);
   const {
     name,
@@ -45,7 +50,6 @@ const ProductDetailPage = ({
     isActive,
   } = productdetails;
   const availableStock = stock.quantity;
-  console.log(availableStock);
 
   // Ensure a color is selected by default on mount
   useEffect(() => {
@@ -120,8 +124,20 @@ const ProductDetailPage = ({
     };
 
     if (!store.auth.token) {
-      toast.error("Please login to add to Cart.");
-      redirect(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      const pendingItem = {
+        sizeId: selectedSize,
+        colorId: selectedColorId,
+        quantity: quantity,
+        productId: item.id,
+        total: item.price,
+      };
+      localStorage.setItem("pendingCartItem", JSON.stringify(pendingItem));
+      setShowLoginPrompt(true);
+      return;
+    }
+
+    if (!store.auth.token) {
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -163,7 +179,7 @@ const ProductDetailPage = ({
         cart: updatedCart,
       }));
 
-      localStorage.setItem("katunje-cart", JSON.stringify(updatedCart));
+      localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
 
       toast.success("Item added to cart successfully!");
     } catch (error: unknown) {
@@ -175,6 +191,74 @@ const ProductDetailPage = ({
       toast.error(errorMessage);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const addToWishlist = async (data: producttype) => {
+    if (!store.auth.token) {
+      const pendingItem = {
+        productId: data.id,
+      };
+      localStorage.setItem("pendingWishItem", JSON.stringify(pendingItem));
+      setShowLoginPrompt(true);
+      return;
+    }
+    if (!store.auth.token) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/add-wishlist`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+          body: JSON.stringify({
+            productId: data.id,
+          }),
+        }
+      );
+
+      const result = await response.json();
+      setWishlisted(result.wishlist.isActive);
+
+      const updatedWishlistRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/fetch-all-wishlist`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+        }
+      );
+
+      if (updatedWishlistRes.ok) {
+        const wishlistData = await updatedWishlistRes.json();
+        const activeWishlists = (wishlistData?.data?.wishlists || []).filter(
+          (wishlist: wishlistType) => wishlist.isActive === true
+        );
+
+        setStore((prev: any) => ({
+          ...prev,
+          wishlist: activeWishlists,
+        }));
+
+        localStorage.setItem(
+          "himalayan-wishlist",
+          JSON.stringify(activeWishlists)
+        );
+      }
+
+      if (!response.ok) throw new Error(result.message || "Failed to update");
+
+      toast.success("Wishlist updated successfully.");
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -310,6 +394,10 @@ const ProductDetailPage = ({
                 </Button>
 
                 <div
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToWishlist(productdetails);
+                  }}
                   className={`bg-red-600 text-white rounded-full p-2 w-fit`}
                 >
                   <Heart className="h-4 w-4" />
@@ -332,6 +420,12 @@ const ProductDetailPage = ({
 
       {/* review and description componenet */}
       <ChipTabs description={description} productId={id} />
+
+      <AnimatePresence>
+        {showLoginPrompt && (
+          <LoginPoupup onClose={() => setShowLoginPrompt(false)} />
+        )}
+      </AnimatePresence>
     </main>
   );
 };
