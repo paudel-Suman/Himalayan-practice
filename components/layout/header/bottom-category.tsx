@@ -27,10 +27,9 @@ import { getCategory } from "@/actions/fetchapi";
 import { categoryType } from "@/types/category";
 
 const BottomCategory = () => {
-  const { store, logout } = useMyContext();
+  const { store, logout, cartCount, wishlistCount } = useMyContext();
   const [isOpen, setIsOpen] = useState(false);
   const currentRoute = usePathname();
-  const { cartCount } = useMyContext(); 
 
   useEffect(() => {
     setIsOpen(false);
@@ -84,8 +83,13 @@ const BottomCategory = () => {
             )}
           </Link>
 
-          <Link href="/profile/wishlist">
+          <Link href="/wishlist" className="relative">
             <Icon icon="ri:heart-fill" width="24" height="24" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-2 -right-4 bg-rose-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -103,19 +107,25 @@ const BottomCategory = () => {
               {store.auth.token ? (
                 <div>
                   <DropdownMenuItem>
-                    <Link href="/profile" className="w-full">Profile</Link>
+                    <Link href="/profile" className="w-full">
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button onClick={handleLogout}>Logout</button>
+                  <DropdownMenuItem onClick={handleLogout} className="w-full">
+                    <button>Logout</button>
                   </DropdownMenuItem>
                 </div>
               ) : (
                 <div>
                   <DropdownMenuItem>
-                    <Link href="/login" className="w-full">Login</Link>
+                    <Link href="/login" className="w-full">
+                      Login
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/register" className="w-full">Register</Link>{" "}
+                    <Link href="/register" className="w-full">
+                      Register
+                    </Link>{" "}
                   </DropdownMenuItem>
                 </div>
               )}
