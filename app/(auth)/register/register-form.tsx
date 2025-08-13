@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
@@ -11,6 +11,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Icon } from "@iconify/react";
 import { toast } from "react-hot-toast";
+import { useMyContext } from "@/app/(root)/context/store";
 // import { API_ROUTES } from "@/constants/apiRoutes";
 // import { RegionService } from "@/services/region/regionService";
 // import { showError } from "@/lib/toastHelper";
@@ -18,6 +19,7 @@ import { toast } from "react-hot-toast";
 
 export default function RegisterForm() {
   const router = useRouter();
+  const { store, setStore } = useMyContext();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -28,7 +30,6 @@ export default function RegisterForm() {
     confirmPassword: "",
   });
 
-  
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -82,6 +83,119 @@ export default function RegisterForm() {
     setErrors(newErrors);
     return valid;
   };
+  //add to cart from localstorage if there is any data in cart
+  useEffect(() => {
+    const addPendingItemToCart = async () => {
+      const pendingItem = localStorage.getItem("pendingCartItem");
+
+      if (pendingItem && store?.auth?.token) {
+        const parsedItem = JSON.parse(pendingItem);
+
+        try {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/cart/add-to-cart/create`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store.auth.token}`,
+              },
+              body: JSON.stringify({
+                sizeId: parsedItem.sizeId,
+                colorId: parsedItem.colorId,
+                quantity: parsedItem.quantity,
+                productId: parsedItem.productId,
+                total: parsedItem.total,
+              }),
+            }
+          );
+
+          localStorage.removeItem("pendingCartItem");
+
+          const updatedCartRes = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/cart/fetch-user-cart`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store?.auth?.token}`,
+              },
+            }
+          );
+
+          const cartData = await updatedCartRes.json();
+          const updatedCart = cartData?.cart?.items || [];
+
+          setStore((prev: any) => ({
+            ...prev,
+            cart: updatedCart,
+          }));
+
+          localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
+
+          router.push("/profile/cart");
+        } catch (error) {
+          console.error("Error adding pending cart item:", error);
+        }
+      }
+    };
+
+    addPendingItemToCart();
+  }, [store?.auth?.token]);
+
+  //add to wishlist from localstorage if there is any data in wishlist
+  useEffect(() => {
+    const addPendingItemToWish = async () => {
+      const pendingItem = localStorage.getItem("pendingWishItem");
+
+      if (pendingItem && store?.auth?.token) {
+        const parsedItem = JSON.parse(pendingItem);
+
+        try {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/add-wishlist`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store.auth.token}`,
+              },
+              body: JSON.stringify({
+                productId: parsedItem.productId,
+              }),
+            }
+          );
+
+          localStorage.removeItem("pendingWishItem");
+
+          const updatedWishRes = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/fetch-all-wishlist`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store?.auth?.token}`,
+              },
+            }
+          );
+
+          const wishData = await updatedWishRes.json();
+          const updatedWish = wishData?.data?.wishlists || [];
+
+          setStore((prev: any) => ({
+            ...prev,
+            cart: updatedWish,
+          }));
+
+          localStorage.setItem("himalayan-wishlist", JSON.stringify(updatedWish));
+
+          router.push("/profile/wishlist");
+        } catch (error) {
+          console.error("Error adding pending wishlist item:", error);
+        }
+      }
+    };
+
+    addPendingItemToWish();
+  }, [store?.auth?.token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

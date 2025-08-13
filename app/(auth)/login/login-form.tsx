@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,10 @@ import { Icon } from "@iconify/react";
 import { toast } from "react-hot-toast";
 import { useMyContext } from "@/app/(root)/context/store";
 import { useRouter, useSearchParams } from "next/navigation";
+import { API_ROUTES } from "@/constants/apiRoute";
 
 export default function LoginForm() {
-  const { login } = useMyContext();
+  const { store, setStore, login } = useMyContext();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -57,6 +58,123 @@ export default function LoginForm() {
     setErrors(newErrors);
     return valid;
   };
+
+  //add to cart from localstorage if there is any data in cart
+  useEffect(() => {
+    const addPendingItemToCart = async () => {
+      const pendingItem = localStorage.getItem("pendingCartItem");
+
+      if (pendingItem && store?.auth?.token) {
+        const parsedItem = JSON.parse(pendingItem);
+
+        try {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/cart/add-to-cart/create`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store.auth.token}`,
+              },
+              body: JSON.stringify({
+                sizeId: parsedItem.sizeId,
+                colorId: parsedItem.colorId,
+                quantity: parsedItem.quantity,
+                productId: parsedItem.productId,
+                total: parsedItem.total,
+              }),
+            }
+          );
+
+          localStorage.removeItem("pendingCartItem");
+
+          const updatedCartRes = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/cart/fetch-user-cart`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store?.auth?.token}`,
+              },
+            }
+          );
+
+          const cartData = await updatedCartRes.json();
+          const updatedCart = cartData?.cart?.items || [];
+
+          setStore((prev: any) => ({
+            ...prev,
+            cart: updatedCart,
+          }));
+
+          localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
+
+          router.push("/profile/cart");
+        } catch (error) {
+          console.error("Error adding pending cart item:", error);
+        }
+      }
+    };
+
+    addPendingItemToCart();
+  }, [store?.auth?.token]);
+
+  //add to wishlist from localstorage if there is any data in wishlist
+  useEffect(() => {
+    const addPendingItemToWish = async () => {
+      const pendingItem = localStorage.getItem("pendingWishItem");
+
+      if (pendingItem && store?.auth?.token) {
+        const parsedItem = JSON.parse(pendingItem);
+
+        try {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/add-wishlist`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store.auth.token}`,
+              },
+              body: JSON.stringify({
+                productId: parsedItem.productId,
+              }),
+            }
+          );
+
+          localStorage.removeItem("pendingWishItem");
+
+          const updatedWishRes = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/fetch-all-wishlist`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${store?.auth?.token}`,
+              },
+            }
+          );
+
+          const wishData = await updatedWishRes.json();
+          const updatedWish = wishData?.data?.wishlists || [];
+
+          setStore((prev: any) => ({
+            ...prev,
+            cart: updatedWish,
+          }));
+
+          localStorage.setItem(
+            "himalayan-wishlist",
+            JSON.stringify(updatedWish)
+          );
+
+          router.push("/profile/wishlist");
+        } catch (error) {
+          console.error("Error adding pending wishlist item:", error);
+        }
+      }
+    };
+
+    addPendingItemToWish();
+  }, [store?.auth?.token]);
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -104,20 +222,57 @@ export default function LoginForm() {
         toast.success("Login successful");
         router.push(callbackUrl);
       }
+      const updatedCartRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/cart/fetch-user-cart`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+        }
+      );
+
+      const cartData = await updatedCartRes.json();
+      const updatedCart = cartData?.cart?.items || [];
+
+      setStore((prev: any) => ({
+        ...prev,
+        cart: updatedCart,
+      }));
+
+      localStorage.setItem("himalayan-cart", JSON.stringify(updatedCart));
+
+      const updatedWishRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/wishlist/fetch-all-wishlist`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${store?.auth?.token}`,
+          },
+        }
+      );
+
+      const wishData = await updatedWishRes.json();
+      const updatedWish = wishData?.data?.wishlists || [];
+
+      setStore((prev: any) => ({
+        ...prev,
+        cart: updatedWish,
+      }));
+
+      localStorage.setItem("himalayan-wishlist", JSON.stringify(updatedWish));
     } catch (error) {
       console.error("Login failed", error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  //   const handleGoogleLogin = () => {
-  //     if (regionId != null)
-  //       window.location.href = `${API_ROUTES.AUTH.GOOGLE_LOGIN}?regionId=${regionId}`;
-  //   };
+  const handleGoogleLogin = () => {
+    window.location.href = `${API_ROUTES.AUTH.GOOGLE_LOGIN}`;
+  };
 
   return (
-    <Card className="w-full overflow-hidden border-0 shadow-lg">
+    <Card className="w-full overflow-hidden border shadow-none">
       <CardContent className="relative space-y-6 pb-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
@@ -194,7 +349,7 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full h-11 font-medium transition-all duration-200 hover:shadow-md hover:translate-y-[-1px]"
+            className="w-full h-11 bg-green-600 font-medium transition-all duration-200 hover:shadow-md hover:translate-y-[-1px]"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -224,9 +379,9 @@ export default function LoginForm() {
             <Button
               variant="outline"
               onClick={() => {
-                // handleGoogleLogin();
+                handleGoogleLogin();
               }}
-              className="w-full h-11 transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:shadow-sm"
+              className="w-full h-11 transition-all duration-200  "
               disabled={isLoading}
             >
               <Icon icon="flat-color-icons:google" width="48" height="48" />
