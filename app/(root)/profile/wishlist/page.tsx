@@ -26,13 +26,16 @@ const WishlistPage = () => {
   return (
     <div>
       {wishlist.length > 0 ? (
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-          {wishlist.map((item, index) => (
-            <div key={index}>
-              <WishlistCard products={item.product} />
-            </div>
-          ))}
-        </div>
+        <section>
+          <h2 className="text-xl font-semibold text-center my-4">My Wishlist</h2>
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+            {wishlist.map((item, index) => (
+              <div key={index}>
+                <WishlistCard products={item.product} />
+              </div>
+            ))}
+          </div>
+        </section>
       ) : (
         <div className=" w-full">
           <div className="flex flex-col justify-center items-center space-y-3">
