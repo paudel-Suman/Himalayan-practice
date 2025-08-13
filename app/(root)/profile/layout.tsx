@@ -21,7 +21,7 @@ export default function ProfileLayout({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = store.auth.token || localStorage.getItem("token");
+    const token = store.auth.token || localStorage.getItem("himalayan-token");
 
     if (token) {
       setIsAuthenticated(true);
