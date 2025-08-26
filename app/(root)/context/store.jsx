@@ -108,11 +108,11 @@ export const StoreProvider = ({ children }) => {
       if (cartData) {
         localStorage.setItem(
           "himalayan-cart",
-          JSON.stringify(cartData?.cart.items)
+          JSON.stringify(cartData?.cart?.items)
         );
 
         setCartCount(
-          cartData.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+          cartData?.cart?.items?.reduce((sum, item) => sum + item.quantity, 0)
         );
       }
 
@@ -165,7 +165,7 @@ export const StoreProvider = ({ children }) => {
           "himalayan-wishlist",
           JSON.stringify(activeWishlists || [])
         );
-        const wishCount = activeWishlists.length;
+        const wishCount = activeWishlists?.length;
 
         setWishlistCount(wishCount);
       }
@@ -207,7 +207,7 @@ export const StoreProvider = ({ children }) => {
 
 
   useEffect(() => {
-    const count = store.cart.reduce((sum, item) => sum + item.quantity, 0);
+    const count = store?.cart?.reduce((sum, item) => sum + item.quantity, 0);
     setCartCount(count);
   }, [store.cart]);
 

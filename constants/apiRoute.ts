@@ -1,5 +1,5 @@
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SERVER_API || "https://api.katunje.com/v1";
+  process.env.NEXT_PUBLIC_SERVER_API || "https://api.himalaygarment.com/v1";
 const withBase = (path: string) => `${BASE_URL}${path}`;
 export const API_ROUTES = {
   AUTH: {
