@@ -97,7 +97,7 @@ export default function VerifyEmailOTP() {
       <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
         <h2 className="text-xl font-bold mb-4">Enter OTP</h2>
         <p className="text-sm text-gray-500 mb-6">
-          We sent a 6-digit code to your phone
+          We sent a 6-digit code to your email
         </p>
 
         <div className="flex justify-center gap-2 mb-4">
