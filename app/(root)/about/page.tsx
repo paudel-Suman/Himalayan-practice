@@ -12,7 +12,7 @@ export default function Component() {
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-6">
                   <h1 className="text-2xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Our Story
+                    Our home
                   </h1>
                   <p className="text-muted-foreground md:text-base">
                     For over three decades, we've been weaving stories of
