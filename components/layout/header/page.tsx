@@ -40,7 +40,7 @@ const Header = () => {
         {company && (
           <Link href="/" className="md:hidden block">
             <Image
-              src={company.logoUrl}
+              src="/logo/mainlogo.png"
               alt="logo"
               width={1000}
               height={1000}
@@ -62,7 +62,7 @@ const Header = () => {
           <figure className="md:block hidden absolute  left-1/2 -translate-x-1/2">
             <Link href="/">
               <Image
-                src={company.logoUrl}
+                src="/logo/mainlogo.png"
                 alt="logo"
                 width={1000}
                 height={1000}
