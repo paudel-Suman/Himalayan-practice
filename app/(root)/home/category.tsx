@@ -21,8 +21,8 @@ const Category = ({ category }: { category: categoryType[] }) => {
               <Image
                 src={item?.image}
                 alt={item.name}
-                width={1000}
-                height={1000}
+                width={2000}
+                height={2000}
                 className="sm:h-[10em] h-[8em] sm:w-[12em] object-contain  rounded-md   group-hover:scale-125 ease-in-out duration-200"
               />
             </figure>
