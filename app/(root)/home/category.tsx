@@ -7,7 +7,7 @@ import React from "react";
 const Category = ({ category }: { category: categoryType[] }) => {
   return (
     <div>
-      <PageHeader title="Explore Our Category" />
+      <PageHeader title="Main Category" />
 
       <div className="sm:flex grid grid-cols-2 flex-wrap gap-6 my-8 justify-center">
         {category.slice(0, 8).map((item, index) => (
